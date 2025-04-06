@@ -78,6 +78,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 7afe87e847fe2e4418013b30914f5bee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9136459541927384702}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 7afe87e847fe2e4418013b30914f5bee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1905923341303786888}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: 7afe87e847fe2e4418013b30914f5bee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 123445627370884110}
@@ -202,10 +205,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1
-  go_hit_effect_prefab: {fileID: 2369600878822380501, guid: 12f8cfb1a3964dd4180a1d8ca2c34fc6, type: 3}
   destroyTime: 5
   force: 0.05
+  go_hit_effect_prefab: {fileID: 2369600878822380501, guid: 12f8cfb1a3964dd4180a1d8ca2c34fc6, type: 3}
+  item_leaf: {fileID: 11400000, guid: d79e144af4fd97d499f532c4715ab750, type: 2}
+  leafCount: 3
   hit_sound: Twig_Hit
+--- !u!54 &1905923341303786888
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5988598671141382849}
+  serializedVersion: 4
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5988598671141382851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: 7afe87e847fe2e4418013b30914f5bee, type: 3}

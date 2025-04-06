@@ -5,46 +5,34 @@ using UnityEngine.UI;
 
 public class StatusController : MonoBehaviour
 {
-    //체력
-    [SerializeField]
-    private int hp;
+    // 체력
+    [SerializeField] private int hp;
     private int currentHp;
-    //스테미나
-    [SerializeField]
-    private int sp;
+
+    // 스태미나
+    [SerializeField] private int sp;
     private int currentSp;
-    //스테미나 증가량
-    [SerializeField]
-    private int spIncreaseSpeed;
-    //스테미나 딜레이
-    [SerializeField]
-    private int spRechargeTime;
+    [SerializeField] private int spIncreaseSpeed;
+    [SerializeField] private int spRechargeTime;
     private int currentSpRechargeTime;
-    //스테미나 감소 여부
     private bool spUsed;
-    //배고픔
-    [SerializeField]
-    private int hungry;
+
+    // 배고픔
+    [SerializeField] private int hungry;
     private int currentHungry;
-    //배고픔 줄어드는 속도
-    [SerializeField]
-    private int hungryDecreaseTime;
+    [SerializeField] private int hungryDecreaseTime;
     private int currentHungryDecreaseTime;
-    //목마름
-    [SerializeField]
-    private int thirsty;
+
+    // 목마름
+    [SerializeField] private int thirsty;
     private int currentThirsty;
-    [SerializeField]
-    private int thirstyDecreaseTime;
+    [SerializeField] private int thirstyDecreaseTime;
     private int currentThirstyDecreaseTime;
 
-    //필요 이미지
-    [SerializeField]
-    private Image[] images_Gauge;
-
+    // UI 게이지
+    [SerializeField] private Image[] images_Gauge;
     private const int HP = 0, SP = 1, HUNGRY = 2, THIRSTY = 3;
 
-    // Start is called before the first frame update
     void Start()
     {
         currentHp = hp;
@@ -53,7 +41,6 @@ public class StatusController : MonoBehaviour
         currentThirsty = thirsty;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Hungry();
@@ -61,23 +48,28 @@ public class StatusController : MonoBehaviour
         GaugeUpdate();
         SPRechargeTime();
         SPRecover();
+
+        // 배고픔 또는 목마름이 0이면 스태미나를 0으로 설정
+        if (currentHungry == 0 || currentThirsty == 0)
+        {
+            currentSp = 0;
+        }
     }
 
     private void SPRechargeTime()
     {
-        if(spUsed)
+        if (spUsed)
         {
             if (currentSpRechargeTime < spRechargeTime)
                 currentSpRechargeTime++;
             else
                 spUsed = false;
-
         }
     }
 
     private void SPRecover()
     {
-        if(!spUsed && currentSp < sp)
+        if (!spUsed && currentSp < sp && currentThirsty > 0) // 목마름이 0이면 회복 불가
         {
             currentSp += spIncreaseSpeed;
         }
@@ -87,7 +79,7 @@ public class StatusController : MonoBehaviour
     {
         if (currentHungry > 0)
         {
-            if (currentHungryDecreaseTime <= hungryDecreaseTime)
+            if (currentHungryDecreaseTime < hungryDecreaseTime)
                 currentHungryDecreaseTime++;
             else
             {
@@ -95,15 +87,13 @@ public class StatusController : MonoBehaviour
                 currentHungryDecreaseTime = 0;
             }
         }
-        else
-            Debug.Log("배고픔 수치가 0이 되었습니다");
     }
 
     private void Thirsty()
     {
-        if (currentThirsty> 0)
+        if (currentThirsty > 0)
         {
-            if (currentThirstyDecreaseTime <= thirstyDecreaseTime)
+            if (currentThirstyDecreaseTime < thirstyDecreaseTime)
                 currentThirstyDecreaseTime++;
             else
             {
@@ -111,8 +101,6 @@ public class StatusController : MonoBehaviour
                 currentThirstyDecreaseTime = 0;
             }
         }
-        else
-            Debug.Log("목마름 수치가 0이 되었습니다");
     }
 
     private void GaugeUpdate()
@@ -123,64 +111,46 @@ public class StatusController : MonoBehaviour
         images_Gauge[THIRSTY].fillAmount = (float)currentThirsty / thirsty;
     }
 
-    public void IncreaseHP(int _count)
+    public void IncreaseHP(int amount)
     {
-        if (currentHp + _count < hp)
-            currentHp += _count;
-        else
-            currentHp = hp;
+        currentHp = Mathf.Min(currentHp + amount, hp);
     }
 
-    public void DecreaseHP(int _count)
+    public void DecreaseHP(int amount)
     {
-        currentHp -= _count;
+        currentHp -= amount;
 
         if (currentHp <= 0)
-            Debug.Log("캐릭터의 hp가 0이 되었습니다!");
-
+        {
+            Debug.Log(" 캐릭터의 체력이 0이 되었습니다!");
+        }
     }
-    public void IncreaseHungry(int _count)
+
+    public void IncreaseHungry(int amount)
     {
-        if (currentHungry + _count < hungry)
-            currentHungry += _count;
-        else
-            currentHungry = hungry;
+        currentHungry = Mathf.Min(currentHungry + amount, hungry);
     }
 
-    public void DecreaseHungry(int _count)
+    public void DecreaseHungry(int amount)
     {
-        if (currentHungry - _count < 0)
-            currentHungry = 0;
-        else
-            currentHungry -= _count;
-
+        currentHungry = Mathf.Max(currentHungry - amount, 0);
     }
-    public void IncreaseThirsty(int _count)
+
+    public void IncreaseThirsty(int amount)
     {
-        if (currentThirsty + _count < thirsty)
-            currentThirsty += _count;
-        else
-            currentThirsty = thirsty;
+        currentThirsty = Mathf.Min(currentThirsty + amount, thirsty);
     }
 
-    public void DecreaseThirsty(int _count)
+    public void DecreaseThirsty(int amount)
     {
-        if (currentThirsty - _count < 0)
-            currentThirsty = 0;
-        else
-            currentThirsty -= _count;
-
+        currentThirsty = Mathf.Max(currentThirsty - amount, 0);
     }
 
-    public void DecreaseStamina(int _count)
+    public void DecreaseStamina(int amount)
     {
         spUsed = true;
         currentSpRechargeTime = 0;
-
-        if (currentSp - _count > 0)
-            currentSp -= _count;
-        else
-            currentSp = 0;
+        currentSp = Mathf.Max(currentSp - amount, 0);
     }
 
     public int GetCurrentSP()
