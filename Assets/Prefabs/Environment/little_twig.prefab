@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: little_twig
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
+      propertyPath: m_TagString
+      value: Item
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.7
@@ -74,6 +82,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8554815172175465281}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1561572442434968940}
   m_SourcePrefab: {fileID: 100100000, guid: 81453898e7b2eb045a481afb9dc3e974, type: 3}
 --- !u!1 &2238244578760360029 stripped
 GameObject:
@@ -128,3 +139,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-1561572442434968940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2238244578760360029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6dc37f297c53a449dbe642ed809985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: e9f97d58dfeea0e478690aa1110f2ea6, type: 2}

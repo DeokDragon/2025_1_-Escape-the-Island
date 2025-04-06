@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+      propertyPath: m_TagString
+      value: Item
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
       propertyPath: m_LocalScale.x
       value: 70
@@ -82,6 +90,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5805503114756949952}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6230113834176156735}
   m_SourcePrefab: {fileID: 100100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
 --- !u!1 &1814469710727601293 stripped
 GameObject:
@@ -138,3 +149,16 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-6230113834176156735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814469710727601293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6dc37f297c53a449dbe642ed809985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: bf43321ae128a1342a15937d0d875362, type: 2}
