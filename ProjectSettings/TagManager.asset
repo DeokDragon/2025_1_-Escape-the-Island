@@ -4,11 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Rock
+  - Item
+  - Tree
   - Twig
   - Grass
-  - Tree
-  - Item
+  - Rock
   layers:
   - Default
   - TransparentFX

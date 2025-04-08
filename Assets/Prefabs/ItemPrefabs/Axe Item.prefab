@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
       propertyPath: m_Name
-      value: Axe
+      value: Axe Item
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
       propertyPath: m_Layer
@@ -64,16 +64,19 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38,
+        type: 3}
       insertIndex: -1
       addedObject: {fileID: 2173250518584287366}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38,
+        type: 3}
       insertIndex: -1
       addedObject: {fileID: 7595520717000826574}
   m_SourcePrefab: {fileID: 100100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
 --- !u!1 &3853747309661364251 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38, type: 3}
+  m_CorrespondingSourceObject: {fileID: 100000, guid: b27a4fc843d9e7f4bbccdf659d547b38,
+    type: 3}
   m_PrefabInstance: {fileID: 3853747309661267643}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &2173250518584287366
