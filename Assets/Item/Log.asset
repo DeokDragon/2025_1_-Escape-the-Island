@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Log
   itemDesc: "\uD1B5\uB098\uBB34"
   itemType: 2
-  itemImage: {fileID: 21300000, guid: 91cd8ab4114078e46add6f38a42b35c2, type: 3}
-  itemPrefab: {fileID: 1814469710727601293, guid: 914b5b0f97060ca4b8252dde6dbd84e7, type: 3}
+  itemImage: {fileID: 21300000, guid: cbb04a8dbd10c2d459da7f8cfc287463, type: 3}
+  itemPrefab: {fileID: 1814469710727601293, guid: 914b5b0f97060ca4b8252dde6dbd84e7,
+    type: 3}
   weaponType: 

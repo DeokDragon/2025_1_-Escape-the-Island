@@ -75,28 +75,32 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 2933718851f375f4bb160aa5a9b59e32, type: 2}
+      objectReference: {fileID: 2100000, guid: ff9dd304943732d4a8ca5c049a82176d, type: 2}
     - target: {fileID: 2300000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 2933718851f375f4bb160aa5a9b59e32, type: 2}
+      objectReference: {fileID: 2100000, guid: ff9dd304943732d4a8ca5c049a82176d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779,
+        type: 3}
       insertIndex: -1
       addedObject: {fileID: 6698706905873129863}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779,
+        type: 3}
       insertIndex: -1
       addedObject: {fileID: 5805503114756949952}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779,
+        type: 3}
       insertIndex: -1
       addedObject: {fileID: -6230113834176156735}
   m_SourcePrefab: {fileID: 100100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
 --- !u!1 &1814469710727601293 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779, type: 3}
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 5633616ba6d922c408b83f62bca08779,
+    type: 3}
   m_PrefabInstance: {fileID: 1814469710727502381}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &6698706905873129863
