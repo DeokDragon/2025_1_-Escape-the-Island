@@ -33,12 +33,20 @@ public class StatusController : MonoBehaviour
     [SerializeField] private Image[] images_Gauge;
     private const int HP = 0, SP = 1, HUNGRY = 2, THIRSTY = 3;
 
+    // 소리 효과
+    [SerializeField] private AudioClip hitSound;
+    private AudioSource audioSource;
+
+    bool hasHit = false;
+
     void Start()
     {
         currentHp = hp;
         currentSp = sp;
         currentHungry = hungry;
         currentThirsty = thirsty;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -56,6 +64,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
+    // 스태미나 회복 대기 시간
     private void SPRechargeTime()
     {
         if (spUsed)
@@ -67,6 +76,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
+    // 스태미나 회복
     private void SPRecover()
     {
         if (!spUsed && currentSp < sp && currentThirsty > 0) // 목마름이 0이면 회복 불가
@@ -75,6 +85,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
+    // 배고픔 감소
     private void Hungry()
     {
         if (currentHungry > 0)
@@ -89,6 +100,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
+    // 목마름 감소
     private void Thirsty()
     {
         if (currentThirsty > 0)
@@ -103,6 +115,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
+    // UI 게이지 업데이트
     private void GaugeUpdate()
     {
         images_Gauge[HP].fillAmount = (float)currentHp / hp;
@@ -111,41 +124,71 @@ public class StatusController : MonoBehaviour
         images_Gauge[THIRSTY].fillAmount = (float)currentThirsty / thirsty;
     }
 
+    // 체력 증가
     public void IncreaseHP(int amount)
     {
         currentHp = Mathf.Min(currentHp + amount, hp);
     }
 
-    public void DecreaseHP(int amount)
+    // 체력 감소
+    public void DecreaseHP(int amount, GameObject attacker = null)
     {
         currentHp -= amount;
 
+        // 곰한테 맞았을 때만 피격 사운드 재생
+        if (attacker != null && attacker.CompareTag("Bear"))
+        {
+            PlayHitEffects();
+        }
+
         if (currentHp <= 0)
         {
-            Debug.Log(" 캐릭터의 체력이 0이 되었습니다!");
+            Debug.Log("캐릭터의 체력이 0이 되었습니다!");
+            // TODO: 사망 처리
         }
     }
 
+    // 피격 효과
+    private void PlayHitEffects()
+    {
+        PlayHitSound();
+        // PlayDamageAnimation(); // 필요 시 애니메이션 추가
+    }
+
+    // 피격 소리 재생
+    public void PlayHitSound()
+    {
+        if (audioSource != null && hitSound != null && !audioSource.isPlaying) // 이미 소리가 재생 중이지 않으면
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
+    }
+
+    // 배고픔 증가
     public void IncreaseHungry(int amount)
     {
         currentHungry = Mathf.Min(currentHungry + amount, hungry);
     }
 
+    // 배고픔 감소
     public void DecreaseHungry(int amount)
     {
         currentHungry = Mathf.Max(currentHungry - amount, 0);
     }
 
+    // 목마름 증가
     public void IncreaseThirsty(int amount)
     {
         currentThirsty = Mathf.Min(currentThirsty + amount, thirsty);
     }
 
+    // 목마름 감소
     public void DecreaseThirsty(int amount)
     {
         currentThirsty = Mathf.Max(currentThirsty - amount, 0);
     }
 
+    // 스태미나 감소
     public void DecreaseStamina(int amount)
     {
         spUsed = true;
@@ -153,8 +196,15 @@ public class StatusController : MonoBehaviour
         currentSp = Mathf.Max(currentSp - amount, 0);
     }
 
+    // 현재 스태미나 반환
     public int GetCurrentSP()
     {
         return currentSp;
+    }
+
+    // 현재 체력 반환 (필요할 수 있어서 추가)
+    public int GetCurrentHP()
+    {
+        return currentHp;
     }
 }
