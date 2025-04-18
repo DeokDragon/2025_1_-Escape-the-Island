@@ -19,7 +19,7 @@ public abstract class CloseWeaponController : MonoBehaviour
 
     
     //필요한 컴포넌트
-    private PlayerController thePlayerController;
+    protected PlayerController thePlayerController;
 
     void Start()
     {
@@ -28,10 +28,13 @@ public abstract class CloseWeaponController : MonoBehaviour
 
     protected void TryAttack()
     {
-        if (!Inventory.inventoryActivated)
+        if (!Inventory.inventoryActivated && !thePlayerController.IsCrouch) // 쪼그림 체크
         {
-            if (Input.GetButton("Fire1"))
+            if (Input.GetButtonDown("Fire1"))
             {
+                if (thePlayerController.IsCrouch) // << 추가!
+                    return; // 앉아있으면 공격 안 함
+
                 if (!isAttack)
                 {
                     if (CheckObject())

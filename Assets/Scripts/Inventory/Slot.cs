@@ -12,7 +12,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public Item item;
     public int itemCount;
     public Image itemImage;
-
+    public Text itemCountText;
 
     [SerializeField]
     private Text text_Count;
@@ -88,6 +88,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         item = _item;
         itemCount = _count;
         itemImage.sprite = item.itemImage;
+        itemImage.gameObject.SetActive(true);
 
         if (item.itemType != Item.ItemType.Equipment)
         {
@@ -154,6 +155,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         item = null;
         itemCount = 0;
         itemImage.sprite = null;
+        itemImage.gameObject.SetActive(false);
         SetColor(0);
 
         text_Count.text = "0";
@@ -176,8 +178,34 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                     SetSlotCount(-1);
                 }
             }
+            if (item != null && item.itemName == "BearMeat")
+            {
+                UseItem();
+            }
         }
     }
+
+    private void UseItem()
+    {
+        if (item.itemName == "BearMeat") // 정확히 BearMeat 아이템 이름
+        {
+            StatusController statusController = FindObjectOfType<StatusController>();
+            if (statusController != null)
+            {
+                statusController.IncreaseHP(20);
+                Debug.Log("체력 회복!");
+            }
+            else
+            {
+                Debug.LogError("StatusController 컴포넌트를 찾을 수 없습니다!");
+            }
+
+            SetSlotCount(-1);
+            UpdateSlotUI();
+        }
+    }
+
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {

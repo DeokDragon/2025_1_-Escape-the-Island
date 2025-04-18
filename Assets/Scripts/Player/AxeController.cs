@@ -22,7 +22,9 @@ public class AxeController : CloseWeaponController
         {
             if (CheckObject())
             {
-                if(hitInfo.transform.tag == "Grass")
+                Debug.Log("Axe Hit: " + hitInfo.transform.name);
+
+                if (hitInfo.transform.tag == "Grass")
                 {
                     hitInfo.transform.GetComponent<Grass>().Damage();
                 }
@@ -30,8 +32,19 @@ public class AxeController : CloseWeaponController
                 {
                     hitInfo.transform.GetComponent<TreeComponent>().Chop(hitInfo.point, transform.eulerAngles.y);
                 }
+                else if (hitInfo.transform.tag == "Bear")
+                {
+                    Debug.Log("Axe Hit: Bear detected, finally applying damage.");
+                    hitInfo.transform.GetComponent<BearHealth>().TakeDamage(50);
+                }
+
                 isSwing = false;
             }
+            else
+            {
+                Debug.Log("Axe Hit: No object detected.");
+            }
+
             yield return null;
         }
     }

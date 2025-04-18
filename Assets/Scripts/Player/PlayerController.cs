@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
-
 public class PlayerController : MonoBehaviour
 {   
         static public bool isActivated = true;
@@ -28,6 +26,7 @@ public class PlayerController : MonoBehaviour
         private bool isWalk = false;
         private bool isRun = false;
         private bool isCrouch = false;
+        public bool IsCrouch => isCrouch;  //프로퍼티
         private bool isGround = true;
 
 

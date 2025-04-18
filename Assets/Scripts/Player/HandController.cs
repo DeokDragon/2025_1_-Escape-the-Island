@@ -17,7 +17,7 @@ public class HandController : CloseWeaponController
     // Update is called once per frame
     void Update()
     {
-        if (isActivate)
+        if (isActivate && !thePlayerController.IsCrouch)
             TryAttack();
     }
 
@@ -28,6 +28,17 @@ public class HandController : CloseWeaponController
         {
             if (CheckObject())
             {
+                // AxeAttack 스크립트 불러오기
+                AxeAttack axeAttack = GetComponent<AxeAttack>();
+                if (axeAttack != null)
+                {
+                    axeAttack.StartSwing();
+                }
+                else
+                {
+                    Debug.LogWarning("AxeAttack 스크립트가 없습니다!");
+                }
+
                 isSwing = false;
             }
             yield return null;
