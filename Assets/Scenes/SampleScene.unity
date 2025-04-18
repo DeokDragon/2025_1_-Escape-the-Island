@@ -9221,6 +9221,7 @@ MonoBehaviour:
   - {fileID: 1545464099}
   woodRequired: 40
   requiredItemName: Log
+  repairSound: {fileID: 8300000, guid: 8819d20ce5e3ebf4c8d003c5defb8a5e, type: 3}
 --- !u!4 &1771767860
 Transform:
   m_ObjectHideFlags: 0

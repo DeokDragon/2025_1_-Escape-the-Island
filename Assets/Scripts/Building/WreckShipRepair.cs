@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WreckShipRepair : MonoBehaviour
 {
+
     public GameObject[] shipModelStages;
     public int woodRequired = 40;
     public string requiredItemName = "Log"; // "Log" 아이템
@@ -20,11 +21,15 @@ public class WreckShipRepair : MonoBehaviour
     private Vector3 basePosition;
     private Quaternion baseRotation;
 
+    public AudioClip repairSound; // 수리 사운드
+    private AudioSource audioSource; // AudioSource 컴포넌트
+
     void Start()
     {
         // 부모 객체의 기본 위치와 회전값을 설정
         basePosition = transform.position;
         baseRotation = transform.rotation;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -49,11 +54,16 @@ public class WreckShipRepair : MonoBehaviour
         // 인벤토리에서 나무가 충분히 있는지 체크
         if (Inventory.instance.HasItem(requiredItemName, 1))
         {
-            // 나무를 소모하고 수리 진행
             Inventory.instance.ConsumeItem(requiredItemName, 1);
             currentWood++;
             UpdateShipModel();
             Debug.Log("나무 추가됨! 현재 나무: " + currentWood);
+
+            // 사운드 재생
+            if (repairSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(repairSound);
+            }
         }
         else
         {
