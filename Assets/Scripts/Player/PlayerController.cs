@@ -61,14 +61,36 @@ public class PlayerController : MonoBehaviour
         private Rigidbody myRigid;
         private StatusController theStatusController;
         private Crosshair theCrosshair;
+    void Awake()
+    {
+        Debug.Log("🟢 PlayerController.Awake 실행됨!");
+
+        theStatusController = FindObjectOfType<StatusController>();
+
+        int isContinue = PlayerPrefs.GetInt("IsContinue", -1);
+        int slotIndex = PlayerPrefs.GetInt("SelectedSlot", -1);
+
+        Debug.Log($"[DEBUG] isContinue = {isContinue}, slotIndex = {slotIndex}");
+
+        if (isContinue == 1)
+        {
+            SaveData data = SaveManager.instance.LoadFromSlot(slotIndex);
+            ApplySaveData(data);
+            Debug.Log("📦 ApplySaveData 실행됨!");
+        }
+        else
+        {
+            Debug.Log("⚠️ 이어하기 아님 → 새 게임 상태임");
+        }
+    }
 
 
-        void Start()
+    void Start()
         {
             capsuleCollider = GetComponent<CapsuleCollider>();
             myRigid = GetComponent<Rigidbody>();
             theCrosshair = FindObjectOfType<Crosshair>();
-            theStatusController = FindObjectOfType<StatusController>();
+            
             isActivated = FindObjectOfType<CraftManual>();
 
             // ✅ 회전 고정 설정 (충돌 시 회전 방지)
@@ -79,9 +101,68 @@ public class PlayerController : MonoBehaviour
             applySpeed = walkSpeed;
             originPosY = theCamera.transform.localPosition.y;
             applyCrouchPosY = originPosY;
+
+        // ✅ 이어하기 여부에 따라 저장 데이터 적용
+        int isContinue = PlayerPrefs.GetInt("IsContinue", 0);
+        int slotIndex = PlayerPrefs.GetInt("SelectedSlot", 0);
+
+
+        if (isContinue == 1)
+        {
+            SaveData data = SaveManager.instance.LoadFromSlot(slotIndex);
+            ApplySaveData(data);
+            Debug.Log("📦 ApplySaveData 실행됨!");
+        }
         }
 
-        void Update()
+    private void ApplySaveData(SaveData data)
+    {
+        Debug.Log("📦 ApplySaveData 실행됨!");
+        Debug.Log("📦 플레이어 위치: " + data.playerPosition);
+        Debug.Log("📦 체력: " + data.hp + ", 스태미나: " + data.stamina);
+
+
+        // 1. 위치 적용
+        transform.position = data.playerPosition;
+
+        // 2. 상태 적용
+        theStatusController.SetStatus(data.hp, data.stamina, data.hunger, data.thirst);
+
+        // 3. 무기 적용
+        WeaponManager1 weaponManager = GetComponent<WeaponManager1>();
+        if (weaponManager != null)
+        {
+            weaponManager.EquipWeaponByName(data.equippedWeaponName); // 수정된 함수 이름
+        }
+
+
+        // 4. 인벤토리 적용
+        Inventory inventory = Inventory.instance;
+        if (inventory != null)
+        {
+            inventory.LoadInventory(data.inventorySlots);
+        }
+
+        // 5. 시간 적용
+        DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
+        if (timeSystem != null)
+        {
+            timeSystem.SetTime(data.currentTime);
+        }
+
+        // 6. 수리 진행도
+        WreckShipRepair shipRepair = FindObjectOfType<WreckShipRepair>();
+        if (shipRepair != null)
+        {
+            shipRepair.SetCurrentWood(data.currentWoodCount);
+        }
+
+        Debug.Log("불러온 저장 데이터 적용 완료!");
+    }
+
+
+
+    void Update()
         {
             if (isActivated && GameManager.canPlayerMove)
             {

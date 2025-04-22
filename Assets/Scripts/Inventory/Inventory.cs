@@ -19,6 +19,8 @@ public class Inventory : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        slots = go_SlotsParent.GetComponentsInChildren<Slot>();
     }
 
     public static bool inventoryActivated = false;
@@ -34,7 +36,7 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-        slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+        
     }
 
     void Update()
@@ -150,4 +152,38 @@ public class Inventory : MonoBehaviour
 
         return itemCount; // 총 아이템 개수 반환
     }
+
+    public Slot[] GetSlots()
+    {
+        return slots;
+    }
+
+    public void LoadInventory(List<InventorySlotData> slotDataList)
+    {
+        // 모든 슬롯 비우기
+        foreach (Slot slot in slots)    
+        {
+            slot.ClearSlot(); // 이 함수가 없으면 AddItem 전에 null 초기화 코드 직접 넣어야 해
+        }
+
+        // 전달받은 데이터로 슬롯 채우기
+        for (int i = 0; i < slotDataList.Count && i < slots.Length; i++)
+        {
+            InventorySlotData data = slotDataList[i];
+            if (!string.IsNullOrEmpty(data.itemName))
+            {
+                Item item = ItemDatabase.instance.GetItemByName(data.itemName); // 아이템 이름으로 찾기
+                if (item != null)
+                {
+                    slots[i].AddItem(item, data.itemCount);
+                    slots[i].UpdateSlotUI(); // UI 갱신 함수
+                }
+            }
+        }
+
+        Debug.Log("인벤토리 로드 완료!");
+    }
+
+    
+
 }

@@ -127,4 +127,29 @@ public class WeaponManager1 : MonoBehaviour
 
         currentWeapon.gameObject.SetActive(true);
     }
+    public void ChangeWeaponTo(string weaponType)
+    {
+        StartCoroutine(ChangeWeaponCoroutine(weaponType, "BareHand")); // 이름은 기본 무기로 대체
+    }
+
+
+    public string GetEquippedWeaponName()
+    {
+        return currentWeaponType;
+    }
+
+    // 🔹 저장 불러온 무기 이름으로 장착하는 함수
+    public void EquipWeaponByName(string weaponName)
+    {
+        if (handDictionary.ContainsKey(weaponName))
+            theHandController.CloseWeaponChange(handDictionary[weaponName]);
+        else if (axeDictionary.ContainsKey(weaponName))
+            theAxeController.CloseWeaponChange(axeDictionary[weaponName]);
+        else if (pickaxeDictionary.ContainsKey(weaponName))
+            thePickaxeController.CloseWeaponChange(pickaxeDictionary[weaponName]);
+        else
+            Debug.LogWarning($"무기 이름 '{weaponName}'을 찾을 수 없습니다.");
+    }
+
+
 }

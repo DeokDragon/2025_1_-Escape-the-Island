@@ -95,7 +95,16 @@ public class DayAndNight : MonoBehaviour
         temperature = newTemperature;
     }
 
+    public float GetCurrentTime()
+    {
+        return transform.eulerAngles.x;
+    }
 
+    public void SetTime(float angleX)
+    {
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(angleX, currentRotation.y, currentRotation.z);
+    }
 
 
 }
