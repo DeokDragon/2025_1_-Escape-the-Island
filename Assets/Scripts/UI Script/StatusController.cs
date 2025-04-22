@@ -1,15 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StatusController : MonoBehaviour
 {
-    // Ã¼·Â
+    // ì²´ë ¥
     [SerializeField] private int hp;
     private int currentHp;
 
-    // ½ºÅÂ¹Ì³ª
+    // ìŠ¤íƒœë¯¸ë‚˜
     [SerializeField] private int sp;
     private int currentSp;
     [SerializeField] private int spIncreaseSpeed;
@@ -17,27 +17,56 @@ public class StatusController : MonoBehaviour
     private int currentSpRechargeTime;
     private bool spUsed;
 
-    // ¹è°íÇÄ
+    // ë°°ê³ í””
     [SerializeField] private int hungry;
     private int currentHungry;
     [SerializeField] private int hungryDecreaseTime;
     private int currentHungryDecreaseTime;
 
-    // ¸ñ¸¶¸§
+    // ëª©ë§ˆë¦„
     [SerializeField] private int thirsty;
     private int currentThirsty;
     [SerializeField] private int thirstyDecreaseTime;
     private int currentThirstyDecreaseTime;
 
-    // UI °ÔÀÌÁö
+    // UI ê²Œì´ì§€
     [SerializeField] private Image[] images_Gauge;
     private const int HP = 0, SP = 1, HUNGRY = 2, THIRSTY = 3;
 
-    // ¼Ò¸® È¿°ú
+    // ì†Œë¦¬ íš¨ê³¼
     [SerializeField] private AudioClip hitSound;
     private AudioSource audioSource;
 
     bool hasHit = false;
+
+
+
+public int GetCurrentStamina()
+    {
+        return currentSp;
+    }
+
+    public int GetCurrentHunger()
+    {
+        return currentHungry;
+    }
+
+    public int GetCurrentThirst()
+    {
+        return currentThirsty;
+    }
+
+    public void SetStatus(float hp, float sp, float hunger, float thirst)
+    {
+        currentHp = (int)hp;
+        currentSp = (int)sp;
+        currentHungry = (int)hunger;
+        currentThirsty = (int)thirst;
+
+        GaugeUpdate(); 
+    }
+
+
 
     void Start()
     {
@@ -57,14 +86,14 @@ public class StatusController : MonoBehaviour
         SPRechargeTime();
         SPRecover();
 
-        // ¹è°íÇÄ ¶Ç´Â ¸ñ¸¶¸§ÀÌ 0ÀÌ¸é ½ºÅÂ¹Ì³ª¸¦ 0À¸·Î ¼³Á¤
+        // ë°°ê³ í”” ë˜ëŠ” ëª©ë§ˆë¦„ì´ 0ì´ë©´ ìŠ¤íƒœë¯¸ë‚˜ë¥¼ 0ìœ¼ë¡œ ì„¤ì •
         if (currentHungry == 0 || currentThirsty == 0)
         {
             currentSp = 0;
         }
     }
 
-    // ½ºÅÂ¹Ì³ª È¸º¹ ´ë±â ½Ã°£
+    // ìŠ¤íƒœë¯¸ë‚˜ íšŒë³µ ëŒ€ê¸° ì‹œê°„
     private void SPRechargeTime()
     {
         if (spUsed)
@@ -76,16 +105,16 @@ public class StatusController : MonoBehaviour
         }
     }
 
-    // ½ºÅÂ¹Ì³ª È¸º¹
+    // ìŠ¤íƒœë¯¸ë‚˜ íšŒë³µ
     private void SPRecover()
     {
-        if (!spUsed && currentSp < sp && currentThirsty > 0) // ¸ñ¸¶¸§ÀÌ 0ÀÌ¸é È¸º¹ ºÒ°¡
+        if (!spUsed && currentSp < sp && currentThirsty > 0) // ëª©ë§ˆë¦„ì´ 0ì´ë©´ íšŒë³µ ë¶ˆê°€
         {
             currentSp += spIncreaseSpeed;
         }
     }
 
-    // ¹è°íÇÄ °¨¼Ò
+    // ë°°ê³ í”” ê°ì†Œ
     private void Hungry()
     {
         if (currentHungry > 0)
@@ -100,7 +129,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
-    // ¸ñ¸¶¸§ °¨¼Ò
+    // ëª©ë§ˆë¦„ ê°ì†Œ
     private void Thirsty()
     {
         if (currentThirsty > 0)
@@ -115,27 +144,36 @@ public class StatusController : MonoBehaviour
         }
     }
 
-    // UI °ÔÀÌÁö ¾÷µ¥ÀÌÆ®
+    // UI ê²Œì´ì§€ ì—…ë°ì´íŠ¸
     private void GaugeUpdate()
     {
+        float hpRatio = (float)currentHp / hp;
+        float spRatio = (float)currentSp / sp;
+        float hungryRatio = (float)currentHungry / hungry;
+        float thirstyRatio = (float)currentThirsty / thirsty;
+
+        
+
+
+
         images_Gauge[HP].fillAmount = (float)currentHp / hp;
         images_Gauge[SP].fillAmount = (float)currentSp / sp;
         images_Gauge[HUNGRY].fillAmount = (float)currentHungry / hungry;
         images_Gauge[THIRSTY].fillAmount = (float)currentThirsty / thirsty;
     }
 
-    // Ã¼·Â Áõ°¡
+    // ì²´ë ¥ ì¦ê°€
     public void IncreaseHP(int amount)
     {
         currentHp = Mathf.Min(currentHp + amount, hp);
     }
 
-    // Ã¼·Â °¨¼Ò
+    // ì²´ë ¥ ê°ì†Œ
     public void DecreaseHP(int amount, GameObject attacker = null)
     {
         currentHp -= amount;
 
-        // °õÇÑÅ× ¸Â¾ÒÀ» ¶§¸¸ ÇÇ°İ »ç¿îµå Àç»ı
+        // ê³°í•œí…Œ ë§ì•˜ì„ ë•Œë§Œ í”¼ê²© ì‚¬ìš´ë“œ ì¬ìƒ
         if (attacker != null && attacker.CompareTag("Bear"))
         {
             PlayHitEffects();
@@ -143,52 +181,59 @@ public class StatusController : MonoBehaviour
 
         if (currentHp <= 0)
         {
-            Debug.Log("Ä³¸¯ÅÍÀÇ Ã¼·ÂÀÌ 0ÀÌ µÇ¾ú½À´Ï´Ù!");
-            // TODO: »ç¸Á Ã³¸®
+            Debug.Log("ìºë¦­í„°ì˜ ì²´ë ¥ì´ 0ì´ ë˜ì—ˆìŠµë‹ˆë‹¤!");
+
+            RespawnManager respawn = FindObjectOfType<RespawnManager>();
+            if (respawn != null)
+            {
+                respawn.Respawn();
+            }
+
+            // í•„ìš” ì‹œ ì¶”ê°€ë¡œ í”Œë ˆì´ì–´ ì›€ì§ì„ ì ê¸ˆ ë“± ì²˜ë¦¬ ê°€ëŠ¥
         }
     }
 
-    // ÇÇ°İ È¿°ú
+    // í”¼ê²© íš¨ê³¼
     private void PlayHitEffects()
     {
         PlayHitSound();
-        // PlayDamageAnimation(); // ÇÊ¿ä ½Ã ¾Ö´Ï¸ŞÀÌ¼Ç Ãß°¡
+        // PlayDamageAnimation(); // í•„ìš” ì‹œ ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€
     }
 
-    // ÇÇ°İ ¼Ò¸® Àç»ı
+    // í”¼ê²© ì†Œë¦¬ ì¬ìƒ
     public void PlayHitSound()
     {
-        if (audioSource != null && hitSound != null && !audioSource.isPlaying) // ÀÌ¹Ì ¼Ò¸®°¡ Àç»ı ÁßÀÌÁö ¾ÊÀ¸¸é
+        if (audioSource != null && hitSound != null && !audioSource.isPlaying) // ì´ë¯¸ ì†Œë¦¬ê°€ ì¬ìƒ ì¤‘ì´ì§€ ì•Šìœ¼ë©´
         {
             audioSource.PlayOneShot(hitSound);
         }
     }
 
-    // ¹è°íÇÄ Áõ°¡
+    // ë°°ê³ í”” ì¦ê°€
     public void IncreaseHungry(int amount)
     {
         currentHungry = Mathf.Min(currentHungry + amount, hungry);
     }
 
-    // ¹è°íÇÄ °¨¼Ò
+    // ë°°ê³ í”” ê°ì†Œ
     public void DecreaseHungry(int amount)
     {
         currentHungry = Mathf.Max(currentHungry - amount, 0);
     }
 
-    // ¸ñ¸¶¸§ Áõ°¡
+    // ëª©ë§ˆë¦„ ì¦ê°€
     public void IncreaseThirsty(int amount)
     {
         currentThirsty = Mathf.Min(currentThirsty + amount, thirsty);
     }
 
-    // ¸ñ¸¶¸§ °¨¼Ò
+    // ëª©ë§ˆë¦„ ê°ì†Œ
     public void DecreaseThirsty(int amount)
     {
         currentThirsty = Mathf.Max(currentThirsty - amount, 0);
     }
 
-    // ½ºÅÂ¹Ì³ª °¨¼Ò
+    // ìŠ¤íƒœë¯¸ë‚˜ ê°ì†Œ
     public void DecreaseStamina(int amount)
     {
         spUsed = true;
@@ -196,13 +241,13 @@ public class StatusController : MonoBehaviour
         currentSp = Mathf.Max(currentSp - amount, 0);
     }
 
-    // ÇöÀç ½ºÅÂ¹Ì³ª ¹İÈ¯
+    // í˜„ì¬ ìŠ¤íƒœë¯¸ë‚˜ ë°˜í™˜
     public int GetCurrentSP()
     {
         return currentSp;
     }
 
-    // ÇöÀç Ã¼·Â ¹İÈ¯ (ÇÊ¿äÇÒ ¼ö ÀÖ¾î¼­ Ãß°¡)
+    // í˜„ì¬ ì²´ë ¥ ë°˜í™˜ (í•„ìš”í•  ìˆ˜ ìˆì–´ì„œ ì¶”ê°€)
     public int GetCurrentHP()
     {
         return currentHp;

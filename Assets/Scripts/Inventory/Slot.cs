@@ -39,7 +39,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         theItemEffectDatabase = FindObjectOfType<ItemEffectDataBase>();
         theWeaponManager = FindObjectOfType<WeaponManager1>();
         theInputNumber = FindObjectOfType<InputNumber>();
+       
     }
+   
+
 
     public void UpdateSlotUI()
     {
@@ -150,7 +153,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             ClearSlot();
     }
 
-    private void ClearSlot()
+    public void ClearSlot()
     {
         item = null;
         itemCount = 0;

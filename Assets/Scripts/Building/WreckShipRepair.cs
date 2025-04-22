@@ -116,4 +116,15 @@ public class WreckShipRepair : MonoBehaviour
             Debug.Log("플레이어 난파선 범위 이탈");
         }
     }
+    public void SetCurrentWood(int value)
+    {
+        currentWood = value;
+        UpdateShipModel(); // 모델 상태도 함께 갱신!
+    }
+    public int GetCurrentWood()
+    {
+        return currentWood;
+    }
+  
+
 }
