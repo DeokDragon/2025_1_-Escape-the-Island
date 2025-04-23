@@ -167,42 +167,33 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right && item != null)
         {
-            if (item != null)
+            if (item.itemType == Item.ItemType.Equipment)
             {
-                if (item.itemType == Item.ItemType.Equipment)
-                {
-                    StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(item.weaponType, item.itemName));
-                }
-                else
-                {
-                    Debug.Log(item.itemName + " 을 사용했습니다");
-                    SetSlotCount(-1);
-                }
+                StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(item.weaponType, item.itemName));
             }
-            if (item != null && item.itemName == "BearMeat")
+            else if (item.itemName == "BearMeat")
             {
-                UseItem();
+                UseItem(); // UseItem 내부에서 상태 회복 + SetSlotCount 포함
+            }
+            else
+            {
+                SetSlotCount(-1); // 일반 소비 아이템
             }
         }
     }
 
     private void UseItem()
     {
-        if (item.itemName == "BearMeat") // 정확히 BearMeat 아이템 이름
+        if (item.itemName == "BearMeat")
         {
             StatusController statusController = FindObjectOfType<StatusController>();
             if (statusController != null)
             {
-                statusController.IncreaseHP(20);
-                Debug.Log("체력 회복!");
+                statusController.IncreaseHP(3);      //피 회복
+                statusController.IncreaseHungry(10); //배고픔 회복
             }
-            else
-            {
-                Debug.LogError("StatusController 컴포넌트를 찾을 수 없습니다!");
-            }
-
             SetSlotCount(-1);
             UpdateSlotUI();
         }

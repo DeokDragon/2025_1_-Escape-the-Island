@@ -26,11 +26,6 @@ public class BearAI : MonoBehaviour
         if (playerObj != null)
         {
             player = playerObj.transform;
-            Debug.Log("플레이어를 찾았습니다!");
-        }
-        else
-        {
-            Debug.LogError("Player 태그가 지정된 오브젝트를 찾을 수 없습니다!");
         }
     }
 
@@ -71,18 +66,11 @@ public class BearAI : MonoBehaviour
 
         animator.SetTrigger("Attack1");
 
-        Debug.Log("곰이 플레이어를 공격합니다!");
-
         StatusController statusController = player.GetComponent<StatusController>();
         if (statusController != null)
         {
             statusController.DecreaseHP(10);
             statusController.PlayHitSound();
-            Debug.Log("플레이어 체력 감소!");
-        }
-        else
-        {
-            Debug.LogError("플레이어에 StatusController가 없습니다!");
         }
 
         yield return new WaitForSeconds(attackCooldown);

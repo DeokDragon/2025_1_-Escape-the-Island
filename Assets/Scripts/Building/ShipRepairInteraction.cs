@@ -41,12 +41,6 @@ public class ShipRepairInteraction : MonoBehaviour
         {
             // 나무 1개 소모 후 수리 진행
             Inventory.instance.ConsumeItem("Log", 1);
-            // 수리 진행 후 모델 업데이트 등 추가 작업
-            Debug.Log("수리 진행 중... 현재 나무 개수: " + Inventory.instance.HasItem("Log", 0));
-        }
-        else
-        {
-            Debug.Log("나무가 부족합니다.");
         }
     }
 }

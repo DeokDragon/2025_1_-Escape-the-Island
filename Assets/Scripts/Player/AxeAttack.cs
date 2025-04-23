@@ -28,16 +28,7 @@ public class AxeAttack : MonoBehaviour
             if (bear != null)
             {
                 bear.TakeDamage(damage);
-                Debug.Log("Bear hit!");
             }
-            else
-            {
-                Debug.Log("Hit something else: " + hit.collider.name);
-            }
-        }
-        else
-        {
-            Debug.Log("No object hit.");
         }
     }
 

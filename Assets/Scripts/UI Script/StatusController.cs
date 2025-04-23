@@ -181,7 +181,6 @@ public class StatusController : MonoBehaviour
 
         if (currentHp <= 0)
         {
-            Debug.Log("캐릭터의 체력이 0이 되었습니다!");
 
             RespawnManager respawn = FindObjectOfType<RespawnManager>();
             if (respawn != null)
