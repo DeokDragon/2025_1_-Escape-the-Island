@@ -998,8 +998,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b851dbdd2559940940824db9c1d51f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  batteryPower: 10
-  drainTime: 1
+  batteryPower: 1
+  drainRate: 0.05
 --- !u!114 &243508755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10495,8 +10495,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 100
-  sp: 100000
-  spIncreaseSpeed: 10
+  sp: 10000
+  spIncreaseSpeed: 3
   spRechargeTime: 300
   hungry: 300
   hungryDecreaseTime: 100

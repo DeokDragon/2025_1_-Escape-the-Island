@@ -41,7 +41,7 @@ public class StatusController : MonoBehaviour
 
 
 
-public int GetCurrentStamina()
+    public int GetCurrentStamina()
     {
         return currentSp;
     }
@@ -63,7 +63,7 @@ public int GetCurrentStamina()
         currentHungry = (int)hunger;
         currentThirsty = (int)thirst;
 
-        GaugeUpdate(); 
+        GaugeUpdate();
     }
 
 
@@ -152,7 +152,7 @@ public int GetCurrentStamina()
         float hungryRatio = (float)currentHungry / hungry;
         float thirstyRatio = (float)currentThirsty / thirsty;
 
-        
+
 
 
 

@@ -4,8 +4,12 @@ using UnityEngine;
 
 
 public abstract class CloseWeaponController : MonoBehaviour
-    //미완성 클래스
+//미완성 클래스
 {
+    //스테이터스 컨트롤러 참조
+    protected StatusController theStatusController;
+
+
     // 현재 장착된 Hand형 타입 무기.
     [SerializeField]
     protected CloseWeapon currentCloseWeapon;
@@ -17,13 +21,14 @@ public abstract class CloseWeaponController : MonoBehaviour
     protected RaycastHit hitInfo;
     [SerializeField]
 
-    
+
     //필요한 컴포넌트
     protected PlayerController thePlayerController;
 
     void Start()
     {
         thePlayerController = FindObjectOfType<PlayerController>();
+        theStatusController = FindObjectOfType<StatusController>();//참조
     }
 
     protected void TryAttack()
@@ -35,7 +40,7 @@ public abstract class CloseWeaponController : MonoBehaviour
                 if (thePlayerController.IsCrouch) // << 추가!
                     return; // 앉아있으면 공격 안 함
 
-                if (!isAttack)
+                if (!isAttack && theStatusController.GetCurrentStamina() >= 2500)
                 {
                     if (CheckObject())
                     {
@@ -58,12 +63,16 @@ public abstract class CloseWeaponController : MonoBehaviour
         isAttack = true;
         currentCloseWeapon.anim.SetTrigger(swingType);
 
+        // 공격 시작 전 스태미나 감소
+        if (theStatusController != null)
+        {
+            theStatusController.DecreaseStamina(1500); // 원하는 수치로 조정
+        }
+
         yield return new WaitForSeconds(_delayA);
         isSwing = true;
 
         StartCoroutine(HitCoroutine());
-
-
 
         yield return new WaitForSeconds(_delayB);
         isSwing = false;
