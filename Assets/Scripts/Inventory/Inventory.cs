@@ -69,7 +69,6 @@ public class Inventory : MonoBehaviour
 
     public void AcquireItem(Item _item, int _count = 1)
     {
-        Debug.Log("AcquireItem called: " + _item.itemName + " x" + _count);
 
         // 같은 아이템이 인벤토리에 있는지 먼저 확인
         for (int i = 0; i < slots.Length; i++)
@@ -101,10 +100,8 @@ public class Inventory : MonoBehaviour
         {
             if (slot.item != null)
             {
-                Debug.Log("아이템 이름 확인: " + slot.item.itemName);  // 아이템 이름 확인
                 if (slot.item.itemName.ToLower() == itemName.ToLower())  // 대소문자 구분 없이 비교
                 {
-                    Debug.Log("아이템 수량: " + slot.itemCount);  // 수량 확인
                     if (slot.itemCount >= count)
                         return true;
                 }
@@ -116,7 +113,6 @@ public class Inventory : MonoBehaviour
     // 아이템 소비하기
     public bool ConsumeItem(string itemName, int count)
     {
-        Debug.Log($"ConsumeItem 호출됨: {itemName} x{count}");
 
         for (int i = 0; i < slots.Length; i++)
         {
@@ -124,10 +120,8 @@ public class Inventory : MonoBehaviour
             {
                 if (slots[i].itemCount >= count)
                 {
-                    Debug.Log($"아이템 소비 전: {slots[i].itemCount}");
                     slots[i].SetSlotCount(-count);  // 아이템 개수 감소
                     slots[i].UpdateSlotUI();        // UI 업데이트
-                    Debug.Log($"아이템 소비 후: {slots[i].itemCount}");
                     return true;
                 }
             }
@@ -180,8 +174,6 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("인벤토리 로드 완료!");
     }
 
     

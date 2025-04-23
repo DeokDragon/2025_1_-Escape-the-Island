@@ -13,11 +13,8 @@ public class BearMeat : MonoBehaviour
         {
             if (bearMeatItem == null)
             {
-                Debug.LogError("아이템 데이터가 없습니다! bearMeatItem 이 null 입니다!");
                 return;
             }
-
-            Debug.Log("E 키 입력 확인됨, 아이템 획득 시도!");
             Inventory.instance.AcquireItem(bearMeatItem);
             Destroy(gameObject);
         }

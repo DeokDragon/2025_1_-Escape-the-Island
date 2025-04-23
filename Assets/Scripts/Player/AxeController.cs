@@ -7,8 +7,6 @@ public class AxeController : CloseWeaponController
     // 활성화 여부.
     public static bool isActivate = false;
 
-   
-
     // Update is called once per frame
     void Update()
     {
@@ -34,15 +32,10 @@ public class AxeController : CloseWeaponController
                 }
                 else if (hitInfo.transform.tag == "Bear")
                 {
-                    Debug.Log("Axe Hit: Bear detected, finally applying damage.");
                     hitInfo.transform.GetComponent<BearHealth>().TakeDamage(50);
                 }
 
                 isSwing = false;
-            }
-            else
-            {
-                Debug.Log("Axe Hit: No object detected.");
             }
 
             yield return null;

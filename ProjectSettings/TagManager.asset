@@ -9,6 +9,7 @@ TagManager:
   - Twig
   - Grass
   - Rock
+  - Bear
   layers:
   - Default
   - TransparentFX
