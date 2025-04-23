@@ -30,19 +30,21 @@ public class DayAndNight : MonoBehaviour
     void Start()
     {
         statusController = FindObjectOfType<StatusController>();
-        // 낮의 기본 안개 밀도를 명확하게 설정
         dayFogDensity = defaultDayFogDensity;
-        currentFogDensity = RenderSettings.fogDensity; // 현재 안개 밀도 가져오기
+
+        // 아침부터 시작한다고 가정하고 낮 안개 값으로 초기화
+        StartCoroutine(InitFogProperly());
     }
 
     // Update is called once per frame
     void Update()
     {
+        float angleX = transform.eulerAngles.x;
         transform.Rotate(Vector3.right, 0.1f * secondPerRealTimeSecond * Time.deltaTime);
 
-        if (transform.eulerAngles.x >= 170)
+        if (angleX >= 170f && angleX < 340f)
             isNight = true;
-        else if (transform.eulerAngles.x >= 340)
+        else
             isNight = false;
 
         // 온도 변화 처리
@@ -64,6 +66,15 @@ public class DayAndNight : MonoBehaviour
             }
         }
 
+        if (isNight) // 밤일 때
+        {
+            if (currentFogDensity < nightFogDensity)
+            {
+                currentFogDensity += 0.1f * fogDensityCalc * Time.deltaTime;
+                currentFogDensity = Mathf.Min(currentFogDensity, nightFogDensity); // 최대값 초과 방지
+                RenderSettings.fogDensity = currentFogDensity;
+            }
+        }
 
         // 온도에 따른 체력 감소 처리
         if (temperature < 0)
@@ -106,5 +117,16 @@ public class DayAndNight : MonoBehaviour
         transform.eulerAngles = new Vector3(angleX, currentRotation.y, currentRotation.z);
     }
 
+    private IEnumerator InitFogProperly()
+    {
+        yield return null; // 한 프레임 기다림
 
+        RenderSettings.fog = true;
+
+        float angleX = transform.eulerAngles.x;
+        isNight = angleX >= 170f && angleX < 340f;
+
+        currentFogDensity = isNight ? nightFogDensity : dayFogDensity;
+        RenderSettings.fogDensity = currentFogDensity;
+    }
 }

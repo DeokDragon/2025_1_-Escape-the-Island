@@ -6,8 +6,8 @@ public class BearSpawner : MonoBehaviour
 {
     public GameObject bearPrefab;  // 곰 프리팹
     public float spawnRadius = 10f; // 스폰 반경
-    public float spawnInterval = 30f; // 곰이 스폰되는 간격 (30초)
-    public int maxBearsAtOnce = 3; // 한번에 최대 생성될 곰 수
+    public float spawnInterval = 43200f; // 곰이 스폰되는 간격 (30초)
+    public int maxBearsAtOnce = 1; // 한번에 최대 생성될 곰 수
 
     private List<Vector3> spawnedBearPositions = new List<Vector3>(); // 이미 스폰된 곰들의 위치 리스트
 
