@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Axe
   itemDesc: "\uB3C4\uB07C"
   itemType: 0
-  itemImage: {fileID: 21300000, guid: 4415094e70a113a45afdda80af88ed59, type: 3}
-  itemPrefab: {fileID: 3853747309661364251, guid: b723bbf48abb0af429fb2329b865bd74, type: 3}
+  itemImage: {fileID: 21300000, guid: ac734fdae7cb6da489f1f32a8d016857, type: 3}
+  itemPrefab: {fileID: 3853747309661364251, guid: b723bbf48abb0af429fb2329b865bd74,
+    type: 3}
   weaponType: AXE

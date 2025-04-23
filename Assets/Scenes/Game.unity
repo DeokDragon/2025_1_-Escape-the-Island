@@ -1943,8 +1943,8 @@ MonoBehaviour:
   bearPrefab: {fileID: 2522993383147629068, guid: a984c02eec9fbe2489bf6362347aa0ab,
     type: 3}
   spawnRadius: 10
-  spawnInterval: 30
-  maxBearsAtOnce: 2
+  spawnInterval: 43200
+  maxBearsAtOnce: 1
 --- !u!4 &431971993
 Transform:
   m_ObjectHideFlags: 0
@@ -3809,7 +3809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secondPerRealTimeSecond: 100
   temperatureText: {fileID: 1926907775}
-  fogDensityCalc: 0.5
+  fogDensityCalc: 0.2
   defaultDayFogDensity: 0
   nightFogDensity: 0.03
   temperature: 10
@@ -8153,7 +8153,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.754717, g: 0.73372185, b: 0.46635816, a: 1}
-  m_Intensity: 30
+  m_Intensity: 100
   m_Range: 30
   m_SpotAngle: 75
   m_InnerSpotAngle: 1

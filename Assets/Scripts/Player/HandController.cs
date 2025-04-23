@@ -17,8 +17,8 @@ public class HandController : CloseWeaponController
     // Update is called once per frame
     void Update()
     {
-        if (isActivate && !thePlayerController.IsCrouch)
-            TryAttack();
+       // if (isActivate && !thePlayerController.IsCrouch)
+          // TryAttack();
     }
 
 
