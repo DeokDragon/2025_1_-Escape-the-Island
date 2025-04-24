@@ -7,7 +7,7 @@ public class RespawnManager : MonoBehaviour
     public GameObject player;
     public float respawnDelay = 3f;
 
-    public FadeController fadeController;  // ✅ 이거 클래스 안에 있어야 함!
+    public FadeController fadeController;  //  이거 클래스 안에 있어야 함!
 
     public void Respawn()
     {
@@ -27,12 +27,13 @@ public class RespawnManager : MonoBehaviour
 
         StatusController status = player.GetComponent<StatusController>();
         status.SetStatus(100, 100, 100, 100);
+        status.Invoke("GaugeUpdate", 0f);
 
         player.SetActive(true);
 
         if (fadeController != null)
             fadeController.FadeIn();
 
-        Debug.Log("💀 캐릭터 리스폰 완료");
+        
     }
 }

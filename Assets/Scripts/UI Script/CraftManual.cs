@@ -155,14 +155,21 @@ using UnityEngine.UI;
 
             isActivated = true;
             go_BaseUI.SetActive(true);
-        }
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None; // 커서 사라짐 방지
+    }
 
         private void CloseWindow()
         {
 
             isActivated = false;
             go_BaseUI.SetActive(false);
-        }
+
+        //  커서 숨기고 고정
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
         private bool CheckMaterials(int _slotNumber)
         {

@@ -107,9 +107,37 @@ public class QuickSlotController : MonoBehaviour
         }
     }
 
-    // ✅ 현재 선택된 슬롯 번호 제공
+    //  현재 선택된 슬롯 번호 제공
     public int GetSelectedSlotNumber()
     {
         return selectedSlot;
     }
+
+    //  퀵슬롯 배열 반환 함수 추가
+    public Slot[] GetQuickSlots()
+    {
+        return quickSlots;
+    }
+
+    public void LoadQuickSlots(List<QuickSlotData> slotDataList)
+    {
+        for (int i = 0; i < quickSlots.Length && i < slotDataList.Count; i++)
+        {
+            var data = slotDataList[i];
+            if (!string.IsNullOrEmpty(data.itemName))
+            {
+                Item item = ItemDatabase.instance.GetItemByName(data.itemName);
+                if (item != null)
+                {
+                    quickSlots[i].AddItem(item, data.itemCount);
+                }
+            }
+            else
+            {
+                quickSlots[i].ClearSlot();
+            }
+        }
+    }
+
+
 }

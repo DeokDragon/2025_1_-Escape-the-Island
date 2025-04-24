@@ -25,81 +25,94 @@ public class SaveManager : MonoBehaviour
 
     public void SaveToSlot(int slotIndex)
     {
-        Debug.Log("💾 SaveToSlot 시작됨");
+       
 
         SaveData data = new SaveData();
 
-        // 🔍 1. 플레이어 위치 저장
+        // 1. 플레이어 위치 저장
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("❌ Player 오브젝트를 찾지 못함! (태그 확인 필요)");
-        }
-        else
+        if (player != null)
         {
             data.playerPosition = player.transform.position;
-            Debug.Log("✅ 위치 저장됨: " + data.playerPosition);
+            
         }
 
-        // 🔍 2. 상태 저장
+        // 2. 상태 저장
         StatusController status = player?.GetComponent<StatusController>();
-        if (status == null)
-        {
-            Debug.LogError("❌ StatusController 컴포넌트를 찾지 못함!");
-        }
-        else
+        if (status != null)
         {
             data.hp = status.GetCurrentHP();
             data.stamina = status.GetCurrentStamina();
             data.hunger = status.GetCurrentHunger();
             data.thirst = status.GetCurrentThirst();
-            Debug.Log("✅ 상태 저장됨: HP=" + data.hp + " SP=" + data.stamina);
+            
         }
 
-        // 🔍 3. 인벤토리 저장
+        // 3. 인벤토리 저장
         Inventory inventory = Inventory.instance;
-        if (inventory == null)
-        {
-            Debug.LogError("❌ Inventory.instance가 null임!");
-        }
-        else
+        if (inventory != null)
         {
             var slots = inventory.GetSlots();
-            Debug.Log("✅ 슬롯 수: " + slots.Length);
+            
             foreach (var slot in slots)
             {
                 if (slot.item != null)
                 {
-                    InventorySlotData slotData = new InventorySlotData();
-                    slotData.itemName = slot.item.itemName;
-                    slotData.itemCount = slot.itemCount;
+                    InventorySlotData slotData = new InventorySlotData
+                    {
+                        itemName = slot.item.itemName,
+                        itemCount = slot.itemCount
+                    };
                     data.inventorySlots.Add(slotData);
-                    Debug.Log("📦 아이템 저장됨: " + slotData.itemName + " x" + slotData.itemCount);
+                    
                 }
             }
         }
 
-        // 🔍 4. 파일 저장
+        // 4. 퀵슬롯 저장 (✅ 저장 파일 생성 전에)
+        QuickSlotController quickSlot = FindObjectOfType<QuickSlotController>();
+        if (quickSlot != null)
+        {
+            Slot[] slots = quickSlot.GetQuickSlots();
+            foreach (Slot slot in slots)
+            {
+                if (slot.item != null)
+                {
+                    QuickSlotData slotData = new QuickSlotData
+                    {
+                        itemName = slot.item.itemName,
+                        itemCount = slot.itemCount
+                    };
+                    data.quickSlotDataList.Add(slotData);
+                }
+                else
+                {
+                    data.quickSlotDataList.Add(new QuickSlotData { itemName = "", itemCount = 0 });
+                }
+            }
+        }
+
+        // 5. JSON 저장
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSaveFilePath(slotIndex), json);
-        Debug.Log("✅ 파일 저장 완료! 경로: " + GetSaveFilePath(slotIndex));
+        
     }
 
-
     public SaveData LoadFromSlot(int slotIndex)
-       {
+    {
         string path = GetSaveFilePath(slotIndex);
 
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            Debug.Log($"슬롯 {slotIndex + 1} 로드 완료!");
+            
+
             return data;
         }
         else
         {
-            Debug.LogWarning($"슬롯 {slotIndex + 1}에 저장된 파일이 없습니다.");
+           
             return null;
         }
     }
@@ -109,9 +122,4 @@ public class SaveManager : MonoBehaviour
         string path = GetSaveFilePath(slotIndex);
         return File.Exists(path);
     }
-
 }
-
-
-
-
