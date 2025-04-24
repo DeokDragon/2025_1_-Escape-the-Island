@@ -117,9 +117,7 @@ public class PlayerController : MonoBehaviour
 
     private void ApplySaveData(SaveData data)
     {
-        Debug.Log("📦 ApplySaveData 실행됨!");
-        Debug.Log("📦 플레이어 위치: " + data.playerPosition);
-        Debug.Log("📦 체력: " + data.hp + ", 스태미나: " + data.stamina);
+     
 
 
         // 1. 위치 적용
@@ -155,6 +153,13 @@ public class PlayerController : MonoBehaviour
         if (shipRepair != null)
         {
             shipRepair.SetCurrentWood(data.currentWoodCount);
+
+            // 7. 퀵슬롯 복원
+            QuickSlotController quickSlot = FindObjectOfType<QuickSlotController>();
+            if (quickSlot != null)
+            {
+                quickSlot.LoadQuickSlots(data.quickSlotDataList);
+            }
         }
 
         Debug.Log("불러온 저장 데이터 적용 완료!");

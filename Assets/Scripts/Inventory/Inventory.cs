@@ -60,12 +60,20 @@ public class Inventory : MonoBehaviour
     private void OpenInventory()
     {
         go_InventoryBase.SetActive(true);
+
+        Cursor.visible = true; //  커서 보이게
+        Cursor.lockState = CursorLockMode.None; // 자유롭게
     }
+
 
     private void CloseInventory()
     {
         go_InventoryBase.SetActive(false);
+
+        Cursor.visible = false; //  커서 숨기기
+        Cursor.lockState = CursorLockMode.Locked; // 고정
     }
+
 
     public void AcquireItem(Item _item, int _count = 1)
     {

@@ -16,9 +16,15 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnClickQuit()
     {
-        Debug.Log("게임 종료");
-        Application.Quit();
+        Debug.Log("게임 종료됨");
+
+#if UNITY_EDITOR
+    UnityEditor.EditorApplication.isPlaying = false; // 에디터 테스트용 종료
+#else
+        Application.Quit(); // 빌드했을 때 종료
+#endif
     }
+
 
     public void OnClickSlot1Continue()
     {
