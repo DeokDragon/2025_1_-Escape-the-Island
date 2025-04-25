@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,11 +19,13 @@ public class Burn : MonoBehaviour
     private float currentDurationTime;
 
     [SerializeField]
-    private GameObject flame_prefabs; // ºÒ ºÙÀ¸¸é ÇÁ¸®ÆÕ »ı¼º
+    private GameObject flame_prefabs; // ë¶ˆ ë¶™ìœ¼ë©´ í”„ë¦¬íŒ¹ ìƒì„±
     private GameObject go_tempFlame;
 
     public void StartBurning()
     {
+        Debug.Log("ğŸ”¥ StartBurning() í˜¸ì¶œë¨");
+
         if (!isBurning)
         {
             go_tempFlame = Instantiate(flame_prefabs, transform.position, Quaternion.Euler(new Vector3(-90, 0f, 0f)));
@@ -66,6 +68,16 @@ public class Burn : MonoBehaviour
     {
         currentDamageTime = damageTime;
         GetComponent<StatusController>().DecreaseHP(damage);
+
+        StatusController status = GetComponent<StatusController>();
+        if (status != null)
+        {
+            status.DecreaseHP(damage);
+        }
+        else
+        {
+            Debug.LogError(" Burn.cs: StatusControllerê°€ ì—†ìŒ! (ë°ë¯¸ì§€ ëª» ì¤Œ)");
+        }
     }
 
     private void Off()

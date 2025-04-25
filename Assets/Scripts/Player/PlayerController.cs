@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
         private Crosshair theCrosshair;
     void Awake()
     {
-        Debug.Log("🟢 PlayerController.Awake 실행됨!");
+        
 
         theStatusController = FindObjectOfType<StatusController>();
 
@@ -76,7 +76,10 @@ public class PlayerController : MonoBehaviour
         {
             SaveData data = SaveManager.instance.LoadFromSlot(slotIndex);
             ApplySaveData(data);
-            Debug.Log("📦 ApplySaveData 실행됨!");
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            GameManager.canPlayerMove = true;
+
         }
         else
         {
