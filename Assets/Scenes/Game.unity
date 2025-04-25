@@ -2160,7 +2160,7 @@ MonoBehaviour:
   bearPrefab: {fileID: 2522993383147629068, guid: a984c02eec9fbe2489bf6362347aa0ab,
     type: 3}
   spawnRadius: 10
-  spawnInterval: 43200
+  spawnInterval: 100
   maxBearsAtOnce: 1
 --- !u!1 &444895205 stripped
 GameObject:
@@ -13282,7 +13282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   respawnPoint: {fileID: 137053835}
   player: {fileID: 1774666863}
-  respawnDelay: 1
+  respawnDelay: 3
   fadeController: {fileID: 1073697320}
 --- !u!224 &2041221895 stripped
 RectTransform:

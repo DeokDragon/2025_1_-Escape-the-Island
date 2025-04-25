@@ -39,6 +39,8 @@ public class StatusController : MonoBehaviour
 
     bool hasHit = false;
 
+    private float respawnProtectTime = 1f; // 리스폰 후 보호 시간 1초
+    private float currentRespawnProtect = 0f;
 
 
     public int GetCurrentStamina()
@@ -63,23 +65,53 @@ public class StatusController : MonoBehaviour
         currentHungry = (int)hunger;
         currentThirsty = (int)thirst;
 
+        Debug.Log($"[리스폰 SetStatus] HP={currentHp} SP={currentSp} Hungry={currentHungry} Thirsty={currentThirsty}");
+
         GaugeUpdate();
+
+        currentRespawnProtect = respawnProtectTime;
     }
+
+    public void ResetHungryThirstyTimer()
+    {
+        currentHungryDecreaseTime = 0;
+        currentThirstyDecreaseTime = 0;
+    }
+
+    public void SetMaxStatus(int _hp, int _sp, int _hungry, int _thirsty)
+    {
+        hp = _hp;
+        sp = _sp;
+        hungry = _hungry;
+        thirsty = _thirsty;
+    }
+
 
 
 
     void Start()
     {
-        currentHp = hp;
-        currentSp = sp;
-        currentHungry = hungry;
-        currentThirsty = thirsty;
+        if (currentHp == 0 && currentSp == 0 && currentHungry == 0 && currentThirsty == 0)
+        {
+           
+            // 게임 처음 시작할 때만 초기화
+            currentHp = hp;
+            currentSp = sp;
+            currentHungry = hungry;
+            currentThirsty = thirsty;
+        }
 
         audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        if (currentRespawnProtect > 0)
+        {
+            currentRespawnProtect -= Time.deltaTime;
+            return; //  보호 시간동안 Update() 나머지 다 스킵
+        }
+
         Hungry();
         Thirsty();
         GaugeUpdate();
@@ -180,20 +212,23 @@ public class StatusController : MonoBehaviour
         }
 
         if (currentHp <= 0)
+        { 
+            Debug.Log(" 플레이어 사망 → Respawn 호출");
+
+        RespawnManager respawn = FindObjectOfType<RespawnManager>();
+        if (respawn != null)
         {
-
-            RespawnManager respawn = FindObjectOfType<RespawnManager>();
-            if (respawn != null)
-            {
-                respawn.Respawn();
-            }
-
-            // 필요 시 추가로 플레이어 움직임 잠금 등 처리 가능
+            respawn.Respawn();
+        }
+        else
+        {
+            Debug.LogWarning(" RespawnManager 못 찾음!");
         }
     }
+}
 
-    // 피격 효과
-    private void PlayHitEffects()
+// 피격 효과
+private void PlayHitEffects()
     {
         PlayHitSound();
         // PlayDamageAnimation(); // 필요 시 애니메이션 추가
