@@ -30,6 +30,10 @@ public class AxeController : CloseWeaponController
                 {
                     hitInfo.transform.GetComponent<TreeComponent>().Chop(hitInfo.point, transform.eulerAngles.y);
                 }
+                else if (hitInfo.transform.tag == "Twig")
+                {
+                    hitInfo.transform.GetComponent<Twig>().Damage(this.transform);
+                }
                 else if (hitInfo.transform.tag == "Bear")
                 {
                     hitInfo.transform.GetComponent<BearHealth>().TakeDamage(50);

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
 public class Inventory : MonoBehaviour
 {
-    // ✅ 싱글톤 인스턴스 추가
+    //인스턴스
     public static Inventory instance;
 
     private void Awake()
@@ -30,20 +31,26 @@ public class Inventory : MonoBehaviour
     private GameObject go_InventoryBase;
     [SerializeField]
     private GameObject go_SlotsParent;
+    [SerializeField]
+    private GameObject go_QuickSlotParent;
 
     // 슬롯들
     private Slot[] slots;
+    private Slot[] quickSlots;
+    //넣었나 안넣었나?
+    private bool isNotPut;
 
     void Start()
     {
-        
+        slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+        quickSlots = go_QuickSlotParent.GetComponentsInChildren<Slot>();
     }
 
     void Update()
     {
         TryOpenInventory();
     }
-
+    //인벤토리 열기 시도
     private void TryOpenInventory()
     {
         if (Input.GetKeyDown(KeyCode.I))
@@ -56,7 +63,7 @@ public class Inventory : MonoBehaviour
                 CloseInventory();
         }
     }
-
+    //인벤토리 열기
     private void OpenInventory()
     {
         go_InventoryBase.SetActive(true);
@@ -65,7 +72,7 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // 자유롭게
     }
 
-
+    //인벤토리 닫음
     private void CloseInventory()
     {
         go_InventoryBase.SetActive(false);
@@ -74,45 +81,61 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // 고정
     }
 
-
+    // 아이템 횔득
     public void AcquireItem(Item _item, int _count = 1)
     {
+        PutSlot(quickSlots, _item, _count);
+        if (isNotPut)
+            PutSlot(slots, _item, _count);
 
-        // 같은 아이템이 인벤토리에 있는지 먼저 확인
-        for (int i = 0; i < slots.Length; i++)
+        if (isNotPut)
+            Debug.Log("퀵슬롯과 인벤토리가 꽉찼습니다");
+    }
+
+    private void PutSlot(Slot[] _slots, Item _item, int _count)
+
+    {// 같은 아이템이 인벤토리에 있는지 먼저 확인
+        if (Item.ItemType.Equipment != _item.itemType)
         {
-            if (slots[i].item != null && slots[i].item.itemName == _item.itemName)
+            for (int i = 0; i < _slots.Length; i++)
             {
-                slots[i].SetSlotCount(_count);  // 아이템 수량만 증가
-                slots[i].UpdateSlotUI();        // UI 업데이트
-                return;
+                if (_slots[i].item != null && _slots[i].item.itemName == _item.itemName)
+                {
+                    _slots[i].SetSlotCount(_count);  // 아이템 수량만 증가
+                    isNotPut = false;
+                    _slots[i].UpdateSlotUI();        
+                    return;
+                }
             }
         }
 
         // 같은 아이템이 없을 경우, 새로운 슬롯에 추가
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < _slots.Length; i++)
         {
-            if (slots[i].item == null)
+            if (_slots[i].item == null)
             {
-                slots[i].AddItem(_item, _count);
-                slots[i].UpdateSlotUI();        // UI 업데이트
+                _slots[i].AddItem(_item, _count);
+                isNotPut = false;
+                _slots[i].UpdateSlotUI(); 
                 return;
             }
         }
+        isNotPut = true;
+
     }
 
     // 아이템을 가지고 있는지 확인
     public bool HasItem(string itemName, int count)
     {
-        foreach (Slot slot in slots)
+        int totalCount = 0;
+
+        foreach (Slot slot in slots.Concat(quickSlots)) // 퀵슬롯도 포함
         {
-            if (slot.item != null)
+            if (slot.item != null && slot.item.itemName.ToLower() == itemName.ToLower())
             {
-                if (slot.item.itemName.ToLower() == itemName.ToLower())  // 대소문자 구분 없이 비교
-                {
-                    if (slot.itemCount >= count)
-                        return true;
-                }
+                totalCount += slot.itemCount;
+                if (totalCount >= count)
+                    return true;
             }
         }
         return false;
@@ -121,40 +144,43 @@ public class Inventory : MonoBehaviour
     // 아이템 소비하기
     public bool ConsumeItem(string itemName, int count)
     {
+        int remaining = count;
 
-        for (int i = 0; i < slots.Length; i++)
+        foreach (Slot slot in slots.Concat(quickSlots))
         {
-            if (slots[i].item != null && slots[i].item.itemName == itemName)
+            if (slot.item != null && slot.item.itemName == itemName)
             {
-                if (slots[i].itemCount >= count)
+                if (slot.itemCount >= remaining)
                 {
-                    slots[i].SetSlotCount(-count);  // 아이템 개수 감소
-                    slots[i].UpdateSlotUI();        // UI 업데이트
+                    slot.SetSlotCount(-remaining);
+                    slot.UpdateSlotUI();
                     return true;
+                }
+                else
+                {
+                    remaining -= slot.itemCount;
+                    slot.SetSlotCount(-slot.itemCount); // 남은 걸 다 소모
+                    slot.UpdateSlotUI();
                 }
             }
         }
 
-        return false;  // 아이템을 충분히 소모할 수 없으면 false 반환
+        return false;
     }
 
     // 특정 아이템의 개수를 반환하는 함수
     public int GetItemCount(string itemName)
     {
         int itemCount = 0;
-
-        // 모든 슬롯을 확인해서 해당 아이템의 개수를 합산
-        foreach (Slot slot in slots) // items 대신 slots 사용
+        foreach (Slot slot in slots.Concat(quickSlots))
         {
             if (slot.item != null && slot.item.itemName == itemName)
             {
-                itemCount += slot.itemCount; // 아이템의 개수를 더함
+                itemCount += slot.itemCount;
             }
         }
-
-        return itemCount; // 총 아이템 개수 반환
+        return itemCount;
     }
-
     public Slot[] GetSlots()
     {
         return slots;
@@ -163,9 +189,9 @@ public class Inventory : MonoBehaviour
     public void LoadInventory(List<InventorySlotData> slotDataList)
     {
         // 모든 슬롯 비우기
-        foreach (Slot slot in slots)    
+        foreach (Slot slot in slots)
         {
-            slot.ClearSlot(); // 이 함수가 없으면 AddItem 전에 null 초기화 코드 직접 넣어야 해
+            slot.ClearSlot(); 
         }
 
         // 전달받은 데이터로 슬롯 채우기
@@ -178,12 +204,12 @@ public class Inventory : MonoBehaviour
                 if (item != null)
                 {
                     slots[i].AddItem(item, data.itemCount);
-                    slots[i].UpdateSlotUI(); // UI 갱신 함수
+                    slots[i].UpdateSlotUI(); 
                 }
             }
         }
     }
 
-    
+
 
 }
