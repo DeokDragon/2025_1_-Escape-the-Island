@@ -4,8 +4,25 @@ using UnityEngine;
 
 
 public class PlayerController : MonoBehaviour
-{   
-        static public bool isActivated = true;
+{
+
+    private AudioSource footstepAudio;
+    [SerializeField]
+    private AudioClip walkClip;
+    [SerializeField]
+    private AudioClip runClip;
+    [SerializeField]
+    private AudioClip crouchClip;
+    [SerializeField]
+    private AudioClip sandClip;   // Sand에서의 걷는 소리
+
+    private float footstepDelay;
+    private float footstepTimer = 0f;
+
+    private string currentSurface = "Grass1";  // 현재 표면 (기본값은 Grass)
+
+
+    static public bool isActivated = true;
 
         // 스피드 조정 변수
         [SerializeField]
@@ -90,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
         {
+            footstepAudio = GetComponent<AudioSource>();
             capsuleCollider = GetComponent<CapsuleCollider>();
             myRigid = GetComponent<Rigidbody>();
             theCrosshair = FindObjectOfType<Crosshair>();
@@ -172,7 +190,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
         {
-            if (isActivated && GameManager.canPlayerMove)
+         
+          PlayFootstepSound(); // 발소리 재생
+        if (isActivated && GameManager.canPlayerMove)
             {
                 IsGround();
                 TryJump();
@@ -322,40 +342,64 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        // 움직임 실행
-        void Move()
+    // 움직임 실행
+    void Move()
+    {
+        float _moveDirX = Input.GetAxisRaw("Horizontal");
+        float _moveDirZ = Input.GetAxisRaw("Vertical");
+
+        Vector3 _moveHorizontal = transform.right * _moveDirX;
+        Vector3 _moveVertical = transform.forward * _moveDirZ;
+        Vector3 _moveDirection = (_moveHorizontal + _moveVertical).normalized;
+
+        if (_moveDirection != Vector3.zero)
         {
-            float _moveDirX = Input.GetAxisRaw("Horizontal");
-            float _moveDirZ = Input.GetAxisRaw("Vertical");
-
-            Vector3 _moveHorizontal = transform.right * _moveDirX;
-            Vector3 _moveVertical = transform.forward * _moveDirZ;
-
-            Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
-
-
-            myRigid.velocity = new Vector3(_velocity.x, myRigid.velocity.y, _velocity.z);
-        }
-
-
-        // 움직임 체크
-        private void MoveCheck()
-        {
-            if (!isRun && !isCrouch && isGround)
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
             {
-                if (Vector3.Distance(lastPos, transform.position) >= 0.01f)
-                    isWalk = true;
-                else
-                    isWalk = false;
-
-                theCrosshair.WalkingAnimation(isWalk);
-                lastPos = transform.position;
+                // 이동 방향을 경사면에 투영 (평면화)
+                _moveDirection = Vector3.ProjectOnPlane(_moveDirection, hit.normal).normalized;
             }
         }
 
+        Vector3 _velocity = _moveDirection * applySpeed;
+        myRigid.velocity = new Vector3(_velocity.x, myRigid.velocity.y, _velocity.z);
+    }
 
-        // 좌우 캐릭터 회전
-        private void CharacterRotation()
+
+    // 움직임 체크
+    private void MoveCheck()
+    {
+        if (isGround)
+        {
+            if (Vector3.Distance(lastPos, transform.position) >= 0.01f)
+            {
+                if (isRun)
+                {
+                    isWalk = false;
+                }
+                else if (isCrouch)
+                {
+                    isWalk = false;
+                }
+                else
+                {
+                    isWalk = true;
+                }
+            }
+            else
+            {
+                isWalk = false;
+            }
+
+            theCrosshair.WalkingAnimation(isWalk);
+            lastPos = transform.position;
+        }
+    }
+
+
+    // 좌우 캐릭터 회전
+    private void CharacterRotation()
         {
             float _yRotation = Input.GetAxisRaw("Mouse X");
             Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
@@ -419,6 +463,82 @@ public class PlayerController : MonoBehaviour
         {
             return isGround;
         }
+
+    private void PlayFootstepSound()
+    {
+        if (!isGround) return;
+        if (myRigid.velocity.magnitude <= 0.1f) return; // 안 움직이면 소리 X
+
+        footstepTimer += Time.deltaTime;
+
+        string movementType = "";
+
+        if (isRun)
+            movementType = "Run";
+        else if (isCrouch)
+            movementType = "Crouch";
+        else
+            movementType = "Walk";
+
+        // 표면 태그에 따라 발소리 다르게
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f))
+        {
+            if (hit.collider != null)
+            {
+                // 표면 태그를 검사하여 발소리 변경
+                if (hit.collider.CompareTag("Grass"))
+                {
+                    currentSurface = "Grass";
+                }
+                else if (hit.collider.CompareTag("Sand"))
+                {
+                    currentSurface = "Sand";
+                }
+                else
+                {
+                    currentSurface = "Other";
+                }
+            }
+        }
+
+        // 움직임에 따라 footstep 딜레이 다르게
+        if (movementType == "Walk")
+            footstepDelay = 0.5f;
+        else if (movementType == "Run")
+            footstepDelay = 0.3f;
+        else if (movementType == "Crouch")
+            footstepDelay = 0.8f;
+
+        if (footstepTimer >= footstepDelay)
+        {
+            footstepTimer = 0f;
+
+            // 표면에 따라 발소리 클립 선택
+            switch (movementType)
+            {
+                case "Walk":
+                    if (currentSurface == "Sand")
+                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                    else
+                        footstepAudio.clip = walkClip;  // 기본적으로는 walkClip
+                    break;
+                case "Run":
+                    if (currentSurface == "Sand")
+                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                    else
+                        footstepAudio.clip = runClip;   // 기본적으로는 runClip
+                    break;
+                case "Crouch":
+                    footstepAudio.clip = crouchClip;  // Crouch는 항상 crouchClip
+                    break;
+            }
+
+            footstepAudio.Play();
+        }
     }
+}
+
+
 
 

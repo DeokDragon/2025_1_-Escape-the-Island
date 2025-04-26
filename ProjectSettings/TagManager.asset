@@ -10,6 +10,8 @@ TagManager:
   - Grass
   - Rock
   - Bear
+  - Sand
+  - Grass1
   layers:
   - Default
   - TransparentFX
