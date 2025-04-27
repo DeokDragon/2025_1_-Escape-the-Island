@@ -58,6 +58,10 @@ public class TreeComponent : MonoBehaviour
     [SerializeField]
     private string logChange_sound;
 
+    //이것들
+    public float objectdestoryTime;
+    public GameObject objectdestory;
+
     public void Chop(Vector3 _pos, float angleY)
     {
         Hit(_pos);
@@ -128,7 +132,18 @@ public class TreeComponent : MonoBehaviour
 
 
         StartCoroutine(LogCoroutine());
+
+        //이거 추가함(캐지고 일정 시간 뒤에 나무 오브젝트 제거)
+        Invoke("objectdestorys", objectdestoryTime);
     }
+
+    //나무 오브젝트 제거 함수
+    void objectdestorys()
+    {
+        Destroy(objectdestory);
+        Debug.Log($"{objectdestory}를 제거 했습니다.");
+    }
+    
 
     IEnumerator LogCoroutine()
     {
@@ -141,12 +156,20 @@ public class TreeComponent : MonoBehaviour
         Instantiate(go_Log_Prefabs, go_ChildTree.transform.position + (go_ChildTree.transform.up * 9f), Quaternion.LookRotation(go_ChildTree.transform.up));
 
         Destroy(go_ChildTree.gameObject);
+        
     }
 
     public Vector3 GetTreeCenterPosition()
     {
+        /*if (go_treeCenter == null)
+        {
+            Debug.LogWarning("TreeCenter is null!");
+            return Vector3.zero;
+        }*/
+        
         return go_treeCenter.transform.position;
     }
 
     
+
 }

@@ -33,7 +33,10 @@ public class Rock : MonoBehaviour
     private string strike_Sound;
     [SerializeField]
     private string destroy_Sound;
-    
+
+    //돌 오브젝트 제거
+    public float objectdestoryTime;
+    public GameObject objectdestory;
 
     public void Mining()
     {
@@ -64,5 +67,17 @@ public class Rock : MonoBehaviour
 
         go_debris.SetActive(true);
         Destroy(go_debris, destroyTime);
+
+        //일정 시간 뒤 제거
+        //Invoke("objectdestorys", objectdestoryTime);
+        Destroy(gameObject);
     }
+
+    //돌 오브젝트 제거 함수
+    /*void objectdestorys()
+    {
+        Destroy(objectdestory);
+        Debug.Log($"{objectdestory}를 제거 했습니다.");
+    }*/
+
 }
