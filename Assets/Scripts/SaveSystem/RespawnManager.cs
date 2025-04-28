@@ -41,12 +41,14 @@ public class RespawnManager : MonoBehaviour
         StatusController status = player.GetComponent<StatusController>();
         if (status != null)
         {
-            // 최대값
-            status.SetMaxStatus(100, 100, 100, 100); //  새로 추가할 함수
+           
 
-            status.SetStatus(100, 100, 100, 100);    // 현재값 설정
-            status.ResetHungryThirstyTimer();        // (기존 유지)
+            // 현재값만 최대값으로 채우기
+            status.SetStatus(status.hp, status.sp, status.hungry, status.thirsty);
+
+            status.ResetHungryThirstyTimer(); // (기존 유지)
         }
+
 
         // 조작 복구
         player.GetComponent<PlayerController>().enabled = true;
