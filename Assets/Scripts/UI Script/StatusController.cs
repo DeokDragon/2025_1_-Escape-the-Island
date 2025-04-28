@@ -216,7 +216,7 @@ public class StatusController : MonoBehaviour
 
         if (currentHp <= 0)
         {
-            Debug.Log(" 플레이어 사망 → Respawn 호출");
+            
 
             RespawnManager respawn = FindObjectOfType<RespawnManager>();
             if (respawn != null)
