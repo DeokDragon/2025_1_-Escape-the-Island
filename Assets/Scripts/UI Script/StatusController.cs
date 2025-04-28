@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class StatusController : MonoBehaviour
 {
     // 체력
-    [SerializeField] private int hp;
+    [SerializeField] public int hp;
     private int currentHp;
 
     // 스태미나
-    [SerializeField] private int sp;
+    [SerializeField] public int sp;
     private int currentSp;
     [SerializeField] private int spIncreaseSpeed;
     [SerializeField] private int spRechargeTime;
@@ -18,13 +18,13 @@ public class StatusController : MonoBehaviour
     private bool spUsed;
 
     // 배고픔
-    [SerializeField] private int hungry;
+    [SerializeField] public int hungry;
     private int currentHungry;
     [SerializeField] private int hungryDecreaseTime;
     private int currentHungryDecreaseTime;
 
     // 목마름
-    [SerializeField] private int thirsty;
+    [SerializeField] public int thirsty;
     private int currentThirsty;
     [SerializeField] private int thirstyDecreaseTime;
     private int currentThirstyDecreaseTime;
@@ -93,7 +93,7 @@ public class StatusController : MonoBehaviour
     {
         if (currentHp == 0 && currentSp == 0 && currentHungry == 0 && currentThirsty == 0)
         {
-           
+
             // 게임 처음 시작할 때만 초기화
             currentHp = hp;
             currentSp = sp;
@@ -109,21 +109,26 @@ public class StatusController : MonoBehaviour
         if (currentRespawnProtect > 0)
         {
             currentRespawnProtect -= Time.deltaTime;
-            return; //  보호 시간동안 Update() 나머지 다 스킵
+            return; // 보호 중이면 다 스킵
         }
 
         Hungry();
         Thirsty();
-        GaugeUpdate();
         SPRechargeTime();
         SPRecover();
 
-        // 배고픔 또는 목마름이 0이면 스태미나를 0으로 설정
+        // ✅ 추가: 디버깅
+        Debug.Log($"[체크] 현재 배고픔: {currentHungry}, 현재 목마름: {currentThirsty}");
+
         if (currentHungry == 0 || currentThirsty == 0)
         {
+            Debug.LogWarning("⚠️ 배고픔 or 목마름 0 됨 → 스태미나 강제 0");
             currentSp = 0;
         }
+
+        GaugeUpdate();
     }
+
 
     // 스태미나 회복 대기 시간
     private void SPRechargeTime()
@@ -212,23 +217,23 @@ public class StatusController : MonoBehaviour
         }
 
         if (currentHp <= 0)
-        { 
+        {
             Debug.Log(" 플레이어 사망 → Respawn 호출");
 
-        RespawnManager respawn = FindObjectOfType<RespawnManager>();
-        if (respawn != null)
-        {
-            respawn.Respawn();
-        }
-        else
-        {
-            Debug.LogWarning(" RespawnManager 못 찾음!");
+            RespawnManager respawn = FindObjectOfType<RespawnManager>();
+            if (respawn != null)
+            {
+                respawn.Respawn();
+            }
+            else
+            {
+                Debug.LogWarning(" RespawnManager 못 찾음!");
+            }
         }
     }
-}
 
-// 피격 효과
-private void PlayHitEffects()
+    // 피격 효과
+    private void PlayHitEffects()
     {
         PlayHitSound();
         // PlayDamageAnimation(); // 필요 시 애니메이션 추가
