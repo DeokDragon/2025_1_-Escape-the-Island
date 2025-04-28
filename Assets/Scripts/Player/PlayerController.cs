@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 
@@ -197,25 +198,26 @@ public class PlayerController : MonoBehaviour
                 IsGround();
                 TryJump();
                 TryRun();
-
-                TryCrouch();
-                Move();
+                TryCrouch();            
                 MoveCheck();
                 if (!Inventory.inventoryActivated)
                 {
                     CameraRotation();
                     CharacterRotation();
                 }
-
-
-
             }
-
-
         }
 
-        // 앉기 시도
-        private void TryCrouch()
+     void FixedUpdate()
+    {
+        if (isActivated && GameManager.canPlayerMove)
+        {
+            Move();        
+        }
+    }
+
+    // 앉기 시도
+    private void TryCrouch()
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
@@ -357,15 +359,30 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
             {
-                // 이동 방향을 경사면에 투영 (평면화)
+                // 경사면에 맞게 이동 방향을 투영한다
                 _moveDirection = Vector3.ProjectOnPlane(_moveDirection, hit.normal).normalized;
             }
         }
 
-        Vector3 _velocity = _moveDirection * applySpeed;
-        myRigid.velocity = new Vector3(_velocity.x, myRigid.velocity.y, _velocity.z);
-    }
+        Vector3 targetVelocity = _moveDirection * applySpeed;
 
+        // Y값은 기존 Rigidbody가 가진 Y속도 
+        Vector3 velocity = myRigid.velocity;
+
+        Vector3 velocityChange = (targetVelocity - new Vector3(velocity.x, 0, velocity.z));
+
+        velocityChange.y = 0;  // 위/아래 방향은 직접 수정 안함
+
+        // 원하는 방향으로 가속
+        myRigid.AddForce(velocityChange, ForceMode.VelocityChange);
+
+        if (isGround) //경사면일때 밑으로 누르는 힘 작용
+        {
+            myRigid.AddForce(Vector3.down * 500f, ForceMode.Force);
+        }
+    }
+    //경사면 힘
+   
 
     // 움직임 체크
     private void MoveCheck()
@@ -410,42 +427,16 @@ public class PlayerController : MonoBehaviour
 
         // 상하 카메라 회전
         private void CameraRotation()
-        {
-            if (!pauseCameraRotation)
-            {
+        {   
                 float _xRotation = Input.GetAxisRaw("Mouse Y");
                 float _cameraRotationX = _xRotation * lookSensitivity;
                 currentCameraRotationX -= _cameraRotationX;
                 currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
 
                 theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
-            }
+            
         }
-
-
-
-        private bool pauseCameraRotation = false;
-
-        //트리 보는 코루틴
-        public IEnumerator TreeLookCoroutine(Vector3 _target)
-        {
-            pauseCameraRotation = true;
-
-            Quaternion direction = Quaternion.LookRotation(_target - theCamera.transform.position);
-            Vector3 eulerValue = direction.eulerAngles;
-            float destinationX = eulerValue.x;
-
-            while (Mathf.Abs(destinationX - currentCameraRotationX) >= 0.5f)
-            {
-                eulerValue = Quaternion.Lerp(theCamera.transform.localRotation, direction, 0.3f).eulerAngles;
-                theCamera.transform.localRotation = Quaternion.Euler(eulerValue.x, 0f, 0f);
-                currentCameraRotationX = theCamera.transform.localEulerAngles.x;
-                yield return null;
-            }
-
-            pauseCameraRotation = false;
-        }
-
+      
         // 상태 변수 값 반환
         public bool GetRun()
         {
@@ -466,8 +457,18 @@ public class PlayerController : MonoBehaviour
 
     private void PlayFootstepSound()
     {
-        if (!isGround) return;
-        if (myRigid.velocity.magnitude <= 0.1f) return; // 안 움직이면 소리 X
+        if (!isGround)
+        {
+            footstepAudio.Stop();  // 땅에 없으면 발소리 강제 종료
+            return;
+        }
+        Vector3 flatVelocity = new Vector3(myRigid.velocity.x, 0f, myRigid.velocity.z);
+        if (flatVelocity.magnitude <= 0.1f)
+        {
+            footstepAudio.Stop();
+            return;
+        } // 안움직이면 소리 x
+        
 
         footstepTimer += Time.deltaTime;
 

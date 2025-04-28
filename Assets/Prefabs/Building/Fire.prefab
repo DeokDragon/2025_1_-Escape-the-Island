@@ -10059,7 +10059,7 @@ MonoBehaviour:
   fireName: "\uBAA8\uB2E5\uBD88"
   damage: 10
   damageTime: 0.3
-  durationTime: 10
+  durationTime: 100
   ps_Flame: {fileID: 4710614533838868609}
 --- !u!135 &4091416707916812444
 SphereCollider:
