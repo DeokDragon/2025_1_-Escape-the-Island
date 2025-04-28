@@ -65,7 +65,6 @@ public class StatusController : MonoBehaviour
         currentHungry = (int)hunger;
         currentThirsty = (int)thirst;
 
-        Debug.Log($"[리스폰 SetStatus] HP={currentHp} SP={currentSp} Hungry={currentHungry} Thirsty={currentThirsty}");
 
         GaugeUpdate();
 
@@ -117,12 +116,11 @@ public class StatusController : MonoBehaviour
         SPRechargeTime();
         SPRecover();
 
-        // ✅ 추가: 디버깅
-        Debug.Log($"[체크] 현재 배고픔: {currentHungry}, 현재 목마름: {currentThirsty}");
+    
 
         if (currentHungry == 0 || currentThirsty == 0)
         {
-            Debug.LogWarning("⚠️ 배고픔 or 목마름 0 됨 → 스태미나 강제 0");
+           
             currentSp = 0;
         }
 
