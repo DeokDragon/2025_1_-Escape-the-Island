@@ -64,7 +64,7 @@ public class DayAndNight : MonoBehaviour
 
         if (temperatureText != null)
         {
-            temperatureText.text = $"현재 온도: {temperature:F1}°C";
+            temperatureText.text = $"{temperature:F1}°C";
         }
 
         // 안개 밀도 조정

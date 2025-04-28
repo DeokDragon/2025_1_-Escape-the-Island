@@ -19,9 +19,7 @@ public class AxeController : CloseWeaponController
         while (isSwing)
         {
             if (CheckObject())
-            {
-                Debug.Log("Axe Hit: " + hitInfo.transform.name);
-
+            {         
                 if (hitInfo.transform.tag == "Grass")
                 {
                     hitInfo.transform.GetComponent<Grass>().Damage();

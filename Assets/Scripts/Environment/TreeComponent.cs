@@ -141,7 +141,6 @@ public class TreeComponent : MonoBehaviour
     void objectdestorys()
     {
         Destroy(objectdestory);
-        Debug.Log($"{objectdestory}를 제거 했습니다.");
     }
     
 
@@ -157,19 +156,5 @@ public class TreeComponent : MonoBehaviour
 
         Destroy(go_ChildTree.gameObject);
         
-    }
-
-    public Vector3 GetTreeCenterPosition()
-    {
-        /*if (go_treeCenter == null)
-        {
-            Debug.LogWarning("TreeCenter is null!");
-            return Vector3.zero;
-        }*/
-        
-        return go_treeCenter.transform.position;
-    }
-
-    
-
+    }   
 }
