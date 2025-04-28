@@ -25,8 +25,7 @@ public class DayAndNight : MonoBehaviour
     [SerializeField] private float maxTemperature = 25f;  // 최고 온도
     [SerializeField] private float temperatureChangeSpeed = 1f; // 온도 변화 속도
 
-    [SerializeField] private GameObject fireObject;  // 모닥불 오브젝트
-    [SerializeField] private float fireRadius = 5f;  // 모닥불이 영향을 미치는 반경
+  
 
     private StatusController statusController;  // 플레이어 상태 관리
     private Transform playerTransform;  // 플레이어 Transform
@@ -85,33 +84,13 @@ public class DayAndNight : MonoBehaviour
         if (temperature < 0)
         {
             // 체온이 낮을 경우 체력 감소
-            float damageAmount = coldDamageRate * Time.deltaTime;
+            // coldDamageRate를 더 천천히 적용해서 부드럽게 체력이 감소하도록 수정
+            float damageAmount = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
             statusController.DecreaseHP((int)damageAmount);
         }
-
-        // 모닥불 근처에서 온도 상승 처리
-        if (fireObject != null)
-        {
-            AdjustTemperatureNearFire();
-        }
     }
 
-    private void AdjustTemperatureNearFire()
-    {
-        // 플레이어와 모닥불 사이의 거리 계산
-        float distanceToFire = Vector3.Distance(playerTransform.position, fireObject.transform.position); // 플레이어의 위치로 계산
 
-        // 모닥불 근처일수록 온도가 상승하도록 처리
-        if (distanceToFire <= fireRadius)
-        {
-            // 거리가 가까울수록 온도가 빠르게 상승
-            float temperatureIncrease = Mathf.Lerp(0, 5, 1 - (distanceToFire / fireRadius));
-            temperature += temperatureIncrease * Time.deltaTime;
-
-            // 온도 제한 (최소, 최대 온도 범위 설정)
-            temperature = Mathf.Clamp(temperature, minTemperature, maxTemperature);
-        }
-    }
 
     private void UpdateTemperature()
     {
@@ -126,8 +105,6 @@ public class DayAndNight : MonoBehaviour
             temperature = Mathf.Lerp(temperature, maxTemperature, temperatureChangeSpeed * Time.deltaTime);
         }
     }
-
-
 
     public void SetTemperature(float newTemperature)
     {
