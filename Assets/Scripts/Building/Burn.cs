@@ -24,7 +24,7 @@ public class Burn : MonoBehaviour
 
     public void StartBurning()
     {
-        Debug.Log("🔥 StartBurning() 호출됨");
+       
 
         if (!isBurning)
         {
