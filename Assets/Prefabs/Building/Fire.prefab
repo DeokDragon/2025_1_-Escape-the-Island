@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRadius: 5
-  temperatureIncreaseRate: 0.05
+  temperatureIncreaseRate: 0.1
 --- !u!1 &1026088391166969887
 GameObject:
   m_ObjectHideFlags: 0

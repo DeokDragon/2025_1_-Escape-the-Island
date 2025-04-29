@@ -24,8 +24,8 @@ public class DayAndNight : MonoBehaviour
     [SerializeField] private float minTemperature = -10f;  // 최저 온도
     [SerializeField] private float maxTemperature = 25f;  // 최고 온도
     [SerializeField] private float temperatureChangeSpeed = 1f; // 온도 변화 속도
+    private float hpLossBuffer = 0f;
 
-  
 
     private StatusController statusController;  // 플레이어 상태 관리
     private Transform playerTransform;  // 플레이어 Transform
@@ -83,10 +83,15 @@ public class DayAndNight : MonoBehaviour
         // 체온이 낮으면 체력 감소
         if (temperature < 0)
         {
-            // 체온이 낮을 경우 체력 감소
-            // coldDamageRate를 더 천천히 적용해서 부드럽게 체력이 감소하도록 수정
             float damageAmount = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
-            statusController.DecreaseHP((int)damageAmount);
+            hpLossBuffer += damageAmount;
+
+            if (hpLossBuffer >= 1f)
+            {
+                int intDamage = Mathf.FloorToInt(hpLossBuffer);
+                statusController.DecreaseHP(intDamage);
+                hpLossBuffer -= intDamage;
+            }
         }
     }
 
