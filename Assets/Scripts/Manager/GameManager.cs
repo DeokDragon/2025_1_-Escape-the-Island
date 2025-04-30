@@ -1,37 +1,46 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
     public static bool canPlayerMove = true;
+
     public static bool isOpenInventory = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã Ä¿¼­ Àá±İ ¹× ¼û±è Ã³¸®
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
         SetCursorState(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-     
+       
+
+
     }
 
-    // Ä¿¼­ »óÅÂ ¼³Á¤ ÇÔ¼ö (trueÀÏ °æ¿ì Ä¿¼­ º¸ÀÓ, falseÀÏ °æ¿ì ¼û±è)
+    // ì»¤ì„œ ì„¤ì •
     private void SetCursorState(bool showCursor)
     {
         if (showCursor)
         {
-            Cursor.lockState = CursorLockMode.None;  // Ä¿¼­ Àá±İ ÇØÁ¦
-            Cursor.visible = true;  // Ä¿¼­ º¸ÀÌ°Ô ¼³Á¤
+            Cursor.lockState = CursorLockMode.None;  // ì»¤ì„œ ì„¤ì •
+            Cursor.visible = true;  // ì»¤ì„œ ë³´ì´ê¸°
+            canPlayerMove = false;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;  // Ä¿¼­ Àá±İ
-            Cursor.visible = false;  // Ä¿¼­ ¼û±è
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            canPlayerMove = true;
         }
     }
 }

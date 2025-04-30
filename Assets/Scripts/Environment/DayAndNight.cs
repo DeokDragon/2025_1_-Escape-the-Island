@@ -8,6 +8,8 @@ public class DayAndNight : MonoBehaviour
 {
     [SerializeField] private float secondPerRealTimeSecond;
     [SerializeField] private Text temperatureText; // 화면에 표시될 온도 텍스트
+    [SerializeField] private RectTransform thermometerFill; //화면 온도UI 빨간색바
+    [SerializeField] private float thermometerMaxHeight = 200f; 
 
     private bool isNight = false;
 
@@ -65,6 +67,13 @@ public class DayAndNight : MonoBehaviour
         {
             temperatureText.text = $"{temperature:F1}°C";
         }
+        //온도 변화 빨간바
+        if (thermometerFill != null)
+        {
+            float normalizedTemp = Mathf.InverseLerp(minTemperature, maxTemperature, temperature);
+            float newHeight = normalizedTemp * thermometerMaxHeight;
+            thermometerFill.sizeDelta = new Vector2(thermometerFill.sizeDelta.x, newHeight);
+        }
 
         // 안개 밀도 조정
         if (!isNight) // 낮
@@ -92,7 +101,7 @@ public class DayAndNight : MonoBehaviour
                 statusController.DecreaseHP(intDamage);
                 hpLossBuffer -= intDamage;
             }
-        }
+        }    
     }
 
 
