@@ -43,12 +43,20 @@ public class SpawnManager : MonoBehaviour
     {
         if (!CanSpawn()) return;
 
-        // 랜덤한 스포너 골라서 리스폰 요청
-        var availableSpawners = spawners.FindAll(s => s.CanRespawn());
+        // 파괴된 스포너를 제거하고, 유효한 스포너만 필터링
+        spawners.RemoveAll(s => s == null); 
+
+        var availableSpawners = spawners.FindAll(s => s != null && s.CanRespawn());
         if (availableSpawners.Count > 0)
         {
             var randomSpawner = availableSpawners[Random.Range(0, availableSpawners.Count)];
             randomSpawner.StartRespawn();
         }
+    }
+   
+
+    public void UnregisterSpawner(Spawner spawner)
+    {
+        spawners.Remove(spawner);
     }
 }

@@ -7,10 +7,11 @@ public class SpawnedObject : MonoBehaviour
 
     void OnDestroy()
     {
-        
         if (SpawnManager.Instance != null)
         {
-            SpawnManager.Instance.UnregisterSpawn(gameObject);
+            SpawnManager.Instance.UnregisterSpawn(gameObject); // 여기는 Spawn만 해제
         }
     }
+
+    
 }
