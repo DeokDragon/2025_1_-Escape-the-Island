@@ -9,13 +9,13 @@ public class SaveSlotUI : MonoBehaviour
 
         if (SaveManager.instance.HasSaveFile(slotIndex))
         {
-            Debug.Log($"슬롯 {slotIndex + 1}: 저장 파일 존재 → 이어하기");
+            
 
             PlayerPrefs.SetInt("IsContinue", 1); // ← 이거 빠졌음!!
         }
         else
         {
-            Debug.Log($"슬롯 {slotIndex + 1}: 저장 없음 → 새 게임 시작");
+           
             PlayerPrefs.SetInt("IsContinue", 0);
         }
 
