@@ -59,6 +59,6 @@ public class RespawnManager : MonoBehaviour
 
         
 
-        isRespawning = false; // 🔥 추가
+        isRespawning = false; //  추가
     }
 }

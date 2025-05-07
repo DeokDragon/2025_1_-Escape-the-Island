@@ -28,7 +28,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnClickSlot1Continue()
     {
-        Debug.Log("🟢 슬롯 1 이어하기 버튼 클릭됨");
+        
 
         PlayerPrefs.SetInt("IsContinue", 1); // 이어하기
         PlayerPrefs.SetInt("SelectedSlot", 0); // slot0
