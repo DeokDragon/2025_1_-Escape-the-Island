@@ -21697,7 +21697,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0.3, y: 29.3}
+  m_AnchoredPosition: {x: 0.3, y: 29.9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.3}
 --- !u!114 &1240757216
@@ -29910,8 +29910,8 @@ MonoBehaviour:
   runClip: {fileID: 8300000, guid: 4c566022ebfd14c40940c81582007d87, type: 3}
   crouchClip: {fileID: 8300000, guid: 4c566022ebfd14c40940c81582007d87, type: 3}
   sandClip: {fileID: 8300000, guid: 93fc46be7e768c743b72bd78828d6fc4, type: 3}
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 10
+  runSpeed: 12
   crouchSpeed: 3
   jumpForce: 3
   crouchPosY: 0
@@ -30027,7 +30027,7 @@ Transform:
   m_GameObject: {fileID: 1774666863}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.72, y: 244.58, z: -2.42}
+  m_LocalPosition: {x: -4.72, y: 3.5, z: -2.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
