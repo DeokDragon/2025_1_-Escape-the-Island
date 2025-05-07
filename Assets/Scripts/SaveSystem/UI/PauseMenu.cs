@@ -29,7 +29,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OnClickSave()
     {
-        Debug.Log("💾 저장 버튼 클릭됨");
+       
 
         if (SaveManager.instance == null)
         {
