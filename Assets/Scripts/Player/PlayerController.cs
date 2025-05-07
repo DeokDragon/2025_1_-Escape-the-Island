@@ -378,7 +378,7 @@ public class PlayerController : MonoBehaviour
 
         if (isGround) //경사면일때 밑으로 누르는 힘 작용
         {
-            myRigid.AddForce(Vector3.down * 500f, ForceMode.Force);
+            myRigid.AddForce(Vector3.down * 800f, ForceMode.Force);
         }
     }
     //경사면 힘
