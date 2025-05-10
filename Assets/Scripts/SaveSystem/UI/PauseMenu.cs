@@ -10,7 +10,11 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            if (!GameManager.isChestUIOpen && !GameManager.escHandledThisFrame)
+            {
+                TogglePause();
+                GameManager.escHandledThisFrame = true; // 혹시 몰라 여기서도 설정해주면 더 안전
+            }
         }
     }
 

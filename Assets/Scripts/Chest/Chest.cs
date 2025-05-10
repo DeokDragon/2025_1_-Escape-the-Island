@@ -4,41 +4,50 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
+   
     public Animator animator;
     public GameObject chestUI;
-    public GameObject interactPromptUI; // "E키를 누르세요" UI
+    public GameObject interactPromptUI; // "E" UI
     public float interactDistance = 3f;
     public Transform player;
+    public LayerMask Box; // 상호작용 가능한 레이어
 
     private bool isOpened = false;
-    private bool isPlayerNear = false;
     private bool isUIOpen = false;
 
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
-        isPlayerNear = distance <= interactDistance;
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // 화면 정중앙
+        RaycastHit hit;
 
-        // 상자 근처면 E키 안내 UI
-        if (isPlayerNear && !isOpened)
+        bool isLookingAtThisChest = false;
+
+        if (Physics.Raycast(ray, out hit, interactDistance, Box))
         {
-            interactPromptUI.SetActive(true);
-
-            if (Input.GetKeyDown(KeyCode.E))
+            if (hit.transform == transform && !isOpened)
             {
-                OpenChest();
+                isLookingAtThisChest = true;
+                interactPromptUI.SetActive(true);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    OpenChest();
+                }
             }
         }
-        else
+
+        if (!isLookingAtThisChest)
         {
             interactPromptUI.SetActive(false);
         }
 
-        // ESC 키로 UI 닫기
         if (isUIOpen && Input.GetKeyDown(KeyCode.Escape))
         {
             CloseChestUI();
+            GameManager.escHandledThisFrame = true; // ESC 처리 완료 표시
         }
+
+      
     }
 
     void OpenChest()
@@ -46,8 +55,14 @@ public class Chest : MonoBehaviour
         animator.SetTrigger("OpenChest");
         animator.SetTrigger("OpenKey");
         isOpened = true;
+
+        GameManager.isChestUIOpen = true; // 애니메이션 기다리지 말고 지금 바로 true로 설정
+
         StartCoroutine(ShowChestUIAfterAnimation());
+        //플레이어 행동 묶기
         GameManager.canPlayerRotate = false;
+        GameManager.canPlayerMove = false;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -59,11 +74,10 @@ public class Chest : MonoBehaviour
         chestUI.SetActive(true);
         isUIOpen = true;
 
-        // 커서 보이게
+        GameManager.isChestUIOpen = true; //열려 있나?
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // 아이템 UI 업데이트
         Slot[] slots = chestUI.GetComponentsInChildren<Slot>();
         foreach (Slot slot in slots)
         {
@@ -76,9 +90,11 @@ public class Chest : MonoBehaviour
         chestUI.SetActive(false);
         isUIOpen = false;
 
-        Time.timeScale = 1f;
-
+        GameManager.isChestUIOpen = false; //닫을 때 false
+        //플레이어 움직임 묶기
         GameManager.canPlayerRotate = true;
+        GameManager.canPlayerMove = true;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

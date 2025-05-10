@@ -22,6 +22,9 @@ public class StatusController : MonoBehaviour
     private int currentHungry;
     [SerializeField] private int hungryDecreaseTime;
     private int currentHungryDecreaseTime;
+    [SerializeField] private int hungryDamageAmount = 1;          // 배고픔 데미지
+    [SerializeField] private float hungryDamageInterval = 2f;     // 배고픔 데미지 주기 (초)
+    private float currentHungryDamageTimer = 0f;
 
     // 목마름
     [SerializeField] public int thirsty;
@@ -108,7 +111,7 @@ public class StatusController : MonoBehaviour
         if (currentRespawnProtect > 0)
         {
             currentRespawnProtect -= Time.deltaTime;
-            return; // 보호 중이면 다 스킵
+            return;
         }
 
         Hungry();
@@ -116,12 +119,25 @@ public class StatusController : MonoBehaviour
         SPRechargeTime();
         SPRecover();
 
-    
-
+        // 배고픔이나 목마름이 0이면 스태미나 회복 불가
         if (currentHungry == 0 || currentThirsty == 0)
         {
-           
             currentSp = 0;
+        }
+
+        // 💥 배고픔 0일 때 체력 감소
+        if (currentHungry == 0)
+        {
+            currentHungryDamageTimer += Time.deltaTime;
+            if (currentHungryDamageTimer >= hungryDamageInterval)
+            {
+                DecreaseHP(hungryDamageAmount);
+                currentHungryDamageTimer = 0f;
+            }
+        }
+        else
+        {
+            currentHungryDamageTimer = 0f; // 배고픔이 회복되면 타이머 초기화
         }
 
         GaugeUpdate();
@@ -262,6 +278,7 @@ public class StatusController : MonoBehaviour
     public void IncreaseThirsty(int amount)
     {
         currentThirsty = Mathf.Min(currentThirsty + amount, thirsty);
+        GaugeUpdate(); // UI 업데이트
     }
 
     // 목마름 감소

@@ -12,6 +12,7 @@ TagManager:
   - Bear
   - Sand
   - Grass1
+  - WaterWell
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - Item
   - Player
   - Terrain
-  - 
-  - 
+  - Box
+  - WaterWell
   - 
   - 
   - 
