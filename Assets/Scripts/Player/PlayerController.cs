@@ -200,12 +200,12 @@ public class PlayerController : MonoBehaviour
                 TryRun();
                 TryCrouch();            
                 MoveCheck();
-                if (!Inventory.inventoryActivated)
-                {
-                    CameraRotation();
-                    CharacterRotation();
-                }
+            if (!Inventory.inventoryActivated && GameManager.canPlayerRotate)
+            {
+                CameraRotation();
+                CharacterRotation();
             }
+        }
         }
 
      void FixedUpdate()
@@ -505,11 +505,11 @@ public class PlayerController : MonoBehaviour
 
         // 움직임에 따라 footstep 딜레이 다르게
         if (movementType == "Walk")
-            footstepDelay = 0.5f;
+            footstepDelay = 0.6f;
         else if (movementType == "Run")
             footstepDelay = 0.3f;
         else if (movementType == "Crouch")
-            footstepDelay = 0.8f;
+            footstepDelay = 1f;
 
         if (footstepTimer >= footstepDelay)
         {

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public static bool isOpenInventory = false;
 
+    public static bool canPlayerRotate = true;
 
     // Start is called before the first frame update
     void Start()
