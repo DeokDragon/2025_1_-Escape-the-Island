@@ -5,11 +5,15 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+    public static bool isChestUIOpen = false;
+
     public static bool canPlayerMove = true;
 
     public static bool isOpenInventory = false;
 
     public static bool canPlayerRotate = true;
+
+    public static bool escHandledThisFrame = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +27,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
 
+       
 
     }
 
+    void LateUpdate()
+    {
+        escHandledThisFrame = false; // 모든 Update 이후에 초기화
+    }
     // 커서 설정
     private void SetCursorState(bool showCursor)
     {
