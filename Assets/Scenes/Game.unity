@@ -32861,7 +32861,7 @@ MonoBehaviour:
   spRechargeTime: 160
   hungry: 300
   hungryDecreaseTime: 300
-  hungryDamageAmount: 2
+  hungryDamageAmount: 1
   hungryDamageInterval: 2
   thirsty: 300
   thirstyDecreaseTime: 270
