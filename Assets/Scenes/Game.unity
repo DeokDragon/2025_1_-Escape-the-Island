@@ -21414,7 +21414,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 1751634562}
-  saveSlotIndex: 0
 --- !u!4 &1107188304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3853747309661404219, guid: b723bbf48abb0af429fb2329b865bd74,
@@ -32085,7 +32084,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 1751634562}
-  saveSlotIndex: 0
 --- !u!1 &1755570623
 GameObject:
   m_ObjectHideFlags: 0
