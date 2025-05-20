@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseUI;
-    public int saveSlotIndex = 0; // 저장할 슬롯 번호. 일단 기본 0번 슬롯
+   
 
     void Update()
     {
@@ -33,7 +33,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OnClickSave()
     {
-       
+        int selectedSlot = PlayerPrefs.GetInt("SelectedSlot", 0); //  현재 선택된 슬롯 불러오기
 
         if (SaveManager.instance == null)
         {
@@ -41,9 +41,11 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
-            SaveManager.instance.SaveToSlot(saveSlotIndex);
+            Debug.Log($" 저장 시도: 슬롯 {selectedSlot}");
+            SaveManager.instance.SaveToSlot(selectedSlot); //  선택된 슬롯에 저장
         }
     }
+
 
     public void OnClickExit()
     {
