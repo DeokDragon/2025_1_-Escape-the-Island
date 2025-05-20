@@ -1038,10 +1038,10 @@ RectTransform:
   m_Children:
   - {fileID: 415974552}
   - {fileID: 698483597}
+  - {fileID: 1182673661}
   - {fileID: 467479199}
   - {fileID: 269264935}
   - {fileID: 356696063}
-  - {fileID: 1182673661}
   - {fileID: 1540971444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1062,6 +1062,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20cdc56a2cd69f4bb6e4d491e1eca9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotButtons:
+  - {fileID: 1182673662}
+  - {fileID: 467479200}
+  - {fileID: 269264936}
 --- !u!1 &860289322
 GameObject:
   m_ObjectHideFlags: 0
