@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro; // 🔥 반드시 추가
+using TMPro; 
 
 public class SaveSlotUI : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class SaveSlotUI : MonoBehaviour
             int index = i;
             slotButtons[i].onClick.AddListener(() => OnClickSlot(index));
 
-            // ✅ TMP 대응 버전!
+            //  TMP 대응 버전 
             TextMeshProUGUI textComponent = slotButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
@@ -63,4 +63,15 @@ public class SaveSlotUI : MonoBehaviour
     {
         SceneManager.LoadScene("MainMenu");
     }
+
+    public void OnClickDelete(int slotIndex)
+    {
+        SaveManager.instance.DeleteSlot(slotIndex);
+
+        // 버튼 텍스트 갱신
+        TextMeshProUGUI textComponent = slotButtons[slotIndex].GetComponentInChildren<TextMeshProUGUI>();
+        if (textComponent != null)
+            textComponent.text = $"파일 {slotIndex + 1} (새로 시작)";
+    }
+
 }
