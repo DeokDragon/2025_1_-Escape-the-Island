@@ -16252,9 +16252,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 6373b8a546f01e6488f69aaddad7aa86,
+        type: 2}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
       propertyPath: baseRect
       value: 
       objectReference: {fileID: 2061505036}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: itemCount
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
       propertyPath: quickSlotNumber
