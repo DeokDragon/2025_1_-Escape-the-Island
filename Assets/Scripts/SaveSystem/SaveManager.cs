@@ -25,7 +25,7 @@ public class SaveManager : MonoBehaviour
 
     public void SaveToSlot(int slotIndex)
     {
-       
+        Debug.Log($"💾 저장 시작: 슬롯 {slotIndex}");
 
         SaveData data = new SaveData();
 
@@ -95,7 +95,9 @@ public class SaveManager : MonoBehaviour
         // 5. JSON 저장
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSaveFilePath(slotIndex), json);
-        
+
+        Debug.Log($"✅ 저장 완료! → {GetSaveFilePath(slotIndex)}");
+
     }
 
     public SaveData LoadFromSlot(int slotIndex)
@@ -122,4 +124,20 @@ public class SaveManager : MonoBehaviour
         string path = GetSaveFilePath(slotIndex);
         return File.Exists(path);
     }
+
+    public void DeleteSlot(int slotIndex)
+    {
+        string path = GetSaveFilePath(slotIndex);
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Debug.Log($" 슬롯 {slotIndex} 저장 파일 삭제됨: {path}");
+        }
+        else
+        {
+            Debug.Log($" 슬롯 {slotIndex}에는 삭제할 파일이 없음.");
+        }
+    }
+
 }
