@@ -303,6 +303,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void OnDisable()
     {
-        theItemEffectDatabase.HideToolTip(); // 슬롯 비활성화될 때도 툴팁 끄기
+        if (theItemEffectDatabase != null)
+            theItemEffectDatabase.HideToolTip(); // 슬롯 비활성화될 때도 툴팁 끄기
     }
+
 }
