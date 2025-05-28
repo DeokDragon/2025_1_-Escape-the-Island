@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Iron_13
+  m_Name: Diamond
   m_EditorClassIdentifier: 
-  itemName: Iron
-  itemDesc: "\uCCA0"
+  itemName: Diamond
+  itemDesc: "\uB2E4\uC774\uC544\uBAAC\uB4DC"
   itemType: 2
-  itemImage: {fileID: 0}
-  itemPrefab: {fileID: 0}
-  weaponType: Resource
+  itemImage: {fileID: 21300000, guid: d1bd308991471b042b7a8b5c66739e6b, type: 3}
+  itemPrefab: {fileID: 3944203618432223619, guid: af44529f21d3b024e89b4fa2e2c722c5,
+    type: 3}
+  weaponType: 

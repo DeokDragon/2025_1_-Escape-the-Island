@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Axe
+  m_Name: Iron
   m_EditorClassIdentifier: 
-  itemName: Axe
-  itemDesc: "\uB3C4\uB07C"
-  itemType: 0
-  itemImage: {fileID: 21300000, guid: 2911d017041ec70419f52d149093cdd6, type: 3}
-  itemPrefab: {fileID: 3853747309661364251, guid: b723bbf48abb0af429fb2329b865bd74,
+  itemName: Iron
+  itemDesc: "\uCCA0"
+  itemType: 2
+  itemImage: {fileID: 21300000, guid: d1bd308991471b042b7a8b5c66739e6b, type: 3}
+  itemPrefab: {fileID: 4483666149879336539, guid: 31029779d4eb95045b4237bb12e2f164,
     type: 3}
-  weaponType: AXE
+  weaponType: 

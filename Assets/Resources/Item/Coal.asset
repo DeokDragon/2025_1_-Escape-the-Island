@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Coal_12
+  m_Name: Coal
   m_EditorClassIdentifier: 
   itemName: Coal
   itemDesc: "\uC11D\uD0C4"
   itemType: 2
-  itemImage: {fileID: 0}
-  itemPrefab: {fileID: 0}
-  weaponType: Resource
+  itemImage: {fileID: 21300000, guid: d1bd308991471b042b7a8b5c66739e6b, type: 3}
+  itemPrefab: {fileID: 5964033087910345349, guid: bf60fcedc5cc0dc47a69703305a223a2,
+    type: 3}
+  weaponType: 
