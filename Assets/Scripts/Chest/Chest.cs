@@ -17,26 +17,55 @@ public class Chest : MonoBehaviour
 
     void Update()
     {
+        if (isUIOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseChestUI();
+                GameManager.escHandledThisFrame = true;
+            }
+            interactPromptUI.SetActive(false); // UI 열려있으면 E키 UI는 무조건 꺼둠
+            return;
+        }
+
+
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // 화면 정중앙
         RaycastHit hit;
+
 
         bool isLookingAtThisChest = false;
 
         if (Physics.Raycast(ray, out hit, interactDistance, Box))
         {
-            if (hit.transform == transform && !isOpened)
+            if (hit.transform == transform)
             {
                 isLookingAtThisChest = true;
                 interactPromptUI.SetActive(true);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    OpenChest();
+                    if (!isOpened)
+                    {
+                        if (Inventory.instance.HasItem("Key", 1))
+                        {
+                            Inventory.instance.ConsumeItem("Key", 1); // 열쇠 1개 소비
+                            OpenChest();
+                        }
+                        else
+                        {
+                            Debug.Log("열쇠가 필요합니다!");
+                        }
+                    }
+                    else
+                    {
+                        // 이미 열린 상태에서 다시 UI 열기
+                        OpenChest();
+                    }
                 }
             }
         }
 
-        if (!isLookingAtThisChest)
+            if (!isLookingAtThisChest)
         {
             interactPromptUI.SetActive(false);
         }
@@ -52,14 +81,24 @@ public class Chest : MonoBehaviour
 
     void OpenChest()
     {
-        animator.SetTrigger("OpenChest");
-        animator.SetTrigger("OpenKey");
-        isOpened = true;
+        if (!isOpened)
+        {
+            animator.SetTrigger("OpenChest");
+            animator.SetTrigger("OpenKey");
+            isOpened = true;
 
-        GameManager.isChestUIOpen = true; // 애니메이션 기다리지 말고 지금 바로 true로 설정
+            StartCoroutine(ShowChestUIAfterAnimation());
+        }
+        else
+        {
+            // 이미 열려있으면 바로 UI 활성화
+            ShowChestUIInstantly();
+        }
 
-        StartCoroutine(ShowChestUIAfterAnimation());
-        //플레이어 행동 묶기
+        interactPromptUI.SetActive(false);
+
+        GameManager.isChestUIOpen = true;
+
         GameManager.canPlayerRotate = false;
         GameManager.canPlayerMove = false;
 
@@ -67,9 +106,23 @@ public class Chest : MonoBehaviour
         Cursor.visible = true;
     }
 
+    void ShowChestUIInstantly()
+    {
+        chestUI.SetActive(true);
+        isUIOpen = true;
+
+        Slot[] slots = chestUI.GetComponentsInChildren<Slot>();
+        foreach (Slot slot in slots)
+        {
+            slot.UpdateSlotUI();
+        }
+    }
+
     private IEnumerator ShowChestUIAfterAnimation()
     {
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
+        ShowChestUIInstantly();
 
         chestUI.SetActive(true);
         isUIOpen = true;

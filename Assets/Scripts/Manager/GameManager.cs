@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+    public static bool hasKey = false;
+
     public static bool isChestUIOpen = false;
 
     public static bool canPlayerMove = true;
