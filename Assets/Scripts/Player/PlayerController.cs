@@ -115,16 +115,16 @@ public class PlayerController : MonoBehaviour
             
             isActivated = FindObjectOfType<CraftManual>();
 
-            // ✅ 회전 고정 설정 (충돌 시 회전 방지)
+           
             myRigid.freezeRotation = true;
             myRigid.constraints = RigidbodyConstraints.FreezeRotation;
 
-            // 초기화.
+         
             applySpeed = walkSpeed;
             originPosY = theCamera.transform.localPosition.y;
             applyCrouchPosY = originPosY;
 
-        // ✅ 이어하기 여부에 따라 저장 데이터 적용
+        
         int isContinue = PlayerPrefs.GetInt("IsContinue", 0);
         int slotIndex = PlayerPrefs.GetInt("SelectedSlot", 0);
 
@@ -268,22 +268,22 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        // 지면 체크.
-        private void IsGround()
-        {
-            RaycastHit hit;
-            float rayLength = capsuleCollider.bounds.extents.y + 0.2f; // 기존보다 길이를 더 증가
+    // 지면 체크.
+    private void IsGround()
+    {
+        RaycastHit hit;
+        float rayLength = capsuleCollider.bounds.extents.y + 0.3f;
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
 
-            // 디버깅을 위한 Ray 시각화
-            Debug.DrawRay(transform.position, Vector3.down * rayLength, Color.red);
+        Debug.DrawRay(rayOrigin, Vector3.down * rayLength, Color.red);
+        isGround = Physics.Raycast(rayOrigin, Vector3.down, out hit, rayLength);
 
-            isGround = Physics.Raycast(transform.position, Vector3.down, out hit, rayLength);
-            theCrosshair.JumpingAnimation(!isGround);
-        }
+        theCrosshair.JumpingAnimation(!isGround);
+    }
 
 
-        // 점프 시도
-        private void TryJump()
+    // 점프 시도
+    private void TryJump()
         {
             if (Input.GetKeyDown(KeyCode.Space) && isGround && theStatusController.GetCurrentSP() > 0)
             {
@@ -293,21 +293,27 @@ public class PlayerController : MonoBehaviour
 
 
 
-        // 점프
-        private void Jump()
-        {
+    // 점프
+    private void Jump()
+    {
+        if (isCrouch)
+            Crouch(); // 점프 시 앉기 해제
 
-            // 앉은 상태에서 점프시 앉은 상태 해제.
-            if (isCrouch)
-                Crouch();
+        theStatusController.DecreaseStamina(100);
 
-            theStatusController.DecreaseStamina(100);
-            myRigid.velocity = transform.up * jumpForce;
-        }
+        // 기존 속도의 Y 성분 제거
+        Vector3 jumpVelocity = myRigid.velocity;
+        jumpVelocity.y = 0;
+        myRigid.velocity = jumpVelocity;
+
+        // 점프 힘 적용
+        myRigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
 
 
-        // 달리기 시도
-        private void TryRun()
+
+    // 달리기 시도
+    private void TryRun()
         {
             if (Input.GetKey(KeyCode.LeftShift) && theStatusController.GetCurrentSP() > 0)
             {
@@ -359,30 +365,28 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
             {
-                // 경사면에 맞게 이동 방향을 투영한다
+                // 경사면에 맞게 이동 방향을 투영
                 _moveDirection = Vector3.ProjectOnPlane(_moveDirection, hit.normal).normalized;
             }
         }
 
-        Vector3 targetVelocity = _moveDirection * applySpeed;
-
-        // Y값은 기존 Rigidbody가 가진 Y속도 
-        Vector3 velocity = myRigid.velocity;
-
-        Vector3 velocityChange = (targetVelocity - new Vector3(velocity.x, 0, velocity.z));
-
-        velocityChange.y = 0;  // 위/아래 방향은 직접 수정 안함
-
-        // 원하는 방향으로 가속
-        myRigid.AddForce(velocityChange, ForceMode.VelocityChange);
-
-        if (isGround) //경사면일때 밑으로 누르는 힘 작용
+        if (isGround)
         {
-            myRigid.AddForce(Vector3.down * 800f, ForceMode.Force);
+            Vector3 targetVelocity = _moveDirection * applySpeed;
+            Vector3 currentVelocity = myRigid.velocity;
+            Vector3 velocityChange = (targetVelocity - new Vector3(currentVelocity.x, 0, currentVelocity.z));
+
+            velocityChange.y = 0; // 위아래 방향 변경 없음
+            myRigid.AddForce(velocityChange, ForceMode.VelocityChange);
+
+            if (isGround && !Input.GetKey(KeyCode.Space))
+            {
+                myRigid.AddForce(Vector3.down * 250f, ForceMode.Force);
+            }
         }
     }
-    //경사면 힘
-   
+
+
 
     // 움직임 체크
     private void MoveCheck()

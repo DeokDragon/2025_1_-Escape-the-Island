@@ -48,45 +48,57 @@ using UnityEngine.UI;
         //필요UI
         [SerializeField]
         private Text[] text_SlotNeedItem;
+        //회전 돌리는거 qe전용
+       private Quaternion targetRotation; // 목표 회전값
+      [SerializeField] private float rotateSpeed = 180f; // 초당 회전 속도 (degree/second
 
 
-
-        public void SlotClick(int _slotNumber)
+    public void SlotClick(int _slotNumber)
+    {
+        if (!CheckMaterials(_slotNumber))
         {
-            if (!CheckMaterials(_slotNumber))
-            {
-                Debug.Log("자재가 부족하여 제작할 수 없습니다!");
-                return;
-            }
-
-            selectedSlotIndex = _slotNumber;
-            go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
-            go_Prefab = craft_fire[_slotNumber].go_Prefab;
-            isPreviewActivated = true;
-            go_BaseUI.SetActive(false);
+            Debug.Log("자재가 부족하여 제작할 수 없습니다!");
+            return;
         }
 
-        void Start()
+        selectedSlotIndex = _slotNumber;
+        go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
+        go_Prefab = craft_fire[_slotNumber].go_Prefab;
+        isPreviewActivated = true;
+        targetRotation = go_Preview.transform.rotation;
+
+
+        go_BaseUI.SetActive(false);
+
+        // 마우스 커서 숨기고 고정
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void Start()
         {
-            inventory = FindObjectOfType<Inventory>(); // ✅ 인벤토리 자동 검색
+            inventory = FindObjectOfType<Inventory>(); //인벤토리 자동 검색
         }
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Tab) && !isPreviewActivated)
-                Window();
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPreviewActivated)
+            Window();
 
-            if (isPreviewActivated)
-                PreviewPositionUpdate();
+        if (isPreviewActivated)
+            PreviewPositionUpdate();
 
-            if (Input.GetButtonDown("Fire1"))
-                Build();
+        if (Input.GetButtonDown("Fire1")) // 왼쪽 클릭: 설치
+            Build();
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-                Cancel();
-        }
+        if (Input.GetMouseButtonDown(1)) // 👉 오른쪽 클릭: 취소
+            Cancel();
+
+        if (Input.GetKeyDown(KeyCode.Escape)) // Esc 키로도 취소
+            Cancel();
+    }
 
 
-        private void Build()
+    private void Build()
         {
             if (isPreviewActivated && go_Preview.GetComponent<PreviewObject>().isBuildable())
             {
@@ -98,7 +110,7 @@ using UnityEngine.UI;
                     return;
                 }
 
-                ConsumeMaterials(selectedSlot);  // ✅ 재료 소모
+                ConsumeMaterials(selectedSlot);  //재료 소모
                 Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
                 Destroy(go_Preview);
                 isActivated = false;
@@ -108,26 +120,28 @@ using UnityEngine.UI;
             }
         }
 
-        private void PreviewPositionUpdate()
+    private void PreviewPositionUpdate()
+    {
+        if (Physics.Raycast(tf_Player.position, tf_Player.forward, out hitInfo, range, layerMask))
         {
-            if (Physics.Raycast(tf_Player.position, tf_Player.forward, out hitInfo, range, layerMask))
+            if (hitInfo.transform != null)
             {
-                if (hitInfo.transform != null)
-                {
-                    Vector3 _location = hitInfo.point;
+                Vector3 _location = hitInfo.point;
 
-                    if (Input.GetKeyDown(KeyCode.Q))
-                        go_Preview.transform.Rotate(0, -90f, 0f);
-                    else if (Input.GetKeyDown(KeyCode.E))
-                        go_Preview.transform.Rotate(0, +90f, 0f);
+                float rotateSpeed = 90f; // 초당 90도 회전
 
-                    _location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z));
-                    go_Preview.transform.position = _location;
-                }
+                // Q, E 누르고 있는 동안 천천히 회전
+                if (Input.GetKey(KeyCode.Q))
+                    go_Preview.transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0f);
+                else if (Input.GetKey(KeyCode.E))
+                    go_Preview.transform.Rotate(0, +rotateSpeed * Time.deltaTime, 0f);
+
+                go_Preview.transform.position = _location;
             }
         }
+    }
 
-        private void Cancel()
+    private void Cancel()
         {
             if (isPreviewActivated)
                 Destroy(go_Preview);
