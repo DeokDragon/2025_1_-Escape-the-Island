@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,33 +8,33 @@ public class Rock : MonoBehaviour
     private int hp;
 
     [SerializeField]
-    private float destroyTime; // ÆÄÆí »èÁ¦ ½Ã°£
+    private float destroyTime; // íŒŒí¸ ì‚­ì œ ì‹œê°„
 
     [SerializeField]
-    private SphereCollider col; // ±¸Ã¼ 
+    private SphereCollider col; // êµ¬ì²´ 
 
 
-    //ÇÊ¿äÇÑ °ÔÀÓ ¿ÀºêÁ§Æ®
+    //í•„ìš”í•œ ê²Œì„ ì˜¤ë¸Œì íŠ¸
     [SerializeField]
-    private GameObject go_rock;//ÀÏ¹İ ¹ÙÀ§
+    private GameObject go_rock;//ì¼ë°˜ ë°”ìœ„
     [SerializeField]
-    private GameObject go_debris;//±úÁø ¹ÙÀ§
+    private GameObject go_debris;//ê¹¨ì§„ ë°”ìœ„
     [SerializeField]
     private GameObject go_effect_prefabs;
     [SerializeField]
     private GameObject go_rock_item_prefab;
 
-    //µ¹¸ÍÀÌ µîÀå °³¼ö
+    //ëŒë§¹ì´ ë“±ì¥ ê°œìˆ˜
     [SerializeField]
     private int count;
 
-    //ÇÊ¿äÇÑ »ç¿îµå ÀÌ¸§
+    //í•„ìš”í•œ ì‚¬ìš´ë“œ ì´ë¦„
     [SerializeField]
     private string strike_Sound;
     [SerializeField]
     private string destroy_Sound;
 
-    //µ¹ ¿ÀºêÁ§Æ® Á¦°Å
+    //ëŒ ì˜¤ë¸Œì íŠ¸ ì œê±°
     public float objectdestoryTime;
     public GameObject objectdestory;
 
@@ -51,33 +51,35 @@ public class Rock : MonoBehaviour
         if (hp <= 0)
             Destruction();
     }
-   
+
     private void Destruction()
     {
         SoundManager.instance.PlaySE(destroy_Sound);
 
         col.enabled = false;
 
-        for( int i = 0; i <= count; i++ )
+        // ğŸ” ìœ„ì¹˜ ìºì‹±
+        Vector3 spawnPosition = go_rock != null ? go_rock.transform.position : transform.position;
+
+        // ì•„ì´í…œ ìƒì„±
+        for (int i = 0; i <= count; i++)
         {
-            Instantiate(go_rock_item_prefab, go_rock.transform.position, Quaternion.identity);
+            Instantiate(go_rock_item_prefab, spawnPosition, Quaternion.identity);
         }
 
-        Destroy(go_rock);
+        // ğŸ’£ go_rockì´ nullì´ ì•„ë‹ˆë©´ ì‚­ì œ
+        if (go_rock != null)
+            Destroy(go_rock);
 
-        go_debris.SetActive(true);
-        Destroy(go_debris, destroyTime);
+        // ğŸ’£ íŒŒí¸ ì˜¤ë¸Œì íŠ¸ ì²˜ë¦¬
+        if (go_debris != null)
+        {
+            go_debris.SetActive(true);
+            Destroy(go_debris, destroyTime);
+        }
 
-        //ÀÏÁ¤ ½Ã°£ µÚ Á¦°Å
-        //Invoke("objectdestorys", objectdestoryTime);
+        // ğŸ”š ë³¸ì²´ ì˜¤ë¸Œì íŠ¸ ì œê±°
         Destroy(gameObject);
     }
-
-    //µ¹ ¿ÀºêÁ§Æ® Á¦°Å ÇÔ¼ö
-    /*void objectdestorys()
-    {
-        Destroy(objectdestory);
-        Debug.Log($"{objectdestory}¸¦ Á¦°Å Çß½À´Ï´Ù.");
-    }*/
 
 }
