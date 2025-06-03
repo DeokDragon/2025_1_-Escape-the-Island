@@ -1,99 +1,191 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class DayAndNight : MonoBehaviour
 {
-    [SerializeField] private float secondPerRealTimeSecond;
-    [SerializeField] private Text temperatureText; // 화면에 표시될 온도 텍스트
-    [SerializeField] private RectTransform thermometerFill; //화면 온도UI 빨간색바
-    [SerializeField] private float thermometerMaxHeight = 200f; 
+    // -------------------- 시간 --------------------
+    [Header("시간 진행")]
+    [SerializeField] private float secondPerRealTimeSecond = 60f;
 
-    private bool isNight = false;
+    // -------------------- UI --------------------
+    [Header("온도 UI")]
+    [SerializeField] private Text temperatureText;
+    [SerializeField] private RectTransform thermometerFill;
+    [SerializeField] private float thermometerMaxHeight = 200f;
 
-    [SerializeField] private float fogDensityCalc;
+    // -------------------- 온도 --------------------
+    [Header("온도 설정")]
+    [SerializeField] private float temperature = 10f;
+    [SerializeField] private float minTemperature = -10f;
+    [SerializeField] private float maxTemperature = 25f;
+    [SerializeField] private float temperatureChangeSpeed = 1f;
+    [SerializeField] private float coldDamageRate = 1f;
+
+    [Header("안개 설정")]
+    [SerializeField] private float fogDensityCalc = 1f;
     [SerializeField] private float defaultDayFogDensity = 0.01f;
-    [SerializeField] private float nightFogDensity = 0.1f;  // 밤의 안개 밀도
+    [SerializeField] private float morningFogDensity = 0.05f;  // 아침 안개 밀도 추가
+    [SerializeField] private float nightFogDensity = 0.1f;
+    [SerializeField] private Color dayFogColor = Color.gray;
+    [SerializeField] private Color morningFogColor = new Color(0.7f, 0.7f, 0.8f); // 아침 안개색 (연한 회색/파란빛)
+    [SerializeField] private Color nightFogColor = Color.black;
+    [SerializeField] private Material daySkybox;
+    [SerializeField] private Material nightSkybox;
+
+    // -------------------- 조명 --------------------
+    [Header("조명 설정")]
+    [SerializeField] private Light directionalLight;
+    // playerFlashlight 관련 변수 제거
+    [SerializeField] private Color dayLightColor = Color.white;
+    [SerializeField] private Color nightLightColor = new Color(0.2f, 0.2f, 0.4f);
+    [SerializeField] private float dayLightIntensity = 1f;
+    [SerializeField] private float nightLightIntensity = 0.1f;
+
+    // -------------------- 포스트 프로세싱 --------------------
+    [Header("포스트 프로세싱")]
+    [SerializeField] private Volume dayVolume;
+    [SerializeField] private Volume nightVolume;
+
+    // -------------------- 내부 변수 --------------------
+    private bool isNight = false;
     private float dayFogDensity;
     private float currentFogDensity;
     private float targetFogDensity;
-
-    // 온도 관련 변수
-    [SerializeField] private float temperature = 10f;  // 현재 온도
-    [SerializeField] private float coldDamageRate = 1f; // 추위에 의한 체력 감소율
-    [SerializeField] private float minTemperature = -10f;  // 최저 온도
-    [SerializeField] private float maxTemperature = 25f;  // 최고 온도
-    [SerializeField] private float temperatureChangeSpeed = 1f; // 온도 변화 속도
     private float hpLossBuffer = 0f;
 
+    private StatusController statusController;
+    private Transform playerTransform;
 
-    private StatusController statusController;  // 플레이어 상태 관리
-    private Transform playerTransform;  // 플레이어 Transform
-
-    // Start is called before the first frame update
+    // -------------------- 초기 설정 --------------------
     void Start()
     {
         statusController = FindObjectOfType<StatusController>();
-
-        // 플레이어 객체를 찾아서 Transform을 가져옵니다.
-        playerTransform = GameObject.FindWithTag("Player").transform;  // 플레이어를 찾음
+        playerTransform = GameObject.FindWithTag("Player")?.transform;
 
         dayFogDensity = defaultDayFogDensity;
+        currentFogDensity = targetFogDensity = dayFogDensity;
 
-        // 초기 설정
-        currentFogDensity = dayFogDensity;
-        targetFogDensity = dayFogDensity;
+        RenderSettings.fogDensity = currentFogDensity;
+        RenderSettings.fogColor = dayFogColor;
+
+        if (dayVolume != null) dayVolume.weight = 1f;
+        if (nightVolume != null) nightVolume.weight = 0f;
+    }
+
+    // -------------------- 매 프레임 처리 --------------------
+    void Update()
+    {
+        UpdateSkybox();
+        RotateSun();
+        UpdateDayNightState();
+        UpdateTemperature();
+        UpdateTemperatureUI();
+        UpdateFog();
+        UpdateLighting();
+        UpdatePostProcessing();
+        ApplyColdDamage();
+    }
+
+    // -------------------- 태양 회전 --------------------
+    private void RotateSun()
+    {
+        transform.Rotate(Vector3.right, 0.1f * secondPerRealTimeSecond * Time.deltaTime);
+    }
+
+    // -------------------- 낮/밤 판별 --------------------
+    private void UpdateDayNightState()
+    {
+        float angleX = transform.eulerAngles.x;
+        isNight = angleX >= 170f && angleX < 340f;
+    }
+
+    // -------------------- 온도 변화 --------------------
+    private void UpdateTemperature()
+    {
+        float targetTemp = isNight ? minTemperature : maxTemperature;
+        temperature = Mathf.Lerp(temperature, targetTemp, temperatureChangeSpeed * Time.deltaTime);
+    }
+
+    private void UpdateTemperatureUI()
+    {
+        if (temperatureText != null)
+            temperatureText.text = $"{temperature:F1}°C";
+
+        if (thermometerFill != null)
+        {
+            float normalized = Mathf.InverseLerp(minTemperature, maxTemperature, temperature);
+            float height = normalized * thermometerMaxHeight;
+            thermometerFill.sizeDelta = new Vector2(thermometerFill.sizeDelta.x, height);
+        }
+    }
+
+    // -------------------- 안개 조절 --------------------
+    private void UpdateFog()
+    {
+        float angleX = transform.eulerAngles.x;
+        if (isNight)
+        {
+            targetFogDensity = nightFogDensity;
+            RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, nightFogColor, fogDensityCalc * Time.deltaTime);
+        }
+        else if (angleX >= 0f && angleX <= 60f)  // 아침 구간
+        {
+            targetFogDensity = morningFogDensity;
+            RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, morningFogColor, fogDensityCalc * Time.deltaTime);
+        }
+        else  // 낮
+        {
+            targetFogDensity = defaultDayFogDensity;
+            RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, dayFogColor, fogDensityCalc * Time.deltaTime);
+        }
+
+        currentFogDensity = Mathf.Lerp(currentFogDensity, targetFogDensity, fogDensityCalc * Time.deltaTime);
         RenderSettings.fogDensity = currentFogDensity;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UpdateSkybox()
     {
-        float angleX = transform.eulerAngles.x;
-        transform.Rotate(Vector3.right, 0.1f * secondPerRealTimeSecond * Time.deltaTime);
+        RenderSettings.skybox = isNight ? nightSkybox : daySkybox;
+    }
 
-        // 밤/낮 구분
-        if (angleX >= 170f && angleX < 340f)
-            isNight = true;
-        else
-            isNight = false;
-
-        // 온도 변화 처리
-        UpdateTemperature();
-
-        if (temperatureText != null)
+    // -------------------- 조명 전환 --------------------
+    private void UpdateLighting()
+    {
+        if (directionalLight != null)
         {
-            temperatureText.text = $"{temperature:F1}°C";
+            directionalLight.color = Color.Lerp(directionalLight.color,
+                                                isNight ? nightLightColor : dayLightColor,
+                                                Time.deltaTime * 2f);
+
+            directionalLight.intensity = Mathf.Lerp(directionalLight.intensity,
+                                                    isNight ? nightLightIntensity : dayLightIntensity,
+                                                    Time.deltaTime * 2f);
         }
-        //온도 변화 빨간바
-        if (thermometerFill != null)
-        {
-            float normalizedTemp = Mathf.InverseLerp(minTemperature, maxTemperature, temperature);
-            float newHeight = normalizedTemp * thermometerMaxHeight;
-            thermometerFill.sizeDelta = new Vector2(thermometerFill.sizeDelta.x, newHeight);
-        }
+    }
 
-        // 안개 밀도 조정
-        if (!isNight) // 낮
+    // -------------------- 포스트 프로세싱 전환 --------------------
+    private void UpdatePostProcessing()
+    {
+        if (dayVolume != null && nightVolume != null)
         {
-            targetFogDensity = dayFogDensity;
-        }
-        else // 밤
-        {
-            targetFogDensity = nightFogDensity;
-        }
+            float targetDay = isNight ? 0f : 1f;
+            float targetNight = isNight ? 1f : 0f;
 
-        // 안개 밀도 변화
-        currentFogDensity = Mathf.Lerp(currentFogDensity, targetFogDensity, fogDensityCalc * Time.deltaTime);
-        RenderSettings.fogDensity = currentFogDensity;
+            dayVolume.weight = Mathf.Lerp(dayVolume.weight, targetDay, Time.deltaTime * 2f);
+            nightVolume.weight = Mathf.Lerp(nightVolume.weight, targetNight, Time.deltaTime * 2f);
+        }
+    }
 
-        // 체온이 낮으면 체력 감소
-        if (temperature < 0)
+    // -------------------- 체온 데미지 적용 --------------------
+    private void ApplyColdDamage()
+    {
+        if (temperature < 0 && statusController != null)
         {
-            float damageAmount = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
-            hpLossBuffer += damageAmount;
+            float damage = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
+            hpLossBuffer += damage;
 
             if (hpLossBuffer >= 1f)
             {
@@ -101,38 +193,23 @@ public class DayAndNight : MonoBehaviour
                 statusController.DecreaseHP(intDamage);
                 hpLossBuffer -= intDamage;
             }
-        }    
-    }
-
-
-
-    private void UpdateTemperature()
-    {
-        float angle = transform.eulerAngles.x;
-
-        if (angle >= 170 && angle <= 340)  // 밤 (170도 ~ 340도 사이)
-        {
-            temperature = Mathf.Lerp(temperature, minTemperature, temperatureChangeSpeed * Time.deltaTime);
-        }
-        else  // 낮
-        {
-            temperature = Mathf.Lerp(temperature, maxTemperature, temperatureChangeSpeed * Time.deltaTime);
         }
     }
 
-    public void SetTemperature(float newTemperature)
+    // -------------------- 외부 제어 함수 --------------------
+    public void SetTime(float angleX)
     {
-        temperature = Mathf.Clamp(newTemperature, minTemperature, maxTemperature); // 체온을 최소/최대 범위로 제한
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(angleX, currentRotation.y, currentRotation.z);
+    }
+
+    public void SetTemperature(float newTemp)
+    {
+        temperature = Mathf.Clamp(newTemp, minTemperature, maxTemperature);
     }
 
     public float GetTemperature()
     {
         return temperature;
-    }
-
-    public void SetTime(float angleX)
-    {
-        Vector3 currentRotation = transform.eulerAngles;
-        transform.eulerAngles = new Vector3(angleX, currentRotation.y, currentRotation.z);
     }
 }
