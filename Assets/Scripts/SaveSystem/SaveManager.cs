@@ -98,6 +98,12 @@ public class SaveManager : MonoBehaviour
 
         Debug.Log($"✅ 저장 완료! → {GetSaveFilePath(slotIndex)}");
 
+        DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
+        if (timeSystem != null)
+        {
+            data.currentTime = timeSystem.transform.eulerAngles.x;
+        }
+
     }
 
     public SaveData LoadFromSlot(int slotIndex)
