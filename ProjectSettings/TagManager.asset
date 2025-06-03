@@ -14,6 +14,7 @@ TagManager:
   - Grass1
   - WaterWell
   - Building
+  - Cave
   layers:
   - Default
   - TransparentFX
