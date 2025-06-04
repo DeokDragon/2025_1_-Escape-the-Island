@@ -34,6 +34,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField]
     public int quickSlotNumber; // 퀵슬롯 넘버
 
+    public bool canReceiveItem = true;
+
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<ItemEffectDataBase>();
@@ -112,6 +114,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         // ✅ 장착을 살짝 지연해서 시도 (Start 이후 실행되도록)
         if (isQuickSlot)
             StartCoroutine(DelayedEquip());
+
+        if (!canReceiveItem) return;
 
     }
 
