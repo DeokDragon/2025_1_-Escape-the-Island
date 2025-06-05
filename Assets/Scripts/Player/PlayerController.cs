@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
         {
             SaveData data = SaveManager.instance.LoadFromSlot(slotIndex);
             ApplySaveData(data);
-            Debug.Log("📦 ApplySaveData 실행됨!");
+           
         }
         }
 

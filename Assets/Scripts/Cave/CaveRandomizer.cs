@@ -19,7 +19,7 @@ public class CaveRandomizer : MonoBehaviour
                 caveSpawns[i].SetActive(i == selectedIndex);
             }
 
-            Debug.Log($" 새 게임 → 동굴 {selectedIndex + 1}번만 활성화됨");
+            
         }
     }
 }
