@@ -87,17 +87,19 @@ public class SettingsManager : MonoBehaviour
             {
                 SceneManager.UnloadSceneAsync(settingsScene);
             }
+
+            GameObject pauseMenu = GameObject.Find("PauseMenuUI");
+            if (pauseMenu != null)
+                pauseMenu.SetActive(true);
             else
-            {
-                Debug.LogWarning("⚠️ SettingsScene이 Additive로 로드되지 않았습니다. Unload 생략.");
-            }
+                Debug.LogWarning("❌ PauseMenuUI 못 찾음");
         }
         else if (caller == "MainMenu")
         {
-            Debug.Log("🔁 메인 메뉴로 돌아가는 중...");
             SceneManager.LoadScene("MainMenu");
         }
     }
+
 
     public void OnClickApply()
     {
