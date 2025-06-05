@@ -37,7 +37,7 @@ ModelImporter:
       takeName: Plane.002|Open Chest
       internalID: 6481755212264137246
       firstFrame: 0
-      lastFrame: 99
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -65,8 +65,8 @@ ModelImporter:
       name: Plane.002|Plane.002Action
       takeName: Plane.002|Plane.002Action
       internalID: -1177906569688301896
-      firstFrame: 0
-      lastFrame: 50
+      firstFrame: 50
+      lastFrame: 99
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

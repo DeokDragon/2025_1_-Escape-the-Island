@@ -53,6 +53,12 @@ using UnityEngine.UI;
       [SerializeField] private float rotateSpeed = 180f; // 초당 회전 속도 (degree/second
 
 
+    //crafttab ui 칸
+    [SerializeField] private GameObject craftUI1;
+    [SerializeField] private GameObject craftUI2;
+
+    private int currentPage = 1;
+
     public void SlotClick(int _slotNumber)
     {
         if (!CheckMaterials(_slotNumber))
@@ -220,6 +226,22 @@ using UnityEngine.UI;
             CloseWindow();
         }
 
-
+    public void NextPage()
+    {
+        if (currentPage == 1)
+        {
+            craftUI1.SetActive(false);
+            craftUI2.SetActive(true);
+            currentPage = 2;
+        }
+        else if (currentPage == 2)
+        {
+            craftUI2.SetActive(false);
+            craftUI1.SetActive(true);
+            currentPage = 1;
+        }
     }
+
+
+}
 
