@@ -52,6 +52,12 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    
+    public void OnClickSettings()
+    {
+        PlayerPrefs.SetString("SettingsCaller", "Game");
+        SceneManager.LoadScene("SettingsScene", LoadSceneMode.Additive);
+    }
+
+
 
 }
