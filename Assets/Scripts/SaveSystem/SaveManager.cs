@@ -92,7 +92,21 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        // 5. JSON 저장
+        //5. 동굴 위치 저장
+        CaveRandomizer caveRandomizer = FindObjectOfType<CaveRandomizer>();
+        if (caveRandomizer != null)
+        {
+            for (int i = 0; i < caveRandomizer.caveSpawns.Length; i++)
+            {
+                if (caveRandomizer.caveSpawns[i].activeSelf)
+                {
+                    data.caveIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // 6. JSON 저장
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSaveFilePath(slotIndex), json);
 

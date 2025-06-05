@@ -2212,6 +2212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 143939877}
   - component: {fileID: 143939878}
+  - component: {fileID: 143939879}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -2246,6 +2247,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c890fdd9c014c468a368d063c039f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &143939879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143939876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c54af086c0ab349a2cc8339a2c44cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  caveSpawns:
+  - {fileID: 843151652}
+  - {fileID: 1023218380}
+  - {fileID: 1111133418}
 --- !u!1001 &148688590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16923,6 +16940,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 836726446}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &843151652 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8939170092257107302, guid: 104fbb03aba0f0b4d9d4e77ac8a1035a,
+    type: 3}
+  m_PrefabInstance: {fileID: 570716426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &854274871
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20921,6 +20944,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1022202036}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1023218380 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7757416148303401577, guid: 2768dd6011da42a42a6675700aafbb20,
+    type: 3}
+  m_PrefabInstance: {fileID: 1140856684}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1024860740
 GameObject:
   m_ObjectHideFlags: 0
@@ -23376,6 +23405,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f077b400185f28f4a85471ed03fe4f3c, type: 3}
+--- !u!1 &1111133418 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5228294171436518721, guid: 388d8c0a265d1b843a81fbc128dd88a9,
+    type: 3}
+  m_PrefabInstance: {fileID: 530603230}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1112781504
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42785,6 +42820,7 @@ MonoBehaviour:
   - {fileID: 2108929520}
   audioSourceBGM:
   - {fileID: 2108929519}
+  - {fileID: 2108929525}
   playSoundName: []
   effectsSounds:
   - name: Pickaxe_Strike

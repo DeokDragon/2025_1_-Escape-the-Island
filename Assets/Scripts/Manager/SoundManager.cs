@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class Sound
 {
-    public string name; //°îÀÇ ÀÌ¸§
-    public AudioClip clip; // °î
+    public string name; //ê³¡ì˜ ì´ë¦„
+    public AudioClip clip; // ê³¡
 }
 public class SoundManager : MonoBehaviour
 {
@@ -16,10 +16,10 @@ public class SoundManager : MonoBehaviour
 
     static public SoundManager instance;
 
-    //½Ì±ÛÅÏ, singleton,
+    //ì‹±ê¸€í„´, singleton,
 
     #region singleton
-    void Awake()  //»ı¼º ÃÖÃÊ
+    void Awake()  //ìƒì„± ìµœì´ˆ
 
     {
         if (instance == null)
@@ -47,7 +47,21 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         playSoundName = new string[audioSourceEffects.Length];
+        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume", 1f));
+
+        // ìŠ¬ë¼ì´ë” ì €ì¥ê°’ ë¶ˆëŸ¬ì™€ì„œ ì´ˆê¸° ë³¼ë¥¨ ì„¤ì •
+        float savedBGM = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        float savedSFX = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        SetBGMVolume(savedBGM);
+        SetSFXVolume(savedSFX);
+
+        foreach (AudioSource bgm in audioSourceBGM)
+        {
+            bgm.volume = PlayerPrefs.GetFloat("BGMVolume", 1f); // ì´ˆê¸°í™”ì‹œ ê°•ì œ ì ìš©
+        }
+
     }
+
 
     public void PlaySE(string _name)
     {
@@ -65,11 +79,11 @@ public class SoundManager : MonoBehaviour
                         return;
                     }
                 }
-                Debug.Log("¸ğµç °¡¿ë AudioSource°¡ »ç¿ëÁßÀÔ´Ï´Ù");
+                Debug.Log("ëª¨ë“  ê°€ìš© AudioSourceê°€ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤");
                 return;
             }
         }
-        Debug.Log(_name + "»ç¿îµå°¡ SoundManager¿¡ µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+        Debug.Log(_name + "ì‚¬ìš´ë“œê°€ SoundManagerì— ë“±ë¡ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
        
     }
 
@@ -92,7 +106,43 @@ public class SoundManager : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("Àç»ı ÁßÀÎ" + _name + "»ç¿îµå°¡ ¾ø½À´Ï´Ù");
+        Debug.Log("ì¬ìƒ ì¤‘ì¸" + _name + "ì‚¬ìš´ë“œê°€ ì—†ìŠµë‹ˆë‹¤");
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        foreach (AudioSource bgm in audioSourceBGM)
+        {
+            bgm.volume = volume;
+        }
+        PlayerPrefs.SetFloat("BGMVolume", volume);
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        foreach (AudioSource sfx in audioSourceEffects)
+        {
+            sfx.volume = volume;
+        }
+        PlayerPrefs.SetFloat("SFXVolume", volume);
+    }
+
+    public void PlayBGM(string name)
+    {
+        foreach (Sound bgm in bgmSounds)
+        {
+            if (bgm.name == name)
+            {
+                for (int i = 0; i < audioSourceBGM.Length; i++)
+                {
+                    audioSourceBGM[i].clip = bgm.clip;
+                    audioSourceBGM[i].volume = PlayerPrefs.GetFloat("BGMVolume", 1f); // ìŠ¬ë¼ì´ë”ê°’ ë°˜ì˜
+                    audioSourceBGM[i].Play();
+                }
+                return;
+            }
+        }
+        Debug.LogWarning($"âŒ '{name}' ì´ë¦„ì˜ BGMì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 
 }
