@@ -7,6 +7,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+    KeyCode GetSavedKeyCode(string prefKey, KeyCode defaultKey)
+    {
+        string saved = PlayerPrefs.GetString(prefKey, defaultKey.ToString());
+        if (System.Enum.TryParse<KeyCode>(saved, out KeyCode parsed))
+            return parsed;
+        else
+            return defaultKey;
+    }
+
     private AudioSource footstepAudio;
     [SerializeField]
     private AudioClip walkClip;
@@ -109,6 +118,7 @@ public class PlayerController : MonoBehaviour
     void Start()
         {
             footstepAudio = GetComponent<AudioSource>();
+        SoundManager.instance.audioSourceEffects[0] = footstepAudio;
             capsuleCollider = GetComponent<CapsuleCollider>();
             myRigid = GetComponent<Rigidbody>();
             theCrosshair = FindObjectOfType<Crosshair>();
@@ -353,33 +363,45 @@ public class PlayerController : MonoBehaviour
     // 움직임 실행
     void Move()
     {
-        float _moveDirX = Input.GetAxisRaw("Horizontal");
-        float _moveDirZ = Input.GetAxisRaw("Vertical");
+        KeyCode upKey = GetSavedKeyCode("MoveUp", KeyCode.W);
+        KeyCode downKey = GetSavedKeyCode("MoveDown", KeyCode.S);
+        KeyCode leftKey = GetSavedKeyCode("MoveLeft", KeyCode.A);
+        KeyCode rightKey = GetSavedKeyCode("MoveRight", KeyCode.D);
+
+        float _moveDirX = 0f;
+        float _moveDirZ = 0f;
+
+        if (Input.GetKey(leftKey)) _moveDirX = -1f;
+        else if (Input.GetKey(rightKey)) _moveDirX = 1f;
+
+        if (Input.GetKey(downKey)) _moveDirZ = -1f;
+        else if (Input.GetKey(upKey)) _moveDirZ = 1f;
 
         Vector3 _moveHorizontal = transform.right * _moveDirX;
         Vector3 _moveVertical = transform.forward * _moveDirZ;
         Vector3 _moveDirection = (_moveHorizontal + _moveVertical).normalized;
 
+        // 경사면 투영
         if (_moveDirection != Vector3.zero)
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
             {
-                // 경사면에 맞게 이동 방향을 투영
                 _moveDirection = Vector3.ProjectOnPlane(_moveDirection, hit.normal).normalized;
             }
         }
 
+        // 실제 이동 적용
         if (isGround)
         {
             Vector3 targetVelocity = _moveDirection * applySpeed;
             Vector3 currentVelocity = myRigid.velocity;
-            Vector3 velocityChange = (targetVelocity - new Vector3(currentVelocity.x, 0, currentVelocity.z));
+            Vector3 velocityChange = targetVelocity - new Vector3(currentVelocity.x, 0, currentVelocity.z);
 
-            velocityChange.y = 0; // 위아래 방향 변경 없음
+            velocityChange.y = 0f;
             myRigid.AddForce(velocityChange, ForceMode.VelocityChange);
 
-            if (isGround && !Input.GetKey(KeyCode.Space))
+            if (!Input.GetKey(KeyCode.Space)) // 점프 안할 때만 중력 추가
             {
                 myRigid.AddForce(Vector3.down * 250f, ForceMode.Force);
             }
@@ -542,6 +564,23 @@ public class PlayerController : MonoBehaviour
             footstepAudio.Play();
         }
     }
+
+    KeyCode GetSavedKey(string keyName, string defaultKey)
+    {
+        string saved = PlayerPrefs.GetString(keyName, defaultKey);
+
+        try
+        {
+            KeyCode parsed = (KeyCode)System.Enum.Parse(typeof(KeyCode), saved, true);
+            return parsed;
+        }
+        catch
+        {
+            Debug.LogWarning($"⚠️ PlayerPrefs의 {keyName} 값 '{saved}'이(가) 잘못되어 기본값 '{defaultKey}'으로 대체됨.");
+            return (KeyCode)System.Enum.Parse(typeof(KeyCode), defaultKey);
+        }
+    }
+
 }
 
 

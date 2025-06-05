@@ -42785,6 +42785,7 @@ MonoBehaviour:
   - {fileID: 2108929520}
   audioSourceBGM:
   - {fileID: 2108929519}
+  - {fileID: 2108929525}
   playSoundName: []
   effectsSounds:
   - name: Pickaxe_Strike
