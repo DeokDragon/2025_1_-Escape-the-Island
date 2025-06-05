@@ -194,6 +194,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //8. 동굴 위치 저장
+        CaveRandomizer caveRandomizer = FindObjectOfType<CaveRandomizer>();
+        if (caveRandomizer != null)
+        {
+            for (int i = 0; i < caveRandomizer.caveSpawns.Length; i++)
+            {
+                caveRandomizer.caveSpawns[i].SetActive(i == data.caveIndex);
+            }
+        }
+
         Debug.Log("불러온 저장 데이터 적용 완료!");
     }
 
