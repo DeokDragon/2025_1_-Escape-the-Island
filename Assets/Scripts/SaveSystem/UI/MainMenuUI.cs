@@ -11,8 +11,10 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnClickSettings()
     {
-        Debug.Log("설정창 열기 (추후 구현)");
+        PlayerPrefs.SetString("SettingsCaller", "MainMenu");
+        SceneManager.LoadScene("SettingScene");
     }
+
 
     public void OnClickQuit()
     {
@@ -43,5 +45,5 @@ public class MainMenuUI : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-
+  
 }
