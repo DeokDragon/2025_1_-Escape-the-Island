@@ -4,19 +4,35 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseUI;
-   
+    public GameObject PauseMenuUI;
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // 1. 설정창이 열려 있는 경우 → 설정창만 닫기
+            Scene settingsScene = SceneManager.GetSceneByName("SettingScene");
+            if (settingsScene.IsValid() && settingsScene.isLoaded)
+            {
+                SceneManager.UnloadSceneAsync(settingsScene);
+
+                GameObject pauseMenu = GameObject.Find("PauseMenuUI");
+                if (pauseMenu != null)
+                    pauseMenu.SetActive(true);
+
+                Debug.Log("🔙 ESC로 설정창 닫음");
+                return; // ⛔ 여기서 바로 return해서 아래 Pause 토글 방지
+            }
+
+            // 2. 일반 ESC 동작 (기존 로직)
             if (!GameManager.isChestUIOpen && !GameManager.escHandledThisFrame)
             {
                 TogglePause();
-                GameManager.escHandledThisFrame = true; // 혹시 몰라 여기서도 설정해주면 더 안전
+                GameManager.escHandledThisFrame = true;
             }
         }
     }
+
 
     public void TogglePause()
     {
@@ -52,11 +68,18 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+   
+
     public void OnClickSettings()
     {
         PlayerPrefs.SetString("SettingsCaller", "Game");
-        SceneManager.LoadScene("SettingsScene", LoadSceneMode.Additive);
+        SceneManager.LoadScene("SettingScene", LoadSceneMode.Additive);
+
+        if (PauseMenuUI != null)
+            PauseMenuUI.SetActive(false); // 👈 PauseMenu 끄기
     }
+
+
 
 
 
