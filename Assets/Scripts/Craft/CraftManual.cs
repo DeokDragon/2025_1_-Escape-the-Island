@@ -22,8 +22,17 @@ using UnityEngine.UI;
         //상태변수
         private bool isActivated = false;
         private bool isPreviewActivated = false;
+    public bool IsUIActivated()
+    {
+        return isActivated;
+    }
 
-        [SerializeField]
+    public bool IsPreviewMode()
+    {
+        return isPreviewActivated;
+    }
+
+    [SerializeField]
         private GameObject go_BaseUI; // 기본 베이스 UI
 
         private int selectedSlotIndex = -1;
@@ -51,6 +60,33 @@ using UnityEngine.UI;
         //회전 돌리는거 qe전용
        private Quaternion targetRotation; // 목표 회전값
       [SerializeField] private float rotateSpeed = 180f; // 초당 회전 속도 (degree/second
+
+
+
+    //armor 관련 함수
+    [SerializeField] private GameObject craftUI_armor; // 노란 버튼 탭 (Armor)
+    private enum CraftTab { Craft, Armor }
+    private CraftTab currentTab = CraftTab.Craft;
+    [SerializeField] private Craft[] craft_armor;
+    [SerializeField] private GameObject helmetIcon;
+    [SerializeField] private GameObject armorIcon;
+    [SerializeField] private GameObject pantsIcon;
+    [SerializeField] private GameObject bootsIcon;
+
+    [SerializeField] private float helmetColdProtection = 0.1f;
+    [SerializeField] private float armorColdProtection = 0.25f;
+    [SerializeField] private float pantsColdProtection = 0.2f;
+    [SerializeField] private float bootsColdProtection = 0.15f;
+
+    private bool isHelmetEquipped = false;
+    private bool isArmorEquipped = false;
+    private bool isPantsEquipped = false;
+    private bool isBootsEquipped = false;
+
+    public void SetHelmetEquipped(bool equipped) => isHelmetEquipped = equipped;
+    public void SetArmorEquipped(bool equipped) => isArmorEquipped = equipped;
+    public void SetPantsEquipped(bool equipped) => isPantsEquipped = equipped;
+    public void SetBootsEquipped(bool equipped) => isBootsEquipped = equipped;
 
 
     //crafttab ui 칸
@@ -82,9 +118,21 @@ using UnityEngine.UI;
     }
 
     void Start()
-        {
-            inventory = FindObjectOfType<Inventory>(); //인벤토리 자동 검색
-        }
+    {
+        inventory = FindObjectOfType<Inventory>(); // 인벤토리 자동 검색
+
+        // 초기 탭 설정
+        currentTab = CraftTab.Craft;
+        craftUI1.SetActive(true);
+        craftUI2.SetActive(false);
+        craftUI_armor.SetActive(false);
+
+        // ✅ 아이콘 초기화 (모두 꺼놓기)
+        helmetIcon.SetActive(false);
+        armorIcon.SetActive(false);
+        pantsIcon.SetActive(false);
+        bootsIcon.SetActive(false);
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab) && !isPreviewActivated)
@@ -242,6 +290,139 @@ using UnityEngine.UI;
         }
     }
 
+    public void OnArmorTabClick()
+    {
+        currentTab = CraftTab.Armor;
+        craftUI1.SetActive(false);
+        craftUI2.SetActive(false);
+        craftUI_armor.SetActive(true);
+    }
 
+    public void OnCraftTabClick()
+    {
+        currentTab = CraftTab.Craft;
+        craftUI_armor.SetActive(false);
+        craftUI1.SetActive(true);
+        craftUI2.SetActive(false);
+        currentPage = 1;
+    }
+
+
+    public void OnArmorSlotClick(int slotIndex)
+    {
+        // 선택된 슬롯 저장
+        selectedSlotIndex = slotIndex;
+        isPreviewActivated = false; // 미리보기 필요 없음
+        isActivated = false;
+        go_BaseUI.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // 바로 Build 시도
+        BuildArmor();
+    }
+
+    private void BuildArmor()
+    {
+        Craft craft = craft_armor[selectedSlotIndex];
+
+        if (!CheckMaterials_Armor(selectedSlotIndex))
+        {
+            Debug.Log("재료가 부족하여 장착할 수 없습니다.");
+            return;
+        }
+
+        ConsumeMaterials_Armor(selectedSlotIndex);
+
+        switch (selectedSlotIndex)
+        {
+            case 0:
+                if (!isHelmetEquipped)
+                {
+                    isHelmetEquipped = true;
+                    SetHelmetEquipped(true); // 상태 갱신
+                    helmetIcon.SetActive(true);
+                }
+                break;
+            case 1:
+                if (!isArmorEquipped)
+                {
+                    isArmorEquipped = true;
+                    SetArmorEquipped(true);
+                    armorIcon.SetActive(true);
+                }
+                break;
+            case 2:
+                if (!isPantsEquipped)
+                {
+                    isPantsEquipped = true;
+                    SetPantsEquipped(true);
+                    pantsIcon.SetActive(true);
+                }
+                break;
+            case 3:
+                if (!isBootsEquipped)
+                {
+                    isBootsEquipped = true;
+                    SetBootsEquipped(true);
+                    bootsIcon.SetActive(true);
+                }
+                break;
+        }
+
+        Debug.Log($"장비 {craft.craftName} 장착 완료!");
+    }
+    private bool CheckMaterials_Armor(int slotIndex)
+    {
+        Craft craft = craft_armor[slotIndex];
+
+        for (int i = 0; i < craft.craftNeedItem.Length; i++)
+        {
+            if (!inventory.HasItem(craft.craftNeedItem[i], craft.craftNeedItemCount[i]))
+                return false;
+        }
+
+        return true;
+    }
+
+    private void ConsumeMaterials_Armor(int slotIndex)
+    {
+        Craft craft = craft_armor[slotIndex];
+
+        for (int i = 0; i < craft.craftNeedItem.Length; i++)
+        {
+            inventory.ConsumeItem(craft.craftNeedItem[i], craft.craftNeedItemCount[i]);
+        }
+    }
+
+    public bool IsWearingFullArmor()
+    {
+        return isHelmetEquipped && isArmorEquipped && isPantsEquipped && isBootsEquipped;
+    }
+
+    public bool IsWearingAnyArmor()
+    {
+        return isHelmetEquipped || isArmorEquipped || isPantsEquipped || isBootsEquipped;
+    }
+    //추위에 따른 아머 함수
+    public float CalculateColdDamageAfterProtection(float rawDamage)
+    {
+        float totalProtection = 0f;
+
+        if (isHelmetEquipped)
+            totalProtection += helmetColdProtection;
+        if (isArmorEquipped)
+            totalProtection += armorColdProtection;
+        if (isPantsEquipped)
+            totalProtection += pantsColdProtection;
+        if (isBootsEquipped)
+            totalProtection += bootsColdProtection;
+
+        totalProtection = Mathf.Clamp01(totalProtection);
+
+        return rawDamage * (1f - totalProtection);
+    }
 }
+
 

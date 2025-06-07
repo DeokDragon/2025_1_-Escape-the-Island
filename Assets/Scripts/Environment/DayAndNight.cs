@@ -59,10 +59,14 @@ public class DayAndNight : MonoBehaviour
     private StatusController statusController;
     private Transform playerTransform;
 
+    // -------------------- Craft 변수  --------------------
+    private CraftManual craftManual;
+
     // -------------------- 초기 설정 --------------------
     void Start()
     {
         statusController = FindObjectOfType<StatusController>();
+        craftManual = FindObjectOfType<CraftManual>();
         playerTransform = GameObject.FindWithTag("Player")?.transform;
 
         dayFogDensity = defaultDayFogDensity;
@@ -184,8 +188,15 @@ public class DayAndNight : MonoBehaviour
     {
         if (temperature < 0 && statusController != null)
         {
-            float damage = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
-            hpLossBuffer += damage;
+            float rawDamage = coldDamageRate * Mathf.Abs(temperature) * Time.deltaTime;
+            float finalDamage = rawDamage;
+
+            if (craftManual != null)
+            {
+                finalDamage = craftManual.CalculateColdDamageAfterProtection(rawDamage);
+            }
+
+            hpLossBuffer += finalDamage;
 
             if (hpLossBuffer >= 1f)
             {
@@ -212,4 +223,6 @@ public class DayAndNight : MonoBehaviour
     {
         return temperature;
     }
+
+
 }
