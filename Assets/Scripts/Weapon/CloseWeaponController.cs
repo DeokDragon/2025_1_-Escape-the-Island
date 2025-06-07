@@ -33,12 +33,16 @@ public abstract class CloseWeaponController : MonoBehaviour
 
     protected void TryAttack()
     {
+        if (IsCrafting()) return; // 제작 중이면 공격 금지
+
         if (!Inventory.inventoryActivated && !thePlayerController.IsCrouch) // 쪼그림 체크
         {
             if (Input.GetButtonDown("Fire1"))
             {
                 if (thePlayerController.IsCrouch) // << 추가!
                     return; // 앉아있으면 공격 안 함
+
+
 
                 if (!isAttack && theStatusController.GetCurrentStamina() >= 2500)
                 {
@@ -107,5 +111,12 @@ public abstract class CloseWeaponController : MonoBehaviour
 
         currentCloseWeapon.transform.localPosition = Vector3.zero;
         currentCloseWeapon.gameObject.SetActive(true);
+    }
+
+    private bool IsCrafting()
+    {
+        // CraftManual 스크립트 찾기
+        CraftManual craftManual = FindObjectOfType<CraftManual>();
+        return craftManual != null && (craftManual.IsUIActivated() || craftManual.IsPreviewMode());
     }
 }

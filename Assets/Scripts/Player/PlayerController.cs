@@ -211,7 +211,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
         {
-         
+ 
           PlayFootstepSound(); // 발소리 재생
         if (isActivated && GameManager.canPlayerMove)
             {
