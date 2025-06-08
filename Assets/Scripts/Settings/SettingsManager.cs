@@ -18,17 +18,24 @@ public class SettingsManager : MonoBehaviour
     {
 
 
-        if (sfxSlider == null)
-            Debug.LogError("❌ sfxSlider가 연결되지 않았습니다!");
+        if (SoundManager.instance != null)
+        {
+            float bgm = PlayerPrefs.GetFloat("BGMVolume", 1f);
+            float sfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+            bgmSlider.value = bgm;
+            sfxSlider.value = sfx;
+
+            SoundManager.instance.SetBGMVolume(bgm); // 추가
+            SoundManager.instance.SetSFXVolume(sfx); // 추가
+
+            bgmSlider.onValueChanged.AddListener((v) => SoundManager.instance.SetBGMVolume(v));
+            sfxSlider.onValueChanged.AddListener((v) => SoundManager.instance.SetSFXVolume(v));
+        }
         else
-            Debug.Log("✅ sfxSlider 정상 연결됨");
-
-        // Load saved sound settings
-        bgmSlider.value = PlayerPrefs.GetFloat("BGMVolume", 1f);
-        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
-
-        bgmSlider.onValueChanged.AddListener((v) => SoundManager.instance.SetBGMVolume(v));
-        sfxSlider.onValueChanged.AddListener((v) => SoundManager.instance.SetSFXVolume(v));
+        {
+            Debug.LogError("❌ SoundManager.instance 가 null입니다!");
+        }
 
         for (int i = 0; i < keyButtons.Length; i++)
         {
