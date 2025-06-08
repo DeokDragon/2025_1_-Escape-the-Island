@@ -6,96 +6,75 @@ using UnityEngine;
 [System.Serializable]
 public class Sound
 {
-    public string name; //곡의 이름
-    public AudioClip clip; // 곡
+    public string name;
+    public AudioClip clip;
 }
+
 public class SoundManager : MonoBehaviour
 {
-
-
-
-    static public SoundManager instance;
-
-    //싱글턴, singleton,
-
-    #region singleton
-    void Awake()  //생성 최초
-
-    {
-        if (instance == null)
-        {
-
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        else
-            Destroy(gameObject);
-
-
-    }
-    #endregion singleton
+    public static SoundManager instance;
 
     public AudioSource[] audioSourceEffects;
     public AudioSource[] audioSourceBGM;
 
-    public string[] playSoundName;
+    private string[] playSoundName;
 
     public Sound[] effectsSounds;
     public Sound[] bgmSounds;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         playSoundName = new string[audioSourceEffects.Length];
-        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume", 1f));
 
-        // 슬라이더 저장값 불러와서 초기 볼륨 설정
         float savedBGM = PlayerPrefs.GetFloat("BGMVolume", 1f);
         float savedSFX = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
         SetBGMVolume(savedBGM);
         SetSFXVolume(savedSFX);
-
-        foreach (AudioSource bgm in audioSourceBGM)
-        {
-            bgm.volume = PlayerPrefs.GetFloat("BGMVolume", 1f); // 초기화시 강제 적용
-        }
-
     }
-
 
     public void PlaySE(string _name)
     {
         for (int i = 0; i < effectsSounds.Length; i++)
         {
-            if(_name == effectsSounds[i].name)
+            if (_name == effectsSounds[i].name)
             {
-                for(int j = 0; j < audioSourceEffects.Length; j++)
+                AudioClip clip = effectsSounds[i].clip;
+
+                // 1. 비어 있는 AudioSource 찾기
+                for (int j = 0; j < audioSourceEffects.Length; j++)
                 {
                     if (!audioSourceEffects[j].isPlaying)
                     {
-                        playSoundName[j] = effectsSounds[i].name;
-                        audioSourceEffects[j].clip = effectsSounds[i].clip;
+                        playSoundName[j] = _name;
+                        audioSourceEffects[j].clip = clip;
                         audioSourceEffects[j].Play();
                         return;
                     }
                 }
-                Debug.Log("모든 가용 AudioSource가 사용중입니다");
+
+                // 2. 전부 재생 중이면 OneShot으로라도 재생 (중복 허용)
+                audioSourceEffects[0].PlayOneShot(clip);
                 return;
             }
         }
-        Debug.Log(_name + "사운드가 SoundManager에 등록되지 않았습니다.");
-       
+
+        Debug.LogWarning($"❌ '{_name}' 사운드가 SoundManager에 등록되지 않았습니다.");
     }
 
-    public void StopAllSE()
-    {
-        for (int i = 0; i < audioSourceEffects.Length; i++)
-        {
-            audioSourceEffects[i].Stop();
-        }
-
-    }
-    
     public void StopSE(string _name)
     {
         for (int i = 0; i < audioSourceEffects.Length; i++)
@@ -103,10 +82,19 @@ public class SoundManager : MonoBehaviour
             if (playSoundName[i] == _name)
             {
                 audioSourceEffects[i].Stop();
-                break;
+                return;
             }
         }
-        Debug.Log("재생 중인" + _name + "사운드가 없습니다");
+
+        Debug.LogWarning($"❌ '{_name}' 사운드는 현재 재생 중이지 않습니다.");
+    }
+
+    public void StopAllSE()
+    {
+        foreach (var source in audioSourceEffects)
+        {
+            source.Stop();
+        }
     }
 
     public void SetBGMVolume(float volume)
@@ -133,16 +121,16 @@ public class SoundManager : MonoBehaviour
         {
             if (bgm.name == name)
             {
-                for (int i = 0; i < audioSourceBGM.Length; i++)
+                foreach (AudioSource source in audioSourceBGM)
                 {
-                    audioSourceBGM[i].clip = bgm.clip;
-                    audioSourceBGM[i].volume = PlayerPrefs.GetFloat("BGMVolume", 1f); // 슬라이더값 반영
-                    audioSourceBGM[i].Play();
+                    source.clip = bgm.clip;
+                    source.volume = PlayerPrefs.GetFloat("BGMVolume", 1f);
+                    source.Play();
                 }
                 return;
             }
         }
+
         Debug.LogWarning($"❌ '{name}' 이름의 BGM을 찾을 수 없습니다.");
     }
-
 }
