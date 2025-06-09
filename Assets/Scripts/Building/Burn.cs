@@ -80,9 +80,11 @@ public class Burn : MonoBehaviour
         }
     }
 
-    private void Off()
+    public void Off()
     {
         isBurning = false;
-        Destroy(go_tempFlame);
+
+        if (go_tempFlame != null)
+            Destroy(go_tempFlame);
     }
 }
