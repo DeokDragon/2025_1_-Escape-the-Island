@@ -65,8 +65,21 @@ public class PauseMenu : MonoBehaviour
 
     public void OnClickExit()
     {
+        int selectedSlot = PlayerPrefs.GetInt("SelectedSlot", -1);
+
+        if (selectedSlot != -1 && SaveManager.instance != null)
+        {
+            SaveManager.instance.SaveToSlot(selectedSlot);
+            Debug.Log($"💾 게임 종료 직전 자동 저장 완료! 슬롯: {selectedSlot}");
+        }
+        else
+        {
+            Debug.LogWarning("❌ 자동 저장 실패 – 선택된 슬롯이 없거나 SaveManager가 없음");
+        }
+
         SceneManager.LoadScene("MainMenu");
     }
+
 
 
 
