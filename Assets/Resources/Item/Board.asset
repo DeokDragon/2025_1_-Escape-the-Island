@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Iron
+  m_Name: Board
   m_EditorClassIdentifier: 
-  itemName: Iron
-  itemDesc: "\uCCA0"
+  itemName: Board
+  itemDesc: "\uD310\uC790"
   itemType: 2
-  itemImage: {fileID: 21300000, guid: ecf557d98c5568449a80c25dc6b80148, type: 3}
-  itemPrefab: {fileID: 4483666149879336539, guid: 31029779d4eb95045b4237bb12e2f164,
-    type: 3}
-  weaponType: 
+  itemImage: {fileID: 21300000, guid: 54b425413bd34244a9cd00540f91574e, type: 3}
+  itemPrefab: {fileID: 0}
+  weaponType: Etc
