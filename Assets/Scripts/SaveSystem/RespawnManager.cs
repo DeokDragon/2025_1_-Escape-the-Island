@@ -33,6 +33,10 @@ public class RespawnManager : MonoBehaviour
 
         yield return new WaitForSeconds(respawnDelay);
 
+        Burn burn = player.GetComponent<Burn>();
+        if (burn != null)
+            burn.Off();
+
         // 위치 이동
         player.transform.position = respawnPoint.position;
 
