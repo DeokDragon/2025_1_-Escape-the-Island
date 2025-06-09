@@ -19,21 +19,25 @@ public class AxeController : CloseWeaponController
         while (isSwing)
         {
             if (CheckObject())
-            {         
+            {
                 if (hitInfo.transform.tag == "Grass")
                 {
+                    SoundManager.instance.PlaySE("HitGrass");
                     hitInfo.transform.GetComponent<Grass>().Damage();
                 }
                 else if (hitInfo.transform.tag == "Tree")
                 {
+                    SoundManager.instance.PlaySE("HitTree");
                     hitInfo.transform.GetComponent<TreeComponent>().Chop(hitInfo.point, transform.eulerAngles.y);
                 }
                 else if (hitInfo.transform.tag == "Twig")
                 {
+                    SoundManager.instance.PlaySE("HitGrass");
                     hitInfo.transform.GetComponent<Twig>().Damage(this.transform);
                 }
                 else if (hitInfo.transform.tag == "Bear")
                 {
+                    SoundManager.instance.PlaySE("HitBear"); // 사운드 등록돼 있을 경우만
                     hitInfo.transform.GetComponent<BearHealth>().TakeDamage(50);
                 }
 
@@ -43,6 +47,7 @@ public class AxeController : CloseWeaponController
             yield return null;
         }
     }
+
 
     public override void CloseWeaponChange(CloseWeapon _closeWeapon)
     {

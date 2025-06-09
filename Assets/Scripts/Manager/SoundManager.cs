@@ -54,19 +54,18 @@ public class SoundManager : MonoBehaviour
             {
                 AudioClip clip = effectsSounds[i].clip;
 
-                // 1. 비어 있는 AudioSource 찾기
-                for (int j = 0; j < audioSourceEffects.Length; j++)
+                // 1. 비어 있는 AudioSource가 있으면 사용
+                foreach (AudioSource source in audioSourceEffects)
                 {
-                    if (!audioSourceEffects[j].isPlaying)
+                    if (!source.isPlaying)
                     {
-                        playSoundName[j] = _name;
-                        audioSourceEffects[j].clip = clip;
-                        audioSourceEffects[j].Play();
+                        source.clip = clip;
+                        source.Play();
                         return;
                     }
                 }
 
-                // 2. 전부 재생 중이면 OneShot으로라도 재생 (중복 허용)
+                // 2. 전부 재생 중이면 OneShot으로 재생 (겹침 허용)
                 audioSourceEffects[0].PlayOneShot(clip);
                 return;
             }
@@ -74,6 +73,7 @@ public class SoundManager : MonoBehaviour
 
         Debug.LogWarning($"❌ '{_name}' 사운드가 SoundManager에 등록되지 않았습니다.");
     }
+
 
     public void StopSE(string _name)
     {
