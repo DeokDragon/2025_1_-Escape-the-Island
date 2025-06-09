@@ -23,10 +23,12 @@ public class PickaxeController : CloseWeaponController
             {
                 if(hitInfo.transform.tag == "Rock")
                 {
+                    SoundManager.instance.PlaySE("HitRock");
                     hitInfo.transform.GetComponent<Rock>().Mining();
                 }
                 else if (hitInfo.transform.tag == "Twig")
                 {
+                    SoundManager.instance.PlaySE("HitGrass");
                     hitInfo.transform.GetComponent<Twig>().Damage(this.transform);
                 }
                 isSwing = false;
