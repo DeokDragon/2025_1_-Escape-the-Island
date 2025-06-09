@@ -48,6 +48,8 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySE(string _name)
     {
+
+        Debug.Log($"🔊 사운드 재생 요청됨: {name}");
         for (int i = 0; i < effectsSounds.Length; i++)
         {
             if (_name == effectsSounds[i].name)
