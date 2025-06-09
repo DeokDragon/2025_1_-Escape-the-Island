@@ -3,25 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CraftType { Placeable, Armor, Material }
+
 [System.Serializable]
-    public class Craft
-    {
-        public string craftName; // 이름 
-        public GameObject go_Prefab; // 실제 설치될 프리팹.
-        public string[] craftNeedItem; //필요한 아이템
-        public int[] craftNeedItemCount; //필요한 아이템 개수
-        public GameObject go_PreviewPrefab; // 미리보기 프리팹.
+public class Craft
+{
+    public string craftName;
+    public GameObject go_Prefab;
+    public string[] craftNeedItem;
+    public int[] craftNeedItemCount;
+    public GameObject go_PreviewPrefab;
 
+    public CraftType craftType; 
+    public string itemID; // Material 타입용 (아이템 DB에서 사용될 이름)
 
-    }
+    [Header("제작 수량 (슬롯별 설정 가능)")]
+    public int craftAmount = 1; 
+}
 
-    public class CraftManual : MonoBehaviour
+public class CraftManual : MonoBehaviour
     {
         private Inventory inventory;
 
         //상태변수
         private bool isActivated = false;
         private bool isPreviewActivated = false;
+
+
     public bool IsUIActivated()
     {
         return isActivated;
@@ -97,24 +105,34 @@ using UnityEngine.UI;
 
     public void SlotClick(int _slotNumber)
     {
-        if (!CheckMaterials(_slotNumber))
-        {
-            Debug.Log("자재가 부족하여 제작할 수 없습니다!");
-            return;
-        }
-
         selectedSlotIndex = _slotNumber;
-        go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
-        go_Prefab = craft_fire[_slotNumber].go_Prefab;
-        isPreviewActivated = true;
-        targetRotation = go_Preview.transform.rotation;
+        Craft selectedCraft = craft_fire[_slotNumber];
 
+        switch (selectedCraft.craftType)
+        {
+            case CraftType.Placeable:
+                if (!CheckMaterials(_slotNumber))
+                {
+                    Debug.Log("자재가 부족하여 제작할 수 없습니다!");
+                    return;
+                }
 
-        go_BaseUI.SetActive(false);
+                go_Preview = Instantiate(selectedCraft.go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
+                go_Prefab = selectedCraft.go_Prefab;
+                isPreviewActivated = true;
+                targetRotation = go_Preview.transform.rotation;
 
-        // 마우스 커서 숨기고 고정
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+                go_BaseUI.SetActive(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                break;
+
+            case CraftType.Material:
+                BuildMaterial();
+                break;
+
+                // Armor는 기존 OnArmorSlotClick 사용
+        }
     }
 
     void Start()
@@ -422,6 +440,37 @@ using UnityEngine.UI;
         totalProtection = Mathf.Clamp01(totalProtection);
 
         return rawDamage * (1f - totalProtection);
+    }
+
+    //얘는 재료형 함수
+    private void BuildMaterial()
+    {
+        Craft craft = craft_fire[selectedSlotIndex];
+        int amount = craft.craftAmount;
+
+        // 재료 충분한지 확인 (제작 1회 기준)
+        for (int i = 0; i < craft.craftNeedItem.Length; i++)
+        {
+            string itemName = craft.craftNeedItem[i];
+            int needAmount = craft.craftNeedItemCount[i]; // ❗ 그대로
+
+            if (!inventory.HasItem(itemName, needAmount))
+            {
+                Debug.Log("재료가 부족하여 제작할 수 없습니다!");
+                return;
+            }
+        }
+
+        // 재료 소모 (제작 1회 기준)
+        for (int i = 0; i < craft.craftNeedItem.Length; i++)
+        {
+            inventory.ConsumeItem(craft.craftNeedItem[i], craft.craftNeedItemCount[i]);
+        }
+
+        // 아이템 획득: 수량만큼 생성
+        inventory.AcquireItemByName(craft.itemID, amount);
+
+        Debug.Log($"'{craft.itemID}'을(를) {amount}개 제작 완료!");
     }
 }
 

@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour
 {
     //인스턴스
     public static Inventory instance;
-
+    public ItemDatabase itemDatabase;
     private void Awake()
     {
         // 인스턴스가 없으면 할당, 있으면 중복 방지
@@ -210,6 +210,17 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
+    public void AcquireItemByName(string itemName, int count = 1)
+    {
+        Item item = itemDatabase.GetItemByName(itemName); // 이름으로 Item 찾기
+        if (item != null)
+        {
+            AcquireItem(item, count);
+        }
+        else
+        {
+            Debug.LogWarning($"[Inventory] '{itemName}' 아이템을 찾을 수 없습니다.");
+        }
+    }
 
 }

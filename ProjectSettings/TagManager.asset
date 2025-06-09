@@ -16,6 +16,7 @@ TagManager:
   - Building
   - Cave
   - Smelter
+  - LightZone
   layers:
   - Default
   - TransparentFX
@@ -34,7 +35,7 @@ TagManager:
   - WaterWell
   - Building
   - Ground
-  - 
+  - Cave
   - 
   - 
   - 
