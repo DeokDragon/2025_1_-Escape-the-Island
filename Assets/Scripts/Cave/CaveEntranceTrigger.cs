@@ -36,8 +36,8 @@ public class CaveEntranceTrigger : MonoBehaviour
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogMode = FogMode.Linear;
         RenderSettings.fogStartDistance = 2f;
-        RenderSettings.fogEndDistance = 13f;  // 가까운 거리에서 포그 시작
-        RenderSettings.fogDensity = 0.08f;    // Linear 모드에서는 크게 영향 없음
+        RenderSettings.fogEndDistance = 10f;  // 가까운 거리에서 포그 시작
+        RenderSettings.fogDensity = 0.1f;    // Linear 모드에서는 크게 영향 없음
 
         Debug.Log("Entered cave - dark on");
     }

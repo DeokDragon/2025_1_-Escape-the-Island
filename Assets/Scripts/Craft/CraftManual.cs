@@ -29,6 +29,10 @@ public class CraftManual : MonoBehaviour
         private bool isActivated = false;
         private bool isPreviewActivated = false;
 
+    //사운드 
+    [SerializeField] private AudioSource audioSource;   // 사운드 재생용 AudioSource
+    [SerializeField] private AudioClip clickSound;
+    [SerializeField] private AudioClip buildSound;
 
     public bool IsUIActivated()
     {
@@ -100,11 +104,14 @@ public class CraftManual : MonoBehaviour
     //crafttab ui 칸
     [SerializeField] private GameObject craftUI1;
     [SerializeField] private GameObject craftUI2;
+    [SerializeField] private GameObject craftUI3;
 
     private int currentPage = 1;
 
     public void SlotClick(int _slotNumber)
     {
+        PlayClickSound();
+
         selectedSlotIndex = _slotNumber;
         Craft selectedCraft = craft_fire[_slotNumber];
 
@@ -130,8 +137,6 @@ public class CraftManual : MonoBehaviour
             case CraftType.Material:
                 BuildMaterial();
                 break;
-
-                // Armor는 기존 OnArmorSlotClick 사용
         }
     }
 
@@ -143,9 +148,10 @@ public class CraftManual : MonoBehaviour
         currentTab = CraftTab.Craft;
         craftUI1.SetActive(true);
         craftUI2.SetActive(false);
+        craftUI3.SetActive(false);
         craftUI_armor.SetActive(false);
 
-        // ✅ 아이콘 초기화 (모두 꺼놓기)
+        //아이콘 초기화 (모두 꺼놓기)
         helmetIcon.SetActive(false);
         armorIcon.SetActive(false);
         pantsIcon.SetActive(false);
@@ -182,7 +188,10 @@ public class CraftManual : MonoBehaviour
                     return;
                 }
 
-                ConsumeMaterials(selectedSlot);  //재료 소모
+
+            PlayBuildSound();
+
+            ConsumeMaterials(selectedSlot);  //재료 소모
                 Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
                 Destroy(go_Preview);
                 isActivated = false;
@@ -294,6 +303,8 @@ public class CraftManual : MonoBehaviour
 
     public void NextPage()
     {
+        PlayClickSound();
+
         if (currentPage == 1)
         {
             craftUI1.SetActive(false);
@@ -303,6 +314,12 @@ public class CraftManual : MonoBehaviour
         else if (currentPage == 2)
         {
             craftUI2.SetActive(false);
+            craftUI3.SetActive(true);
+            currentPage = 3;
+        }
+        else if (currentPage == 3)
+        {
+            craftUI3.SetActive(false);
             craftUI1.SetActive(true);
             currentPage = 1;
         }
@@ -310,34 +327,40 @@ public class CraftManual : MonoBehaviour
 
     public void OnArmorTabClick()
     {
+        PlayClickSound();
+
         currentTab = CraftTab.Armor;
         craftUI1.SetActive(false);
         craftUI2.SetActive(false);
+        craftUI3.SetActive(false);
         craftUI_armor.SetActive(true);
     }
 
     public void OnCraftTabClick()
     {
+        PlayClickSound();
+
         currentTab = CraftTab.Craft;
         craftUI_armor.SetActive(false);
         craftUI1.SetActive(true);
         craftUI2.SetActive(false);
+        craftUI3.SetActive(false);
         currentPage = 1;
     }
 
 
     public void OnArmorSlotClick(int slotIndex)
     {
-        // 선택된 슬롯 저장
+        PlayClickSound();
+
         selectedSlotIndex = slotIndex;
-        isPreviewActivated = false; // 미리보기 필요 없음
+        isPreviewActivated = false;
         isActivated = false;
         go_BaseUI.SetActive(false);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // 바로 Build 시도
         BuildArmor();
     }
 
@@ -471,6 +494,19 @@ public class CraftManual : MonoBehaviour
         inventory.AcquireItemByName(craft.itemID, amount);
 
         Debug.Log($"'{craft.itemID}'을(를) {amount}개 제작 완료!");
+    }
+
+    //소리 
+    private void PlayClickSound()
+    {
+        if (audioSource != null && clickSound != null)
+            audioSource.PlayOneShot(clickSound);
+    }
+    //build소리
+    private void PlayBuildSound()
+    {
+        if (audioSource != null && buildSound != null)
+            audioSource.PlayOneShot(buildSound);
     }
 }
 
