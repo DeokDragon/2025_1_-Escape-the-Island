@@ -34,6 +34,12 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private GameObject go_QuickSlotParent;
 
+
+    //사운드 설정
+    [SerializeField] private AudioSource audioSource;   // 사운드 재생용 AudioSource
+    [SerializeField] private AudioClip OpenSound; //사운드
+
+
     // 슬롯들
     private Slot[] slots;
     private Slot[] quickSlots;
@@ -66,6 +72,7 @@ public class Inventory : MonoBehaviour
     //인벤토리 열기
     private void OpenInventory()
     {
+        PlayOpenSound();
         go_InventoryBase.SetActive(true);
 
         Cursor.visible = true; //  커서 보이게
@@ -75,6 +82,7 @@ public class Inventory : MonoBehaviour
     //인벤토리 닫음
     private void CloseInventory()
     {
+        PlayOpenSound();
         go_InventoryBase.SetActive(false);
 
         Cursor.visible = false; //  커서 숨기기
@@ -222,5 +230,12 @@ public class Inventory : MonoBehaviour
             Debug.LogWarning($"[Inventory] '{itemName}' 아이템을 찾을 수 없습니다.");
         }
     }
+
+    private void PlayOpenSound()
+    {
+        if (audioSource != null && OpenSound != null)
+            audioSource.PlayOneShot(OpenSound);
+    }
+
 
 }
