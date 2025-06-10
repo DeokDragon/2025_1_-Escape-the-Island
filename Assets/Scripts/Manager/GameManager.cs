@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
 
     void LateUpdate()
     {
-        escHandledThisFrame = false; // 모든 Update 이후에 초기화
+        GameManager.escHandledThisFrame = false; // 모든 Update 이후에 초기화
+        Debug.Log("🔄 escHandledThisFrame 리셋됨");
     }
 
     // 커서 설정
