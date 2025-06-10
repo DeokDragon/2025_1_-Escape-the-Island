@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
             return defaultKey;
     }
 
+    //발소리 사운드 클립
     private AudioSource footstepAudio;
     [SerializeField]
     private AudioClip walkClip;
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private AudioClip crouchClip;
     [SerializeField]
     private AudioClip sandClip;   // Sand에서의 걷는 소리
+    [SerializeField]
+    private AudioClip caveClip;  //동굴에서 걷는 소리
 
     private float footstepDelay;
     private float footstepTimer = 0f;
@@ -532,6 +535,10 @@ public class PlayerController : MonoBehaviour
                 {
                     currentSurface = "Sand";
                 }
+                else if (hit.collider.CompareTag("Cave"))
+                {
+                    currentSurface = "Cave";
+                }
                 else
                 {
                     currentSurface = "Other";
@@ -556,18 +563,24 @@ public class PlayerController : MonoBehaviour
             {
                 case "Walk":
                     if (currentSurface == "Sand")
-                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                        footstepAudio.clip = sandClip;
+                    else if (currentSurface == "Cave")
+                        footstepAudio.clip = caveClip;
                     else
-                        footstepAudio.clip = walkClip;  // 기본적으로는 walkClip
+                        footstepAudio.clip = walkClip;
                     break;
+
                 case "Run":
                     if (currentSurface == "Sand")
-                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                        footstepAudio.clip = sandClip;
+                    else if (currentSurface == "Cave")
+                        footstepAudio.clip = caveClip;
                     else
-                        footstepAudio.clip = runClip;   // 기본적으로는 runClip
+                        footstepAudio.clip = runClip;
                     break;
+
                 case "Crouch":
-                    footstepAudio.clip = crouchClip;  // Crouch는 항상 crouchClip
+                    footstepAudio.clip = crouchClip;
                     break;
             }
 
