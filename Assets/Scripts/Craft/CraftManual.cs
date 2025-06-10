@@ -33,6 +33,7 @@ public class CraftManual : MonoBehaviour
     [SerializeField] private AudioSource audioSource;   // 사운드 재생용 AudioSource
     [SerializeField] private AudioClip clickSound;
     [SerializeField] private AudioClip buildSound;
+    [SerializeField] private AudioClip OpenSound;
 
     public bool IsUIActivated()
     {
@@ -247,6 +248,7 @@ public class CraftManual : MonoBehaviour
 
         private void OpenWindow()
         {
+             PlayOpenSound();
 
             isActivated = true;
             go_BaseUI.SetActive(true);
@@ -258,7 +260,9 @@ public class CraftManual : MonoBehaviour
         private void CloseWindow()
         {
 
-            isActivated = false;
+        PlayOpenSound();
+
+        isActivated = false;
             go_BaseUI.SetActive(false);
 
         //  커서 숨기고 고정
@@ -507,6 +511,12 @@ public class CraftManual : MonoBehaviour
     {
         if (audioSource != null && buildSound != null)
             audioSource.PlayOneShot(buildSound);
+    }
+
+    private void PlayOpenSound()
+    {
+        if (audioSource != null && OpenSound != null)
+            audioSource.PlayOneShot(OpenSound);
     }
 }
 

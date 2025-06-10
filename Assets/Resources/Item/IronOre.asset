@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
   m_Name: IronOre
   m_EditorClassIdentifier: 
-  itemName: Iron Ore
+  itemName: IronOre
   itemDesc: "\uCCA0 \uC6D0\uC11D"
   itemType: 2
   itemImage: {fileID: 0}
-  itemPrefab: {fileID: 843133954421887681, guid: c9b37084dfbf56c45a89083dd2b60393,
+  itemPrefab: {fileID: 6860636243562307237, guid: 767995c0de746db4ab766e2c3ba3d31e,
     type: 3}
-  weaponType: 
+  weaponType: Etc
