@@ -75,8 +75,8 @@ public class Inventory : MonoBehaviour
         PlayOpenSound();
         go_InventoryBase.SetActive(true);
 
-        Cursor.visible = true; //  커서 보이게
-        Cursor.lockState = CursorLockMode.None; // 자유롭게
+        GameManager.isOpenInventory = true;
+        GameManager.UpdateCursorState();
     }
 
     //인벤토리 닫음
@@ -85,10 +85,9 @@ public class Inventory : MonoBehaviour
         PlayOpenSound();
         go_InventoryBase.SetActive(false);
 
-        Cursor.visible = false; //  커서 숨기기
-        Cursor.lockState = CursorLockMode.Locked; // 고정
+        GameManager.isOpenInventory = false;
+        GameManager.UpdateCursorState();
     }
-
     // 아이템 횔득
     public void AcquireItem(Item _item, int _count = 1)
     {

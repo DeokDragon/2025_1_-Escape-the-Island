@@ -124,8 +124,8 @@ public class SmelterUIController : MonoBehaviour
         smeltingUI.SetActive(false);
         isUIOpen = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isSmeltingUIOpen = false;
+        GameManager.UpdateCursorState();
 
         GameManager.canPlayerMove = true;
         GameManager.canPlayerRotate = true;

@@ -5,36 +5,62 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseUI;
     public GameObject PauseMenuUI;
+    //참조
+    private CraftManual craftManual;
 
+
+
+    void Start()
+    {
+        craftManual = FindObjectOfType<CraftManual>();
+    }
     void Update()
     {
-        
-        
-            Debug.Log($"[DEBUG] PauseMenu: Cursor.visible = {Cursor.visible}, lockState = {Cursor.lockState}");
+        if (GameManager.escHandledThisFrame)
+            return;
 
-            
-        
+        if (GameManager.isChestUIOpen)
+            return;
 
+        // 1. 제작 UI(CraftManual)가 열려있을 경우 → ESC로 취소 처리
+        if (craftManual != null && craftManual.IsUIActivated())
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                craftManual.CancelCraft();
+                GameManager.escHandledThisFrame = true;
+            }
+            return;
+        }
+
+        // 2. ESC 키가 눌렸을 때
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // 1. 설정창 켜져 있으면 → 설정창 닫기
+            // 2-1. 설정창이 열려 있다면 → 설정창 닫기
             Scene settingsScene = SceneManager.GetSceneByName("SettingScene");
             if (settingsScene.IsValid() && settingsScene.isLoaded)
             {
                 SceneManager.UnloadSceneAsync(settingsScene);
+
                 GameObject pauseMenu = GameObject.Find("PauseMenuUI");
                 if (pauseMenu != null)
                     pauseMenu.SetActive(true);
+
                 Debug.Log("🔙 ESC로 설정창 닫음");
+                GameManager.escHandledThisFrame = true;
                 return;
             }
 
-            // 2. PauseMenu 토글
+            // 2-2. 설정창 안 열려 있으면 → Pause 메뉴 토글
             TogglePause();
+            GameManager.escHandledThisFrame = true;
         }
     }
 
-
+    void LateUpdate()
+    {
+        GameManager.escHandledThisFrame = false;
+    }
 
 
     public void TogglePause()
@@ -42,20 +68,8 @@ public class PauseMenu : MonoBehaviour
         bool isActive = pauseUI.activeSelf;
         pauseUI.SetActive(!isActive);
 
-        if (!isActive)
-        {
-            // PauseMenu 켜질 때
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            // PauseMenu 꺼질 때
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        GameManager.canPlayerMove = !pauseUI.activeSelf;
+        GameManager.isPauseMenuOpen = !isActive;
+        GameManager.UpdateCursorState(); // 커서 자동 처리
     }
 
 

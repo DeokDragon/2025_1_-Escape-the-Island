@@ -106,8 +106,7 @@ public class PlayerController : MonoBehaviour
         {
             SaveData data = SaveManager.instance.LoadFromSlot(slotIndex);
             ApplySaveData(data);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            GameManager.UpdateCursorState();
             GameManager.canPlayerMove = true;
 
         }
