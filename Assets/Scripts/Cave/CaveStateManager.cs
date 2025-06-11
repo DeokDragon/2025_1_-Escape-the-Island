@@ -20,4 +20,7 @@ public class CaveStateManager : MonoBehaviour
     {
         IsPlayerInsideCave = isInside;
     }
+
+
+
 }

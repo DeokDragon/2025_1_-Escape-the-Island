@@ -16,6 +16,10 @@ public class TreeComponent : MonoBehaviour
     [SerializeField]
     private GameObject go_Log_Prefabs;
 
+    //나뭇가지
+    [SerializeField]
+    private GameObject go_Twig_Prefab;
+
     // 쓰러질 때의 랜덤으로 가해질 힘의 세기
     [SerializeField]
     private float force;
@@ -142,7 +146,7 @@ public class TreeComponent : MonoBehaviour
     {
         Destroy(objectdestory);
     }
-    
+
 
     IEnumerator LogCoroutine()
     {
@@ -150,11 +154,20 @@ public class TreeComponent : MonoBehaviour
 
         SoundManager.instance.PlaySE(logChange_sound);
 
-        Instantiate(go_Log_Prefabs, go_ChildTree.transform.position + (go_ChildTree.transform.up * 3f), Quaternion.LookRotation(go_ChildTree.transform.up));
-        Instantiate(go_Log_Prefabs, go_ChildTree.transform.position + (go_ChildTree.transform.up * 6f), Quaternion.LookRotation(go_ChildTree.transform.up));
-        Instantiate(go_Log_Prefabs, go_ChildTree.transform.position + (go_ChildTree.transform.up * 9f), Quaternion.LookRotation(go_ChildTree.transform.up));
+        // Log 생성
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 offset = go_ChildTree.transform.up * (3f * (i + 1));
+            Instantiate(go_Log_Prefabs, go_ChildTree.transform.position + offset, Quaternion.LookRotation(go_ChildTree.transform.up));
+        }
+
+        //Twig 생성
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 offset = go_ChildTree.transform.right * (1.5f * i); // 옆으로 살짝 벌리기
+            Instantiate(go_Twig_Prefab, go_ChildTree.transform.position + offset + Vector3.up * 0.5f, Quaternion.identity);
+        }
 
         Destroy(go_ChildTree.gameObject);
-        
-    }   
+    }
 }
