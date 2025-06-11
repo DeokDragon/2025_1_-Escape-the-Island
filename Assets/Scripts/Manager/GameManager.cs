@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     void LateUpdate()
     {
         escHandledThisFrame = false;
-      //  UpdateCursorState();
+        UpdateCursorState();
     }
 
     /// 커서 상태를 현재 UI 상태에 맞춰 자동 갱신
