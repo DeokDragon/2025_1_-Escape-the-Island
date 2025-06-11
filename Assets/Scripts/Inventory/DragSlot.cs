@@ -10,6 +10,8 @@ public class DragSlot : MonoBehaviour
 
     public Slot dragSlot;
 
+    public Slot originSlot;
+
     [SerializeField]
     private Image imageItem;
 

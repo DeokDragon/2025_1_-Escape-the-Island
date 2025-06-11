@@ -9,7 +9,7 @@ public class Smelter : MonoBehaviour
     private bool isPlayerNear = false;
     private bool isUIOpen = false;
 
-    private readonly string[] smeltableItems = { "Coal", "Diamond", "Iron" };
+    private readonly string[] smeltableItems = { "Iron" };  //이걸 iron stone으로...?
 
     [SerializeField] private GameObject smeltingUI; // 제련 UI 창 (Canvas 자식으로 만들어두고 꺼두기)
 

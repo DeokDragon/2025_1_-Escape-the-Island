@@ -13,7 +13,11 @@ public class Item : ScriptableObject
     public Sprite itemImage;
     public GameObject itemPrefab;
 
-    public string weaponType; 
+    public string weaponType;
+
+    public float attackPower;
+    public MaterialType materialType;
+
 
     public enum ItemType
     {
@@ -24,4 +28,10 @@ public class Item : ScriptableObject
         ETC
     }
 
+    public enum MaterialType
+    {
+        Rock,
+        Iron,
+        Diamond
+    }
 }

@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: DiamondAxe_10
+  m_Name: IronAxe
   m_EditorClassIdentifier: 
-  itemName: DiamondAxe
-  itemDesc: "\uB2E4\uC774\uC544 \uB3C4\uB07C"
+  itemName: IronAxe
+  itemDesc: "\uCCA0 \uB3C4\uB07C"
   itemType: 0
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 4679177441558254abe231da6c60a363, type: 3}
   itemPrefab: {fileID: 0}
   weaponType: Axe
+  attackPower: 0
+  materialType: 1
