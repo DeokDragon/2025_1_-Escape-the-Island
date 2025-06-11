@@ -131,8 +131,8 @@ public class CraftManual : MonoBehaviour
                 targetRotation = go_Preview.transform.rotation;
 
                 go_BaseUI.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                GameManager.isCraftManualOpen = false;
+                GameManager.UpdateCursorState(); // 커서 및 이동 상태 자동 설정
                 break;
 
             case CraftType.Material:
@@ -170,9 +170,6 @@ public class CraftManual : MonoBehaviour
             Build();
 
         if (Input.GetMouseButtonDown(1)) // 👉 오른쪽 클릭: 취소
-            Cancel();
-
-        if (Input.GetKeyDown(KeyCode.Escape)) // Esc 키로도 취소
             Cancel();
     }
 
@@ -238,7 +235,12 @@ public class CraftManual : MonoBehaviour
             go_BaseUI.SetActive(false);
         }
 
-        private void Window()
+    public void CancelCraft()
+    {
+        if (isPreviewActivated)
+            Cancel();
+    }
+    private void Window()
         {
             if (!isActivated)
                 OpenWindow();
@@ -246,31 +248,27 @@ public class CraftManual : MonoBehaviour
                 CloseWindow();
         }
 
-        private void OpenWindow()
-        {
-             PlayOpenSound();
-
-            isActivated = true;
-            go_BaseUI.SetActive(true);
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None; // 커서 사라짐 방지
-    }
-
-        private void CloseWindow()
-        {
-
+    private void OpenWindow()
+    {
         PlayOpenSound();
+        isActivated = true;
+        go_BaseUI.SetActive(true);
 
-        isActivated = false;
-            go_BaseUI.SetActive(false);
-
-        //  커서 숨기고 고정
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.isCraftManualOpen = true;
+        GameManager.UpdateCursorState();
     }
 
-        private bool CheckMaterials(int _slotNumber)
+    private void CloseWindow()
+    {
+        PlayOpenSound();
+        isActivated = false;
+        go_BaseUI.SetActive(false);
+
+        GameManager.isCraftManualOpen = false;
+        GameManager.UpdateCursorState();
+    }
+
+    private bool CheckMaterials(int _slotNumber)
         {
             Craft craft = craft_fire[_slotNumber];
 
@@ -361,9 +359,9 @@ public class CraftManual : MonoBehaviour
         isPreviewActivated = false;
         isActivated = false;
         go_BaseUI.SetActive(false);
+        GameManager.isCraftManualOpen = false;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.UpdateCursorState();
 
         BuildArmor();
     }
@@ -517,6 +515,15 @@ public class CraftManual : MonoBehaviour
     {
         if (audioSource != null && OpenSound != null)
             audioSource.PlayOneShot(OpenSound);
+    }
+    //꺼지기 버튼
+    public void OnClickCloseButton()
+    {
+        if (isPreviewActivated)
+        {
+            Cancel(); // 미리보기 모드면 취소 처리
+        }
+        CloseWindow(); // 창 닫기 처리
     }
 }
 

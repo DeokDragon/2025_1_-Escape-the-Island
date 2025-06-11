@@ -15,6 +15,9 @@ public class Chest : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.escHandledThisFrame)
+            return;
+
         if (isUIOpen)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -60,7 +63,7 @@ public class Chest : MonoBehaviour
 
     void OpenChest()
     {
-        animator.SetTrigger("ToggleChest"); // 열고 닫는 동일 트리거
+        animator.SetTrigger("ToggleChest");
         ShowChestUI();
         interactPromptUI.SetActive(false);
 
@@ -68,8 +71,7 @@ public class Chest : MonoBehaviour
         GameManager.canPlayerRotate = false;
         GameManager.canPlayerMove = false;
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        GameManager.UpdateCursorState(); // 커서 자동 처리
     }
 
     void ShowChestUI()
@@ -87,23 +89,20 @@ public class Chest : MonoBehaviour
     public void CloseChestUI()
     {
         animator.SetTrigger("ToggleChest");
-        chestUI.SetActive(false);
-        isUIOpen = false;
+        StartCoroutine(DisableChestUIAfterAnimation());
 
         GameManager.isChestUIOpen = false;
         GameManager.canPlayerRotate = true;
         GameManager.canPlayerMove = true;
-
-        StartCoroutine(LockCursorNextFrame());
+        GameManager.UpdateCursorState();
     }
 
-    private IEnumerator LockCursorNextFrame()
+    private IEnumerator DisableChestUIAfterAnimation()
     {
-        yield return null; // 다음 프레임까지 대기
-
-        Cursor.lockState = CursorLockMode.None; // 중립화
-        Cursor.lockState = CursorLockMode.Locked; // 다시 잠금
-        Cursor.visible = false;
+        // 애니메이션 길이만큼 기다림 (예: 0.5초)
+        yield return new WaitForSeconds(0.5f);
+        chestUI.SetActive(false);
+        isUIOpen = false;
     }
 }
 
