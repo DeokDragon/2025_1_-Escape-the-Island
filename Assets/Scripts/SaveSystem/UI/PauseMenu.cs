@@ -8,6 +8,13 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        
+        
+            Debug.Log($"[DEBUG] PauseMenu: Cursor.visible = {Cursor.visible}, lockState = {Cursor.lockState}");
+
+            
+        
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             // 1. 설정창 켜져 있으면 → 설정창 닫기
@@ -35,11 +42,22 @@ public class PauseMenu : MonoBehaviour
         bool isActive = pauseUI.activeSelf;
         pauseUI.SetActive(!isActive);
 
-        Cursor.visible = !isActive;
-        Cursor.lockState = isActive ? CursorLockMode.Locked : CursorLockMode.None;
+        if (!isActive)
+        {
+            // PauseMenu 켜질 때
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            // PauseMenu 꺼질 때
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         GameManager.canPlayerMove = !pauseUI.activeSelf;
     }
+
 
 
     public void OnClickSave()
