@@ -78,7 +78,7 @@ public class SmelterUIController : MonoBehaviour
             }
             else if (rightOutputSlot.item == null)
             {
-                rightOutputSlot.ForceAddItem(outputItem, 1);
+                rightOutputSlot.AddItem(outputItem, 1);
             }
 
             produced++;
@@ -92,12 +92,10 @@ public class SmelterUIController : MonoBehaviour
     {
         Item smeltedItem = null;
 
-        if (inputItem.itemName == "Iron Stone")
+        if (inputItem.itemName == "IronOre")
             smeltedItem = Resources.Load<Item>("Item/Iron");
-        //else if (inputItem.itemName == "BearMeat")
-        //    smeltedItem = Resources.Load<Item>("Item/Diamond");
-        //else if (inputItem.itemName == "WolfMeat")
-        //    smeltedItem = Resources.Load<Item>("Item/Diamond");
+        else if (inputItem.itemName == "DiamondOre")
+            smeltedItem = Resources.Load<Item>("Item/Diamond");
 
         if (smeltedItem == null)
         {
@@ -108,8 +106,6 @@ public class SmelterUIController : MonoBehaviour
         else
         {
             Debug.Log("[Smelter] 아이템 불러오기 성공: " + smeltedItem.itemName);
-
-            Debug.Log("불러온 아이템 스프라이트: " + smeltedItem.itemImage);
         }
 
         return smeltedItem;
@@ -128,11 +124,10 @@ public class SmelterUIController : MonoBehaviour
         smeltingUI.SetActive(false);
         isUIOpen = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isSmeltingUIOpen = false;
+        GameManager.UpdateCursorState();
 
         GameManager.canPlayerMove = true;
         GameManager.canPlayerRotate = true;
     }
-
 }

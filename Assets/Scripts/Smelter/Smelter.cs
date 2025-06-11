@@ -60,13 +60,8 @@ public class Smelter : MonoBehaviour
             smeltingUI.SetActive(true);
             isUIOpen = true;
 
-            
-
-            GameManager.canPlayerMove = false;
-            GameManager.canPlayerRotate = false;
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            GameManager.isSmeltingUIOpen = true;
+            GameManager.UpdateCursorState();
         }
     }
 
@@ -75,13 +70,10 @@ public class Smelter : MonoBehaviour
         smeltingUI.SetActive(false);
         isUIOpen = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isSmeltingUIOpen = false;
+        GameManager.UpdateCursorState();
 
         interactPromptUI.SetActive(false);
-
-        GameManager.canPlayerMove = true;
-        GameManager.canPlayerRotate = true;
     }
     public void TrySmelting()
     {

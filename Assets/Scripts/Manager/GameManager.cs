@@ -6,73 +6,63 @@ public class GameManager : MonoBehaviour
 {
     public static bool hasKey = false;
     public static bool isChestUIOpen = false;
-    public static bool canPlayerMove = true;
     public static bool isOpenInventory = false;
+    public static bool isPauseMenuOpen = false;
+    public static bool isCraftManualOpen = false;
+    public static bool isSmeltingUIOpen = false;
+    public static bool canPlayerMove = true;
     public static bool canPlayerRotate = true;
     public static bool escHandledThisFrame = false;
+    public GameObject loadingUI;
 
-    public GameObject loadingUI; // 로딩 화면 UI 연결
-
-    // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        SetCursorState(false);
-
-        StartCoroutine(HandleLoading()); // 로딩 코루틴 실행
+        // UI 초기화 상태 전부 false로 시작한다고 가정
+        isChestUIOpen = false;
+        isOpenInventory = false;
+        isPauseMenuOpen = false;
+        isCraftManualOpen = false;
+        isSmeltingUIOpen = false;
+        Debug.Log($"[Cursor Debug] Cursor.visible = {Cursor.visible}, lockState = {Cursor.lockState}");
+        UpdateCursorState(); // 커서 상태 강제 초기화
+        StartCoroutine(HandleLoading());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // 여기에 다른 입력 처리 가능
-    }
-
     void LateUpdate()
     {
-        escHandledThisFrame = false; // 모든 Update 이후에 초기화
+        escHandledThisFrame = false;
+        UpdateCursorState();
     }
 
-    // 커서 설정
-    private void SetCursorState(bool showCursor)
+    /// 커서 상태를 현재 UI 상태에 맞춰 자동 갱신
+    public static void UpdateCursorState()
     {
-        if (showCursor)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            canPlayerMove = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            canPlayerMove = true;
-        }
+        bool shouldShowCursor =
+            isChestUIOpen || isOpenInventory ||
+            isPauseMenuOpen || isCraftManualOpen|| isSmeltingUIOpen;
+
+        Cursor.lockState = shouldShowCursor ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = shouldShowCursor;
+
+        canPlayerMove = !shouldShowCursor;
+        canPlayerRotate = !shouldShowCursor;
     }
 
-    // 로딩 UI 표시 코루틴
-    IEnumerator HandleLoading()
+    public IEnumerator HandleLoading()
     {
         if (loadingUI != null)
         {
             loadingUI.SetActive(true);
-
             CanvasGroup cg = loadingUI.GetComponent<CanvasGroup>();
-            if (cg != null)
-                cg.alpha = 1f;
+            if (cg != null) cg.alpha = 1f;
 
-            yield return new WaitForSeconds(3f); // 로딩 표시 시간
+            yield return new WaitForSeconds(3f);
 
-            // ⬇ 페이드 아웃
             float duration = 2f;
             float t = 0f;
             while (t < duration)
             {
                 t += Time.deltaTime;
-                if (cg != null)
-                    cg.alpha = Mathf.Lerp(1f, 0f, t / duration);
+                if (cg != null) cg.alpha = Mathf.Lerp(1f, 0f, t / duration);
                 yield return null;
             }
 

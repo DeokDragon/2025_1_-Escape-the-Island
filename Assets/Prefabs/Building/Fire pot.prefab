@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4947929894983732591}
   - component: {fileID: 8109300452548175720}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SmelterCoroutineRunner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,10 +102,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 858d7a8cb6b090f448b8ae859a30abb7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -7029948723529949830, guid: 858d7a8cb6b090f448b8ae859a30abb7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -516098083770646512, guid: 858d7a8cb6b090f448b8ae859a30abb7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -391268320553695201, guid: 858d7a8cb6b090f448b8ae859a30abb7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 858d7a8cb6b090f448b8ae859a30abb7,
         type: 3}
       propertyPath: m_Name
       value: Fire pot
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 858d7a8cb6b090f448b8ae859a30abb7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 858d7a8cb6b090f448b8ae859a30abb7,
         type: 3}

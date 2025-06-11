@@ -5,12 +5,38 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseUI;
     public GameObject PauseMenuUI;
+    //참조
+    private CraftManual craftManual;
 
+
+
+    void Start()
+    {
+        craftManual = FindObjectOfType<CraftManual>();
+    }
     void Update()
     {
+        if (GameManager.escHandledThisFrame)
+            return;
+
+        if (GameManager.isChestUIOpen)
+            return;
+
+        // 1. 제작 UI(CraftManual)가 열려있을 경우 → ESC로 취소 처리
+        if (craftManual != null && craftManual.IsUIActivated())
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                craftManual.CancelCraft();
+                GameManager.escHandledThisFrame = true;
+            }
+            return;
+        }
+
+        // 2. ESC 키가 눌렸을 때
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // 1. 설정창이 열려 있는 경우 → 설정창만 닫기
+            // 2-1. 설정창이 열려 있다면 → 설정창 닫기
             Scene settingsScene = SceneManager.GetSceneByName("SettingScene");
             if (settingsScene.IsValid() && settingsScene.isLoaded)
             {
@@ -21,16 +47,19 @@ public class PauseMenu : MonoBehaviour
                     pauseMenu.SetActive(true);
 
                 Debug.Log("🔙 ESC로 설정창 닫음");
-                return; // ⛔ 여기서 바로 return해서 아래 Pause 토글 방지
+                GameManager.escHandledThisFrame = true;
+                return;
             }
 
-            // 2. 일반 ESC 동작 (기존 로직)
-            if (!GameManager.isChestUIOpen && !GameManager.escHandledThisFrame)
-            {
-                TogglePause();
-                GameManager.escHandledThisFrame = true;
-            }
+            // 2-2. 설정창 안 열려 있으면 → Pause 메뉴 토글
+            TogglePause();
+            GameManager.escHandledThisFrame = true;
         }
+    }
+
+    void LateUpdate()
+    {
+        GameManager.escHandledThisFrame = false;
     }
 
 
@@ -39,13 +68,11 @@ public class PauseMenu : MonoBehaviour
         bool isActive = pauseUI.activeSelf;
         pauseUI.SetActive(!isActive);
 
-        // 마우스 커서 고정 해제
-        Cursor.visible = !isActive;
-        Cursor.lockState = isActive ? CursorLockMode.Locked : CursorLockMode.None;
-
-        // 플레이어 움직임 잠금 (선택사항)
-        GameManager.canPlayerMove = isActive;
+        GameManager.isPauseMenuOpen = !isActive;
+        GameManager.UpdateCursorState(); // 커서 자동 처리
     }
+
+
 
     public void OnClickSave()
     {
