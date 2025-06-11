@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: DiamondPickaxe_5
+  m_Name: Coal_12
   m_EditorClassIdentifier: 
-  itemName: DiamondPickaxe
-  itemDesc: "\uB2E4\uC774\uC544 \uACE1\uAD2D\uC774"
-  itemType: 0
-  itemImage: {fileID: 21300000, guid: 2bc21a21a9ab3e04fafb219f9ff2337b, type: 3}
+  itemName: Coal
+  itemDesc: "\uC11D\uD0C4"
+  itemType: 2
+  itemImage: {fileID: 21300000, guid: b314c9781c570bf438154d4171d9ceb2, type: 3}
   itemPrefab: {fileID: 0}
-  weaponType: Pickaxe
+  weaponType: Resource
