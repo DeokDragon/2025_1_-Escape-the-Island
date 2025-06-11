@@ -6003,7 +6003,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: fc18dba102b648b40a582ed4fd4e9fd6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8647,7 +8647,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -111, y: -20}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &293372580
 MonoBehaviour:
@@ -8669,7 +8669,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 881b5542978aae848bda08cd4d15f890, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13762,8 +13762,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 106.9, y: -42.8}
-  m_SizeDelta: {x: 45, y: 45}
+  m_AnchoredPosition: {x: 111, y: -47}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &502315560
 MonoBehaviour:
@@ -13785,7 +13785,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: fc18dba102b648b40a582ed4fd4e9fd6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14454,7 +14454,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -111, y: -20}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &511108522
 MonoBehaviour:
@@ -14476,7 +14476,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cbb04a8dbd10c2d459da7f8cfc287463, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e686a763768f14149a689bd0295bcbfb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -16433,7 +16433,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'X3                    '
+  m_Text: 'X5                    '
 --- !u!222 &561075737
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18233,7 +18233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e0e2403556f71a341a2d5082a237d727, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9bcf93c3f35910247bfbffc8778a9c45, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21332,7 +21332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 972fdb18d589e034d9d3a09088d3ef42, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e146d869120a5f44199f46c94308555c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21905,7 +21905,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'X4                     X2 '
+  m_Text: 'X5                      X1 '
 --- !u!222 &727916383
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26619,7 +26619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 96, y: -40.302544}
+  m_AnchoredPosition: {x: 94, y: -40.302544}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &941778244
@@ -26655,7 +26655,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'X8                     X8  '
+  m_Text: 'X8                   X8  '
 --- !u!222 &941778245
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32173,8 +32173,8 @@ MonoBehaviour:
   - craftName: Rope
     go_Prefab: {fileID: 0}
     craftNeedItem:
-    - Twig
-    craftNeedItemCount: 03000000
+    - Leaf
+    craftNeedItemCount: 05000000
     go_PreviewPrefab: {fileID: 0}
     craftType: 2
     itemID: Rope
@@ -32183,16 +32183,17 @@ MonoBehaviour:
     go_Prefab: {fileID: 0}
     craftNeedItem:
     - Leaf
-    - Twig
-    craftNeedItemCount: 0400000002000000
+    - Rope
+    craftNeedItemCount: 0500000001000000
     go_PreviewPrefab: {fileID: 0}
     craftType: 2
     itemID: Grass
     craftAmount: 2
   - craftName: FirePot
     go_Prefab: {fileID: 3362320434924068868}
-    craftNeedItem: []
-    craftNeedItemCount: 
+    craftNeedItem:
+    - Rock
+    craftNeedItemCount: 0c000000
     go_PreviewPrefab: {fileID: 524447368}
     craftType: 0
     itemID: 
@@ -37018,7 +37019,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 56eadda66ec898b4a8bffea9d544cf12, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 03c8921d7d8e11f4d9f05b6f7380e38c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -37497,7 +37498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1264995772
 RectTransform:
   m_ObjectHideFlags: 0
@@ -40782,7 +40783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1424702874
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48151,8 +48152,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 108.8, y: -41.9}
-  m_SizeDelta: {x: 45, y: 45}
+  m_AnchoredPosition: {x: 108, y: -41.9}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1666828493
 MonoBehaviour:
@@ -48174,7 +48175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 972fdb18d589e034d9d3a09088d3ef42, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 881b5542978aae848bda08cd4d15f890, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -49440,7 +49441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 53f8c2882b461fa45af41c463cccb7f0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 626c535526092c64899c8b311ae3e217, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -58640,7 +58641,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 84f930e7a0bf22843bebd3f22a1b8749, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 96023de19c384554296f101e6783751f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

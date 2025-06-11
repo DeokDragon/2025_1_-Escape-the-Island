@@ -92,9 +92,9 @@ public class SmelterUIController : MonoBehaviour
     {
         Item smeltedItem = null;
 
-        if (inputItem.itemName == "Iron Ore")
+        if (inputItem.itemName == "IronOre")
             smeltedItem = Resources.Load<Item>("Item/Iron");
-        else if (inputItem.itemName == "Diamond Ore")
+        else if (inputItem.itemName == "DiamondOre")
             smeltedItem = Resources.Load<Item>("Item/Diamond");
 
         if (smeltedItem == null)
