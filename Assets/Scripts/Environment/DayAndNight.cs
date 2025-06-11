@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -6,50 +6,50 @@ using UnityEngine.UI;
 
 public class DayAndNight : MonoBehaviour
 {
-    // -------------------- ½Ã°£ --------------------
-    [Header("½Ã°£ ÁøÇà")]
+    // -------------------- ì‹œê°„ --------------------
+    [Header("ì‹œê°„ ì§„í–‰")]
     [SerializeField] private float secondPerRealTimeSecond = 60f;
 
     // -------------------- UI --------------------
-    [Header("¿Âµµ UI")]
+    [Header("ì˜¨ë„ UI")]
     [SerializeField] private Text temperatureText;
     [SerializeField] private RectTransform thermometerFill;
     [SerializeField] private float thermometerMaxHeight = 200f;
 
-    // -------------------- ¿Âµµ --------------------
-    [Header("¿Âµµ ¼³Á¤")]
+    // -------------------- ì˜¨ë„ --------------------
+    [Header("ì˜¨ë„ ì„¤ì •")]
     [SerializeField] private float temperature = 10f;
     [SerializeField] private float minTemperature = -10f;
     [SerializeField] private float maxTemperature = 25f;
     [SerializeField] private float temperatureChangeSpeed = 1f;
     [SerializeField] private float coldDamageRate = 1f;
 
-    [Header("¾È°³ ¼³Á¤")]
+    [Header("ì•ˆê°œ ì„¤ì •")]
     [SerializeField] private float fogDensityCalc = 1f;
     [SerializeField] private float defaultDayFogDensity = 0.01f;
-    [SerializeField] private float morningFogDensity = 0.05f;  // ¾ÆÄ§ ¾È°³ ¹Ğµµ Ãß°¡
+    [SerializeField] private float morningFogDensity = 0.05f;  // ì•„ì¹¨ ì•ˆê°œ ë°€ë„ ì¶”ê°€
     [SerializeField] private float nightFogDensity = 0.1f;
     [SerializeField] private Color dayFogColor = Color.gray;
-    [SerializeField] private Color morningFogColor = new Color(0.7f, 0.7f, 0.8f); // ¾ÆÄ§ ¾È°³»ö (¿¬ÇÑ È¸»ö/ÆÄ¶õºû)
+    [SerializeField] private Color morningFogColor = new Color(0.7f, 0.7f, 0.8f); // ì•„ì¹¨ ì•ˆê°œìƒ‰ (ì—°í•œ íšŒìƒ‰/íŒŒë€ë¹›)
     [SerializeField] private Color nightFogColor = Color.black;
     [SerializeField] private Material daySkybox;
     [SerializeField] private Material nightSkybox;
 
-    // -------------------- Á¶¸í --------------------
-    [Header("Á¶¸í ¼³Á¤")]
+    // -------------------- ì¡°ëª… --------------------
+    [Header("ì¡°ëª… ì„¤ì •")]
     [SerializeField] private Light directionalLight;
-    // playerFlashlight °ü·Ã º¯¼ö Á¦°Å
+    // playerFlashlight ê´€ë ¨ ë³€ìˆ˜ ì œê±°
     [SerializeField] private Color dayLightColor = Color.white;
     [SerializeField] private Color nightLightColor = new Color(0.2f, 0.2f, 0.4f);
     [SerializeField] private float dayLightIntensity = 1f;
     [SerializeField] private float nightLightIntensity = 0.1f;
 
-    // -------------------- Æ÷½ºÆ® ÇÁ·Î¼¼½Ì --------------------
-    [Header("Æ÷½ºÆ® ÇÁ·Î¼¼½Ì")]
+    // -------------------- í¬ìŠ¤íŠ¸ í”„ë¡œì„¸ì‹± --------------------
+    [Header("í¬ìŠ¤íŠ¸ í”„ë¡œì„¸ì‹±")]
     [SerializeField] private Volume dayVolume;
     [SerializeField] private Volume nightVolume;
 
-    // -------------------- ³»ºÎ º¯¼ö --------------------
+    // -------------------- ë‚´ë¶€ ë³€ìˆ˜ --------------------
     private bool isNight = false;
     private float dayFogDensity;
     private float currentFogDensity;
@@ -59,10 +59,10 @@ public class DayAndNight : MonoBehaviour
     private StatusController statusController;
     private Transform playerTransform;
 
-    // -------------------- Craft º¯¼ö  --------------------
+    // -------------------- Craft ë³€ìˆ˜  --------------------
     private CraftManual craftManual;
 
-    // -------------------- ÃÊ±â ¼³Á¤ --------------------
+    // -------------------- ì´ˆê¸° ì„¤ì • --------------------
     void Start()
     {
         statusController = FindObjectOfType<StatusController>();
@@ -79,7 +79,7 @@ public class DayAndNight : MonoBehaviour
         if (nightVolume != null) nightVolume.weight = 0f;
     }
 
-    // -------------------- ¸Å ÇÁ·¹ÀÓ Ã³¸® --------------------
+    // -------------------- ë§¤ í”„ë ˆì„ ì²˜ë¦¬ --------------------
     void Update()
     {
         UpdateSkybox();
@@ -93,30 +93,41 @@ public class DayAndNight : MonoBehaviour
         ApplyColdDamage();
     }
 
-    // -------------------- ÅÂ¾ç È¸Àü --------------------
+    // -------------------- íƒœì–‘ íšŒì „ --------------------
     private void RotateSun()
     {
         transform.Rotate(Vector3.right, 0.1f * secondPerRealTimeSecond * Time.deltaTime);
     }
 
-    // -------------------- ³·/¹ã ÆÇº° --------------------
+    // -------------------- ë‚®/ë°¤ íŒë³„ --------------------
     private void UpdateDayNightState()
     {
         float angleX = transform.eulerAngles.x;
         isNight = angleX >= 170f && angleX < 340f;
     }
 
-    // -------------------- ¿Âµµ º¯È­ --------------------
+    // -------------------- ì˜¨ë„ ë³€í™” --------------------
     private void UpdateTemperature()
     {
-        float targetTemp = isNight ? minTemperature : maxTemperature;
+        float targetTemp;
+
+        // ë™êµ´ ì•ˆì¼ ê²½ìš° ë¬´ì¡°ê±´ ì˜í•˜ë¡œ
+        if (CaveStateManager.Instance != null && CaveStateManager.Instance.IsPlayerInsideCave)
+        {
+            targetTemp = -10f; // ì›í•˜ì‹œëŠ” ì˜í•˜ ê°’ìœ¼ë¡œ ì„¤ì • (-5ë„, -10ë„ ë“±)
+        }
+        else
+        {
+            targetTemp = isNight ? minTemperature : maxTemperature;
+        }
+
         temperature = Mathf.Lerp(temperature, targetTemp, temperatureChangeSpeed * Time.deltaTime);
     }
 
     private void UpdateTemperatureUI()
     {
         if (temperatureText != null)
-            temperatureText.text = $"{temperature:F1}¡ÆC";
+            temperatureText.text = $"{temperature:F1}Â°C";
 
         if (thermometerFill != null)
         {
@@ -126,7 +137,7 @@ public class DayAndNight : MonoBehaviour
         }
     }
 
-    // -------------------- ¾È°³ Á¶Àı --------------------
+    // -------------------- ì•ˆê°œ ì¡°ì ˆ --------------------
     private void UpdateFog()
     {
         float angleX = transform.eulerAngles.x;
@@ -135,12 +146,12 @@ public class DayAndNight : MonoBehaviour
             targetFogDensity = nightFogDensity;
             RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, nightFogColor, fogDensityCalc * Time.deltaTime);
         }
-        else if (angleX >= 0f && angleX <= 60f)  // ¾ÆÄ§ ±¸°£
+        else if (angleX >= 0f && angleX <= 60f)  // ì•„ì¹¨ êµ¬ê°„
         {
             targetFogDensity = morningFogDensity;
             RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, morningFogColor, fogDensityCalc * Time.deltaTime);
         }
-        else  // ³·
+        else  // ë‚®
         {
             targetFogDensity = defaultDayFogDensity;
             RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, dayFogColor, fogDensityCalc * Time.deltaTime);
@@ -155,7 +166,7 @@ public class DayAndNight : MonoBehaviour
         RenderSettings.skybox = isNight ? nightSkybox : daySkybox;
     }
 
-    // -------------------- Á¶¸í ÀüÈ¯ --------------------
+    // -------------------- ì¡°ëª… ì „í™˜ --------------------
     private void UpdateLighting()
     {
         if (directionalLight != null)
@@ -170,7 +181,7 @@ public class DayAndNight : MonoBehaviour
         }
     }
 
-    // -------------------- Æ÷½ºÆ® ÇÁ·Î¼¼½Ì ÀüÈ¯ --------------------
+    // -------------------- í¬ìŠ¤íŠ¸ í”„ë¡œì„¸ì‹± ì „í™˜ --------------------
     private void UpdatePostProcessing()
     {
         if (dayVolume != null && nightVolume != null)
@@ -183,7 +194,7 @@ public class DayAndNight : MonoBehaviour
         }
     }
 
-    // -------------------- Ã¼¿Â µ¥¹ÌÁö Àû¿ë --------------------
+    // -------------------- ì²´ì˜¨ ë°ë¯¸ì§€ ì ìš© --------------------
     private void ApplyColdDamage()
     {
         if (temperature < 0 && statusController != null)
@@ -207,7 +218,7 @@ public class DayAndNight : MonoBehaviour
         }
     }
 
-    // -------------------- ¿ÜºÎ Á¦¾î ÇÔ¼ö --------------------
+    // -------------------- ì™¸ë¶€ ì œì–´ í•¨ìˆ˜ --------------------
     public void SetTime(float angleX)
     {
         Vector3 currentRotation = transform.eulerAngles;

@@ -32489,6 +32489,12 @@ PrefabInstance:
       propertyPath: destroyTime
       value: 4.79
       objectReference: {fileID: 0}
+    - target: {fileID: 1979274063343784521, guid: f077b400185f28f4a85471ed03fe4f3c,
+        type: 3}
+      propertyPath: go_Twig_Prefab
+      value: 
+      objectReference: {fileID: 2238244578760360029, guid: 2004d01c741ed664cad615bfacaaca0b,
+        type: 3}
     - target: {fileID: 7649142411331963520, guid: f077b400185f28f4a85471ed03fe4f3c,
         type: 3}
       propertyPath: m_Name
