@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         isPauseMenuOpen = false;
         isCraftManualOpen = false;
         isSmeltingUIOpen = false;
-        Debug.Log($"[Cursor Debug] Cursor.visible = {Cursor.visible}, lockState = {Cursor.lockState}");
+        
         UpdateCursorState(); // 커서 상태 강제 초기화
         StartCoroutine(HandleLoading());
     }
