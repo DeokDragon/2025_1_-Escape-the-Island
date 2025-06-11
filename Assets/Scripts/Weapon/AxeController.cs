@@ -48,11 +48,11 @@ public class AxeController : CloseWeaponController
         }
     }
 
-
-    public override void CloseWeaponChange(CloseWeapon _closeWeapon)
+    public override void CloseWeaponChange(CloseWeapon _weapon)
     {
-        base.CloseWeaponChange(_closeWeapon);
+        base.CloseWeaponChange(_weapon);
         isActivate = true;
+        Debug.Log("[AxeController] 무기 활성화됨: " + _weapon.name);
     }
 }
 

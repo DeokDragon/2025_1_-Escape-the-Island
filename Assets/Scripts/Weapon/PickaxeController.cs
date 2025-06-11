@@ -38,9 +38,15 @@ public class PickaxeController : CloseWeaponController
         }
     }
 
-    public override void CloseWeaponChange(CloseWeapon _closeWeapon)
+    //public override void CloseWeaponChange(CloseWeapon _closeWeapon)
+    //{
+    //    base.CloseWeaponChange(_closeWeapon);
+    //    isActivate = true;
+    //}
+    public override void CloseWeaponChange(CloseWeapon _weapon)
     {
-        base.CloseWeaponChange(_closeWeapon);
+        base.CloseWeaponChange(_weapon);
         isActivate = true;
+        Debug.Log("[PickaxeController] 무기 활성화됨: " + _weapon.name);
     }
 }

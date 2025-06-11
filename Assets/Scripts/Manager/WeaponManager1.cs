@@ -5,27 +5,19 @@ using UnityEngine;
 
 public class WeaponManager1 : MonoBehaviour
 {
-    // 무기 중복 교체 실행 방지.
-    // 무기 중복 교체 실행 방지.
     public static bool isChangeWeapon = false;
 
-    // 현재 무기와 현재 무기의 애니메이션.
     public static Transform currentWeapon;
     public static Animator currentWeaponAnim;
 
-    // 현재 무기의 타입.
     [SerializeField]
     private string currentWeaponType;
 
-
-    // 무기 교체 딜레이, 무기 교체가 완전히 끝난 시점.
     [SerializeField]
     private float changeWeaponDelayTime;
     [SerializeField]
     private float changeWeaponEndDelayTime;
 
-
-    //무기 종류
     [SerializeField]
     private CloseWeapon[] hands;
     [SerializeField]
@@ -33,12 +25,9 @@ public class WeaponManager1 : MonoBehaviour
     [SerializeField]
     private CloseWeapon[] pickaxes;
 
-    // 관리 차원에서 쉽게 무기 접근이 가능하도록 만듦.
-
     private Dictionary<string, CloseWeapon> handDictionary = new Dictionary<string, CloseWeapon>();
     private Dictionary<string, CloseWeapon> axeDictionary = new Dictionary<string, CloseWeapon>();
     private Dictionary<string, CloseWeapon> pickaxeDictionary = new Dictionary<string, CloseWeapon>();
-
 
     [SerializeField]
     private HandController theHandController;
@@ -47,10 +36,11 @@ public class WeaponManager1 : MonoBehaviour
     [SerializeField]
     private PickaxeController thePickaxeController;
 
-    // Use this for initialization
+    // ✅ 추가: 인스펙터에서 연결할 HeldWeaponActivator
+    [SerializeField] private HeldWeaponActivator heldWeaponActivator;
+
     void Start()
     {
-
         for (int i = 0; i < hands.Length; i++)
             handDictionary.Add(hands[i].closeWeaponName, hands[i]);
         for (int i = 0; i < axes.Length; i++)
@@ -59,8 +49,6 @@ public class WeaponManager1 : MonoBehaviour
             pickaxeDictionary.Add(pickaxes[i].closeWeaponName, pickaxes[i]);
     }
 
-
-    // 무기 교체 코루틴.
     public IEnumerator ChangeWeaponCoroutine(string _type, string _name)
     {
         isChangeWeapon = true;
@@ -71,18 +59,19 @@ public class WeaponManager1 : MonoBehaviour
         CancelPreWeaponAction();
         WeaponChange(_type, _name);
 
+        // ✅ 무기 프리팹 표시 (인스펙터에서 할당된 경우만)
+        heldWeaponActivator?.ActivateWeaponModel(_name);
+
         yield return new WaitForSeconds(changeWeaponEndDelayTime);
 
         currentWeaponType = _type;
         isChangeWeapon = false;
     }
 
-    // 무기 취소 함수.
     private void CancelPreWeaponAction()
     {
         switch (currentWeaponType)
         {
-
             case "HAND":
                 HandController.isActivate = false;
                 break;
@@ -95,9 +84,9 @@ public class WeaponManager1 : MonoBehaviour
         }
     }
 
-    // 무기 교체 함수.
     private void WeaponChange(string _type, string _name)
     {
+        Debug.Log("[WeaponChange] 넘겨받은 무기 이름: " + _name);
 
         if (_type == "HAND")
             theHandController.CloseWeaponChange(handDictionary[_name]);
@@ -105,10 +94,8 @@ public class WeaponManager1 : MonoBehaviour
             theAxeController.CloseWeaponChange(axeDictionary[_name]);
         else if (_type == "PICKAXE")
             thePickaxeController.CloseWeaponChange(pickaxeDictionary[_name]);
+        heldWeaponActivator.ActivateWeaponModel(_name);
     }
-
-
-
 
     public IEnumerator WeaponInCoroutine()
     {
@@ -120,36 +107,53 @@ public class WeaponManager1 : MonoBehaviour
         currentWeapon.gameObject.SetActive(false);
     }
 
-
     public void WeaponOut()
     {
         isChangeWeapon = false;
-
         currentWeapon.gameObject.SetActive(true);
     }
+
     public void ChangeWeaponTo(string weaponType)
     {
-        StartCoroutine(ChangeWeaponCoroutine(weaponType, "BareHand")); // 이름은 기본 무기로 대체
+        StartCoroutine(ChangeWeaponCoroutine(weaponType, "BareHand"));
     }
-
 
     public string GetEquippedWeaponName()
     {
         return currentWeaponType;
     }
 
-    // 🔹 저장 불러온 무기 이름으로 장착하는 함수
     public void EquipWeaponByName(string weaponName)
     {
+        Debug.Log("[WeaponManager1] EquipWeaponByName 호출됨: " + weaponName);
+
+        // ✅ 여기선 여전히 동적으로 찾아도 무방
+        HeldWeaponActivator activator = FindObjectOfType<HeldWeaponActivator>();
+
         if (handDictionary.ContainsKey(weaponName))
+        {
+            Debug.Log("[WeaponManager1] HAND 장착 시도");
             theHandController.CloseWeaponChange(handDictionary[weaponName]);
+            activator?.ActivateWeaponModel(weaponName);
+            currentWeaponType = "HAND";
+        }
         else if (axeDictionary.ContainsKey(weaponName))
+        {
+            Debug.Log("[WeaponManager1] AXE 장착 시도");
             theAxeController.CloseWeaponChange(axeDictionary[weaponName]);
+            activator?.ActivateWeaponModel(weaponName);
+            currentWeaponType = "AXE";
+        }
         else if (pickaxeDictionary.ContainsKey(weaponName))
+        {
+            Debug.Log("[WeaponManager1] PICKAXE 장착 시도");
             thePickaxeController.CloseWeaponChange(pickaxeDictionary[weaponName]);
+            activator?.ActivateWeaponModel(weaponName);
+            currentWeaponType = "PICKAXE";
+        }
         else
-            Debug.LogWarning($"무기 이름 '{weaponName}'을 찾을 수 없습니다.");
+        {
+            Debug.LogWarning($"[WeaponManager1] 무기 이름 '{weaponName}'을 찾을 수 없습니다.");
+        }
     }
-
-
 }

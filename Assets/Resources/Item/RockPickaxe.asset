@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: IronOre
+  m_Name: RockPickaxe
   m_EditorClassIdentifier: 
-  itemName: Iron Ore
-  itemDesc: "\uCCA0 \uC6D0\uC11D"
-  itemType: 2
-  itemImage: {fileID: 0}
-  itemPrefab: {fileID: 843133954421887681, guid: c9b37084dfbf56c45a89083dd2b60393,
-    type: 3}
-  weaponType: 
+  itemName: RockPickaxe
+  itemDesc: "\uB3CC \uACE1\uAD2D\uC774"
+  itemType: 0
+  itemImage: {fileID: 21300000, guid: 94a6b11d72103e946b46fa4b2facb41c, type: 3}
+  itemPrefab: {fileID: 0}
+  weaponType: Pickaxe
+  attackPower: 0
+  materialType: 0

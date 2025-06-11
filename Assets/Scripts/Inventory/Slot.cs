@@ -4,7 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
+// 보내주신 Slot.cs 코드 전체 (수정 없음)
 public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
 
@@ -36,14 +38,16 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public bool canReceiveItem = true;
 
+    public UnityEvent OnSlotChanged;
+
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<ItemEffectDataBase>();
         theWeaponManager = FindObjectOfType<WeaponManager1>();
         theInputNumber = FindObjectOfType<InputNumber>();
-       
+
     }
-   
+
 
 
     public void UpdateSlotUI()
@@ -90,33 +94,9 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void AddItem(Item _item, int _count = 1)
     {
-        item = _item;
-        itemCount = _count;
-        itemImage.sprite = item.itemImage;
-        itemImage.gameObject.SetActive(true);
+        if (!CanReceive(_item)) return; // 슬롯 필터에 걸리면 못 넣음
 
-        if (item.itemType != Item.ItemType.Equipment)
-        {
-            go_CountImage.SetActive(true);
-            text_Count.gameObject.SetActive(true);
-            text_Count.text = itemCount.ToString();
-        }
-        else
-        {
-            go_CountImage.SetActive(false);
-            text_Count.gameObject.SetActive(false);
-            text_Count.text = "0";
-        }
-
-        SetColor(1);
-        UpdateSlotUI();
-
-        // ✅ 장착을 살짝 지연해서 시도 (Start 이후 실행되도록)
-        if (isQuickSlot)
-            StartCoroutine(DelayedEquip());
-
-        if (!canReceiveItem) return;
-
+        ApplyItem(_item, _count);
     }
 
     public int GetQuickSlotNumber()
@@ -167,6 +147,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         text_Count.text = "0";
         go_CountImage.SetActive(false);
+        OnSlotChanged?.Invoke();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -205,51 +186,43 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (item != null)
         {
             DragSlot.instance.dragSlot = this;
+            DragSlot.instance.originSlot = this;
             DragSlot.instance.DragSetImage(itemImage);
             DragSlot.instance.transform.position = eventData.position;
             theItemEffectDatabase.HideToolTip();
         }
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public virtual void OnDrag(PointerEventData eventData)
     {
         if (item != null)
             DragSlot.instance.transform.position = eventData.position;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
-        Vector2 localPos = DragSlot.instance.transform.position;
+        bool isInsideInventory = RectTransformUtility.RectangleContainsScreenPoint(baseRect, Input.mousePosition);
+        bool isInsideQuickSlot = RectTransformUtility.RectangleContainsScreenPoint(quickSlotBaseRect, Input.mousePosition);
 
-        Vector3[] inventoryCorners = new Vector3[4];
-        baseRect.GetWorldCorners(inventoryCorners);
-        bool isInsideInventory = (localPos.x > inventoryCorners[0].x && localPos.x < inventoryCorners[2].x
-                                && localPos.y > inventoryCorners[0].y && localPos.y < inventoryCorners[2].y);
-
-        Vector3[] quickSlotCorners = new Vector3[4];
-        quickSlotBaseRect.GetWorldCorners(quickSlotCorners);
-        bool isInsideQuickSlot = (localPos.x > quickSlotCorners[0].x && localPos.x < quickSlotCorners[2].x
-                                && localPos.y > quickSlotCorners[0].y && localPos.y < quickSlotCorners[2].y);
-
-        if (!(isInsideInventory || isInsideQuickSlot))
+        if (!isInsideInventory && !isInsideQuickSlot)
         {
             if (DragSlot.instance.dragSlot != null)
             {
-                theInputNumber.Call(); // 버리기 UI
+                theInputNumber.OpenDropUI(DragSlot.instance.dragSlot);
             }
         }
-        else
-        {
-            DragSlot.instance.SetColor(0);
-            DragSlot.instance.dragSlot = null;
-        }
+
+        DragSlot.instance.SetColor(0);
+        DragSlot.instance.dragSlot = null;
+
         theItemEffectDatabase.HideToolTip();
         UpdateSlotUI();
+
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -268,29 +241,58 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void ChangeSlot()
     {
-        Item _tempItem = item;
-        int _tempItemCount = itemCount;
+        Item draggedItem = DragSlot.instance.dragSlot.item;
+        int draggedCount = DragSlot.instance.dragSlot.itemCount;
 
-        AddItem(DragSlot.instance.dragSlot.item, DragSlot.instance.dragSlot.itemCount);
-        UpdateSlotUI();
-
-        if (_tempItem != null)
+        // 추가: 슬롯이 받을 수 있는지 확인
+        if (!CanReceive(draggedItem))
         {
-            DragSlot.instance.dragSlot.AddItem(_tempItem, _tempItemCount);
-            DragSlot.instance.dragSlot.UpdateSlotUI();
+            Debug.LogWarning("이 슬롯은 해당 아이템을 받을 수 없습니다.");
+            return;
+        }
+
+        // --- 디버깅을 위한 로그 추가 ---
+        string originalItemName = (item != null) ? item.itemName : "비어있음";
+        Debug.Log($"[슬롯 변경 시작] '{DragSlot.instance.dragSlot.name}'에서 '{name}'으로 '{draggedItem.itemName}' 옮기는 중. 대상 슬롯의 원래 아이템: '{originalItemName}'");
+
+
+        // ✅ 이미 같은 아이템이 있다면 수량만 합치기
+        if (item != null && item.itemName == draggedItem.itemName)
+        {
+            Debug.Log("같은 아이템 발견: 수량을 합칩니다.");
+            itemCount += draggedCount;
+            DragSlot.instance.dragSlot.ClearSlot(); // 원래 슬롯은 비워야 함
         }
         else
         {
-            DragSlot.instance.dragSlot.ClearSlot();
+            // 일반 교환
+            Debug.Log("다른 아이템 발견: 아이템을 교환합니다.");
+            Item _tempItem = item;
+            int _tempItemCount = itemCount;
+
+            ApplyItem(draggedItem, draggedCount);
+
+            if (_tempItem != null)
+            {
+                Debug.Log($"원래 슬롯으로 '{_tempItem.itemName}' 아이템을 되돌려줍니다.");
+                DragSlot.instance.dragSlot.ApplyItem(_tempItem, _tempItemCount);
+            }
+            else
+            {
+                Debug.Log("대상 슬롯이 비어있었으므로, 원래 슬롯을 비웁니다.");
+                DragSlot.instance.dragSlot.ClearSlot();
+            }
         }
+
+        // 이 슬롯의 UI와 원래 슬롯의 UI를 모두 업데이트
+        UpdateSlotUI();
+        DragSlot.instance.dragSlot.UpdateSlotUI();
     }
 
     public void SetQuickSlotNumber(int _number)
     {
         quickSlotNumber = _number;
     }
-
-
 
     //마우스가 슬롯에 들어갈 때 발동
     public void OnPointerEnter(PointerEventData eventData)
@@ -309,6 +311,72 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (theItemEffectDatabase != null)
             theItemEffectDatabase.HideToolTip(); // 슬롯 비활성화될 때도 툴팁 끄기
+    }
+    public virtual bool CanReceive(Item item)
+    {
+        return canReceiveItem;
+    }
+    public class OutputOnlySlot : Slot
+    {
+        public override bool CanReceive(Item item)
+        {
+            return false; // 어떤 아이템도 못 넣음
+        }
+    }
+    public void ForceAddItem(Item _item, int _count = 1)
+    {
+        ApplyItem(_item, _count);
+    }
+    private void ApplyItem(Item _item, int _count)
+    {
+        if (_item.itemImage == null)
+        {
+            Debug.LogError($"[ApplyItem 오류] 슬롯 '{this.name}'에 아이템 '{_item.itemName}'을 적용하려 했으나, 이 아이템의 itemImage 필드가 비어있습니다(null)!");
+        }
+        else
+        {
+            Debug.Log($"[ApplyItem 정보] 슬롯 '{this.name}'에 아이템 '{_item.itemName}'의 이미지를 적용합니다. 이미지 이름: '{_item.itemImage.name}'");
+        }
+        item = _item;
+        itemCount = _count;
+        itemImage.sprite = item.itemImage;
+        itemImage.gameObject.SetActive(true);
+
+        if (item.itemType != Item.ItemType.Equipment)
+        {
+            go_CountImage.SetActive(true);
+            text_Count.gameObject.SetActive(true);
+            text_Count.text = itemCount.ToString();
+        }
+        else
+        {
+            go_CountImage.SetActive(false);
+            text_Count.gameObject.SetActive(false);
+            text_Count.text = "0";
+        }
+        
+        SetColor(1);
+        UpdateSlotUI();
+
+        if (isQuickSlot)
+            StartCoroutine(DelayedEquip());
+        OnSlotChanged?.Invoke();
+    }
+
+    // ----- [ 조합 시스템 연동을 위해 추가된 함수들 ] -----
+
+    public void RemoveItems(int amount)
+    {
+        itemCount -= amount;
+        if (itemCount <= 0)
+            ClearSlot();
+        else
+            UpdateSlotUI();
+    }
+
+    public void SetItem(Item newItem, int count)
+    {
+        AddItem(newItem, count);
     }
 
 }

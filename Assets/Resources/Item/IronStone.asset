@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: RockPickaxe_2
+  m_Name: IronStone
   m_EditorClassIdentifier: 
-  itemName: RockPickaxe
-  itemDesc: "\uB3CC \uACE1\uAD2D\uC774"
-  itemType: 0
+  itemName: Iron Stone
+  itemDesc: "\uCCA0 \uC6D0\uC11D"
+  itemType: 2
   itemImage: {fileID: 0}
   itemPrefab: {fileID: 0}
-  weaponType: Pickaxe
+  weaponType: 

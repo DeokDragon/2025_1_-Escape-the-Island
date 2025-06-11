@@ -21,6 +21,7 @@ public class InputNumber : MonoBehaviour
     [SerializeField]
     private ActionController thePlayer;
 
+    private Slot currentSlot;
 
     void Update()
     {
@@ -34,12 +35,21 @@ public class InputNumber : MonoBehaviour
     }
 
 
-    public void Call()
+    //public void Call()
+    //{
+    //    go_Base.SetActive(true);
+    //    activated = true;
+    //    if_text.text = "";
+    //    text_Preview.text = DragSlot.instance.dragSlot.itemCount.ToString();
+    //}
+    public void OpenDropUI(Slot targetSlot)
     {
+        currentSlot = targetSlot;
+
         go_Base.SetActive(true);
         activated = true;
         if_text.text = "";
-        text_Preview.text = DragSlot.instance.dragSlot.itemCount.ToString();
+        text_Preview.text = targetSlot.itemCount.ToString();
     }
 
     public void Cancel()
@@ -52,6 +62,8 @@ public class InputNumber : MonoBehaviour
 
     public void OK()
     {
+        Debug.Log("[버리기 UI] OK 버튼 눌림");
+
         DragSlot.instance.SetColor(0);
 
         int num;
@@ -78,13 +90,15 @@ public class InputNumber : MonoBehaviour
     {
         for (int i = 0; i < _num; i++)
         {
-            if (DragSlot.instance.dragSlot.item.itemPrefab != null)
-                Instantiate(DragSlot.instance.dragSlot.item.itemPrefab, thePlayer.transform.position + thePlayer.transform.forward, Quaternion.identity);
-            DragSlot.instance.dragSlot.SetSlotCount(-1);
+            if (currentSlot.item.itemPrefab != null)
+                Instantiate(currentSlot.item.itemPrefab, thePlayer.transform.position + thePlayer.transform.forward, Quaternion.identity);
+
+            currentSlot.SetSlotCount(-1);
             yield return new WaitForSeconds(0.05f);
         }
 
         DragSlot.instance.dragSlot = null;
+        currentSlot = null;
         go_Base.SetActive(false);
         activated = false;
     }
