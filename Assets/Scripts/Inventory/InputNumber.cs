@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +44,11 @@ public class InputNumber : MonoBehaviour
     //}
     public void OpenDropUI(Slot targetSlot)
     {
+        if (GameManager.isChestUIOpen)
+        {
+            return;
+        }
+
         currentSlot = targetSlot;
 
         go_Base.SetActive(true);
@@ -62,7 +67,7 @@ public class InputNumber : MonoBehaviour
 
     public void OK()
     {
-        Debug.Log("[¹ö¸®±â UI] OK ¹öÆ° ´­¸²");
+        Debug.Log("[ë²„ë¦¬ê¸° UI] OK ë²„íŠ¼ ëˆŒë¦¼");
 
         DragSlot.instance.SetColor(0);
 
