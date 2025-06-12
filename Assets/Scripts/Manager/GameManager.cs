@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public static bool canPlayerMove = true;
     public static bool canPlayerRotate = true;
     public static bool escHandledThisFrame = false;
+    public static bool isAnvilUIOpen = false;
+    public static bool isShipRepairUIOpen = false;
     public GameObject loadingUI;
 
     void Start()
@@ -23,7 +25,9 @@ public class GameManager : MonoBehaviour
         isPauseMenuOpen = false;
         isCraftManualOpen = false;
         isSmeltingUIOpen = false;
-        
+        isAnvilUIOpen = false;
+        isShipRepairUIOpen = false;
+
         UpdateCursorState(); // 커서 상태 강제 초기화
         StartCoroutine(HandleLoading());
     }
@@ -38,7 +42,9 @@ public class GameManager : MonoBehaviour
     {
         bool shouldShowCursor =
             isChestUIOpen || isOpenInventory ||
-            isPauseMenuOpen || isCraftManualOpen|| isSmeltingUIOpen;
+            isPauseMenuOpen || isCraftManualOpen ||
+            isSmeltingUIOpen ||
+            isAnvilUIOpen || isShipRepairUIOpen;
 
         Cursor.lockState = shouldShowCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = shouldShowCursor;
