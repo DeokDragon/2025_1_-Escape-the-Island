@@ -49,9 +49,9 @@ public class CaveEntranceTrigger : MonoBehaviour
         RenderSettings.ambientLight = Color.white;
         RenderSettings.fogColor = Color.gray;
         RenderSettings.fogMode = FogMode.Linear;
-        RenderSettings.fogStartDistance = 0f;
-        RenderSettings.fogEndDistance = 100f;
-        RenderSettings.fogDensity = 0f;
+        RenderSettings.fogStartDistance = 50f;
+        RenderSettings.fogEndDistance = 300f;
+        RenderSettings.fogDensity = 0.001f;
 
         Debug.Log("Exited cave - bright on");
     }
