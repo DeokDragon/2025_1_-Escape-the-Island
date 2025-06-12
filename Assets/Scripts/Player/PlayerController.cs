@@ -148,9 +148,6 @@ public class PlayerController : MonoBehaviour
 
     private void ApplySaveData(SaveData data)
     {
-     
-
-
         // 1. 위치 적용
         transform.position = data.playerPosition;
 
@@ -161,9 +158,8 @@ public class PlayerController : MonoBehaviour
         WeaponManager1 weaponManager = GetComponent<WeaponManager1>();
         if (weaponManager != null)
         {
-            weaponManager.EquipWeaponByName(data.equippedWeaponName); // 수정된 함수 이름
+            weaponManager.EquipWeaponByName(data.equippedWeaponName);
         }
-
 
         // 4. 인벤토리 적용
         Inventory inventory = Inventory.instance;
@@ -179,21 +175,22 @@ public class PlayerController : MonoBehaviour
             timeSystem.SetTime(data.currentTime);
         }
 
-        // 6. 수리 진행도
-        WreckShipRepair shipRepair = FindObjectOfType<WreckShipRepair>();
-        if (shipRepair != null)
+        // 6. (선택) 배 수리 단계 적용 (필요할 경우만)
+        ShipStatus shipStatus = FindObjectOfType<ShipStatus>();
+        if (shipStatus != null && data.currentShipRepairStage > 0)
         {
-            shipRepair.SetCurrentWood(data.currentWoodCount);
-
-            // 7. 퀵슬롯 복원
-            QuickSlotController quickSlot = FindObjectOfType<QuickSlotController>();
-            if (quickSlot != null)
-            {
-                quickSlot.LoadQuickSlots(data.quickSlotDataList);
-            }
+            shipStatus.currentStage = data.currentShipRepairStage;
+            shipStatus.SendMessage("UpdateShipAppearance", SendMessageOptions.DontRequireReceiver);
         }
 
-        //8. 동굴 위치 저장
+        // 7. 퀵슬롯 복원
+        QuickSlotController quickSlot = FindObjectOfType<QuickSlotController>();
+        if (quickSlot != null)
+        {
+            quickSlot.LoadQuickSlots(data.quickSlotDataList);
+        }
+
+        // 8. 동굴 위치 저장
         CaveRandomizer caveRandomizer = FindObjectOfType<CaveRandomizer>();
         if (caveRandomizer != null)
         {
