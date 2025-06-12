@@ -43,30 +43,24 @@ public class ActionController : MonoBehaviour
     {
         if (!pickupActivated)
         {
-            Debug.Log("[CanPickUp] pickupActivated가 false입니다.");
             return;
         }
 
         if (hitInfo.transform == null)
         {
-            Debug.Log("[CanPickUp] hitInfo.transform이 null입니다.");
             return;
         }
 
         var pickupComponent = hitInfo.transform.GetComponent<ItemPickUp>();
         if (pickupComponent == null)
         {
-            Debug.Log("[CanPickUp] ItemPickUp 컴포넌트가 없습니다. 충돌된 오브젝트: " + hitInfo.transform.name);
             return;
         }
 
         if (pickupComponent.item == null)
         {
-            Debug.Log("[CanPickUp] item이 null입니다. ItemPickUp 오브젝트: " + hitInfo.transform.name);
             return;
         }
-
-        Debug.Log("[ActionController] 획득 아이템 이름: " + pickupComponent.item.itemName);
 
         theInventory.AcquireItem(pickupComponent.item);
 
@@ -86,11 +80,9 @@ public class ActionController : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, range, layerMask))
         {
-            Debug.Log("Ray 충돌 감지: " + hitInfo.transform.name);
 
             if (hitInfo.transform.tag == "Item")
             {
-                Debug.Log("태그 일치: Item");
                 ItemInfoAppear();
             }
             else
@@ -100,7 +92,6 @@ public class ActionController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ray 충돌 없음");
             InfoDisappear();
         }
     }
