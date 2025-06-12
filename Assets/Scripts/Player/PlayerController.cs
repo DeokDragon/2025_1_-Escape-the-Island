@@ -221,6 +221,7 @@ public class PlayerController : MonoBehaviour
                 CameraRotation();
                 CharacterRotation();
             }
+
         }
         }
 
