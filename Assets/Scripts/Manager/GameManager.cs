@@ -65,6 +65,16 @@ public class GameManager : MonoBehaviour
         canPlayerRotate = !shouldShowCursor;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
+            if (timeSystem != null)
+                timeSystem.ToggleDayNight();
+        }
+    }
+
 
     public IEnumerator HandleLoading()
     {

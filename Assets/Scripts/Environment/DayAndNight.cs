@@ -236,7 +236,7 @@ public class DayAndNight : MonoBehaviour
     }
 
 
-
+    // 동굴안에서 사망시 화면 흐림현상 제거
     public void ForceOutsideReset()
     {
         RenderSettings.fogColor = dayFogColor;
@@ -245,4 +245,25 @@ public class DayAndNight : MonoBehaviour
         isNight = false;
         SetTemperature(maxTemperature);
     }
+
+
+// f4로 밤낮 설정하기
+    public void ToggleDayNight()
+    {
+        float currentAngle = transform.eulerAngles.x;
+
+        if (currentAngle >= 170f && currentAngle < 340f)
+        {
+            // 현재 밤 → 낮으로 변경
+            SetTime(60f);   // 아침 각도
+            
+        }
+        else
+        {
+            // 현재 낮 → 밤으로 변경
+            SetTime(260f);  // 밤 각도
+           
+        }
+    }
+
 }
