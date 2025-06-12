@@ -15,9 +15,6 @@ public class AnvilInteraction : MonoBehaviour
 
     void Update()
     {
-        // --- 디버깅용 로그 추가 ---
-        Debug.Log($"UI 열림 상태: {isUIOpen}, 플레이어 근접 상태: {isPlayerNear}");
-
         // 1. 플레이어와의 거리를 먼저 확인
         float dist = Vector3.Distance(player.position, transform.position);
         isPlayerNear = (dist <= interactDistance);
