@@ -13,6 +13,11 @@ public class Chest : MonoBehaviour
 
     private bool isUIOpen = false;
 
+
+    [Header("사운드")]
+    public AudioSource audioSource;
+    public AudioClip openSound;
+    public AudioClip closeSound;
     void Update()
     {
         if (GameManager.escHandledThisFrame)
@@ -71,8 +76,12 @@ public class Chest : MonoBehaviour
         GameManager.canPlayerRotate = false;
         GameManager.canPlayerMove = false;
 
-        GameManager.UpdateCursorState(); // 커서 자동 처리
+        GameManager.UpdateCursorState();
+
+        if (openSound != null && audioSource != null)
+            audioSource.PlayOneShot(openSound);
     }
+
 
     void ShowChestUI()
     {
@@ -95,6 +104,9 @@ public class Chest : MonoBehaviour
         GameManager.canPlayerRotate = true;
         GameManager.canPlayerMove = true;
         GameManager.UpdateCursorState();
+
+        if (closeSound != null && audioSource != null)
+            audioSource.PlayOneShot(closeSound);
     }
 
     private IEnumerator DisableChestUIAfterAnimation()
