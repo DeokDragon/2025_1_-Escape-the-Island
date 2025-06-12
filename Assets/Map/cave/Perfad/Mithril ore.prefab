@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5477655912401398372
+--- !u!1001 &3507373278034167284
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,32 +11,32 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.9974
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.9974
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.9974
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.406
+      value: -19.46
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1426.28
+      value: 1426.23
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.77
+      value: 10.96941
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
@@ -73,15 +73,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74b3a1da5915a9e45b01ff33d9306023,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1b490f7d034a1fe4dbaf788e65b080f2, type: 2}
+      objectReference: {fileID: 2100000, guid: 2974876466282504a85b9af5cd5e9090, type: 2}
     - target: {fileID: 919132149155446097, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       propertyPath: m_Name
-      value: ore 2
+      value: Mithril ore
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -90,21 +95,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 74b3a1da5915a9e45b01ff33d9306023,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2964508046235378275}
+      addedObject: {fileID: 7996305003686052432}
   m_SourcePrefab: {fileID: 100100000, guid: 74b3a1da5915a9e45b01ff33d9306023, type: 3}
---- !u!1 &4667385998270650165 stripped
+--- !u!1 &4354374700594477221 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 74b3a1da5915a9e45b01ff33d9306023,
     type: 3}
-  m_PrefabInstance: {fileID: 5477655912401398372}
+  m_PrefabInstance: {fileID: 3507373278034167284}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &2964508046235378275
+--- !u!64 &7996305003686052432
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4667385998270650165}
+  m_GameObject: {fileID: 4354374700594477221}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
