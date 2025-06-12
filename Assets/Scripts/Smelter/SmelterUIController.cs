@@ -94,8 +94,10 @@ public class SmelterUIController : MonoBehaviour
 
         if (inputItem.itemName == "IronOre")
             smeltedItem = Resources.Load<Item>("Item/Iron");
-        else if (inputItem.itemName == "DiamondOre")
-            smeltedItem = Resources.Load<Item>("Item/Diamond");
+        else if (inputItem.itemName == "BearMeat")
+            smeltedItem = Resources.Load<Item>("Item/GrilledBearMeat");
+        else if (inputItem.itemName == "WolfMeat")
+            smeltedItem = Resources.Load<Item>("Item/GrilledWolfMeat");
 
         if (smeltedItem == null)
         {
