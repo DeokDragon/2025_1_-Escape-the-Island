@@ -23,7 +23,6 @@ public class ToolUpgradeRecipe
     // 2. override 키워드를 public으로 변경
     public bool CheckRecipe(Slot toolSlot, Slot[] materialSlots)
     {
-        // ... (내부 코드는 그대로)
         if (toolSlot.item == null) return false;
 
         if (!string.Equals(toolSlot.item.itemName.Trim(), inputItemName.Trim(), System.StringComparison.OrdinalIgnoreCase))
@@ -31,7 +30,6 @@ public class ToolUpgradeRecipe
             Debug.Log($"[레시피 불일치] 슬롯 아이템: {toolSlot.item.itemName} / 레시피 기대값: {inputItemName}");
             return false;
         }
-        // ...
         return true;
     }
 
@@ -55,9 +53,7 @@ public class ToolUpgradeRecipe
                 {
                     int remove = Mathf.Min(slot.itemCount, need);
 
-                    // 재료 제거도 직접 변수를 건드리기보다 함수를 사용하는 것이 안전합니다.
-                    // slot.itemCount -= remove; 
-                    slot.SetSlotCount(-remove); // Slot.cs에 이런 함수가 있을 가능성이 높습니다.
+                    slot.SetSlotCount(-remove);
 
                     need -= remove;
                     if (need <= 0)
