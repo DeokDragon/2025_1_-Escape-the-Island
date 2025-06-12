@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static bool canPlayerRotate = true;
     public static bool escHandledThisFrame = false;
     public GameObject loadingUI;
+    public static bool isLoading = false;  
 
     void Start()
     {
@@ -36,9 +37,19 @@ public class GameManager : MonoBehaviour
     /// 커서 상태를 현재 UI 상태에 맞춰 자동 갱신
     public static void UpdateCursorState()
     {
+        if (isLoading)
+        {
+            // 로딩 중엔 강제로 잠금
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            canPlayerMove = false;
+            canPlayerRotate = false;
+            return;
+        }
+
         bool shouldShowCursor =
             isChestUIOpen || isOpenInventory ||
-            isPauseMenuOpen || isCraftManualOpen|| isSmeltingUIOpen;
+            isPauseMenuOpen || isCraftManualOpen || isSmeltingUIOpen;
 
         Cursor.lockState = shouldShowCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = shouldShowCursor;
@@ -49,6 +60,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator HandleLoading()
     {
+        isLoading = true;  // 로딩 시작
+
         if (loadingUI != null)
         {
             loadingUI.SetActive(true);
@@ -68,6 +81,11 @@ public class GameManager : MonoBehaviour
 
             loadingUI.SetActive(false);
         }
+
+        isLoading = false;  // 로딩 끝
     }
 
 }
+
+
+
