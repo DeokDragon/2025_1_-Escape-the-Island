@@ -33,11 +33,12 @@ public class ActionController : MonoBehaviour
 
     private void TryAction()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyBindingManager.GetKey("Interact", KeyCode.E)))
         {
             CheckItem();
             CanPickUp();
-        }    
+        }
+
     }
     private void CanPickUp()
     {
