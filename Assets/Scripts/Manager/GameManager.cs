@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public static bool isLoading = false;
     public static bool isAnvilUIOpen = false;
     public static bool isShipRepairUIOpen = false;
+    public static bool isTutorialOpen = false;
 
     void Start()
     {
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
         bool shouldShowCursor =
             isChestUIOpen || isOpenInventory ||
             isPauseMenuOpen || isCraftManualOpen || isSmeltingUIOpen ||
-            isAnvilUIOpen || isShipRepairUIOpen;
+            isAnvilUIOpen || isShipRepairUIOpen || isTutorialOpen;
 
         Cursor.lockState = shouldShowCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = shouldShowCursor;
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
         canPlayerMove = !shouldShowCursor;
         canPlayerRotate = !shouldShowCursor;
     }
+
 
     public IEnumerator HandleLoading()
     {
