@@ -23,8 +23,19 @@ public class IntroStoryUI : MonoBehaviour
 
     void Start()
     {
+        int isContinue = PlayerPrefs.GetInt("IsContinue", 0);
+
+        if (isContinue == 1)
+        {
+            // 이어하기일 때는 스토리 패널 안띄움
+            storyPanel.SetActive(false);
+            GameManager.canPlayerMove = true;
+            return;
+        }
+
         currentPage = 0;
         storyPanel.SetActive(true);
+        GameManager.canPlayerMove = false;
         ShowPage();
     }
 
