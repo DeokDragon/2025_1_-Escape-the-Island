@@ -59,7 +59,7 @@ public class Inventory : MonoBehaviour
     //인벤토리 열기 시도
     private void TryOpenInventory()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyBindingManager.GetKey("Inventory", KeyCode.I)))
         {
             inventoryActivated = !inventoryActivated;
 
