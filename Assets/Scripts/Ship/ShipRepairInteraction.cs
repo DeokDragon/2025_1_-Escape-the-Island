@@ -54,14 +54,14 @@ public class ShipRepairInteraction : MonoBehaviour
         if (isUIOpen)
         {
             shipRepairUIController.OpenUI();
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            GameManager.isShipRepairUIOpen = true;
+            GameManager.UpdateCursorState();
         }
         else
         {
             shipRepairUIController.CloseUI();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            GameManager.isShipRepairUIOpen = false;
+            GameManager.UpdateCursorState();
         }
     }
 }
