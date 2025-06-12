@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //진품
     public static bool hasKey = false;
     public static bool isChestUIOpen = false;
     public static bool isOpenInventory = false;
@@ -14,7 +15,9 @@ public class GameManager : MonoBehaviour
     public static bool canPlayerRotate = true;
     public static bool escHandledThisFrame = false;
     public GameObject loadingUI;
-    public static bool isLoading = false;  
+    public static bool isLoading = false;
+    public static bool isAnvilUIOpen = false;
+    public static bool isShipRepairUIOpen = false;
 
     void Start()
     {
@@ -24,7 +27,9 @@ public class GameManager : MonoBehaviour
         isPauseMenuOpen = false;
         isCraftManualOpen = false;
         isSmeltingUIOpen = false;
-        
+        isAnvilUIOpen = false;
+        isShipRepairUIOpen = false;
+
         UpdateCursorState(); // 커서 상태 강제 초기화
         StartCoroutine(HandleLoading());
     }
@@ -49,7 +54,8 @@ public class GameManager : MonoBehaviour
 
         bool shouldShowCursor =
             isChestUIOpen || isOpenInventory ||
-            isPauseMenuOpen || isCraftManualOpen || isSmeltingUIOpen;
+            isPauseMenuOpen || isCraftManualOpen || isSmeltingUIOpen ||
+            isAnvilUIOpen || isShipRepairUIOpen;
 
         Cursor.lockState = shouldShowCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = shouldShowCursor;
