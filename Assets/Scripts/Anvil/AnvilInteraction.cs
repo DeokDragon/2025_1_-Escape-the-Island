@@ -77,11 +77,8 @@ public class AnvilInteraction : MonoBehaviour
 
         isUIOpen = true;
 
-        GameManager.canPlayerMove = false;
-        GameManager.canPlayerRotate = false;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        GameManager.isAnvilUIOpen = true;
+        GameManager.UpdateCursorState();
     }
 
     void CloseAnvilUI()
@@ -89,11 +86,8 @@ public class AnvilInteraction : MonoBehaviour
         anvilUI.SetActive(false);
         isUIOpen = false;
 
-        GameManager.canPlayerMove = true;
-        GameManager.canPlayerRotate = true;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameManager.isAnvilUIOpen = false;
+        GameManager.UpdateCursorState();
 
         interactPromptUI.SetActive(false);
     }
