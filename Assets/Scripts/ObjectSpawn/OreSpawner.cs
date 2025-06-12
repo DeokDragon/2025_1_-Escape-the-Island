@@ -44,7 +44,7 @@ public class OreSpawner : MonoBehaviour
 
                     if (IsWalkable(randomPosition, out Vector3 spawnPosition))
                     {
-                        Instantiate(oreData.orePrefab, spawnPosition + Vector3.up * 0.2f, Quaternion.identity);
+                        Instantiate(oreData.orePrefab, spawnPosition + Vector3.up * 0.4f, Quaternion.identity);
                         spawned++;
                     }
                 }
@@ -56,7 +56,7 @@ public class OreSpawner : MonoBehaviour
     {
         return new Vector3(
             Random.Range(bounds.min.x, bounds.max.x),
-            bounds.max.y + 2f, // 위에서 아래로 Raycast 쏘기 위해 높게
+            bounds.max.y + 20f, // 기존보다 더 높은 위치에서 시작
             Random.Range(bounds.min.z, bounds.max.z)
         );
     }
@@ -64,13 +64,14 @@ public class OreSpawner : MonoBehaviour
     bool IsWalkable(Vector3 position, out Vector3 spawnPosition)
     {
         RaycastHit hit;
-        if (Physics.Raycast(position, Vector3.down, out hit, 10f, groundMask))
-        {
-            spawnPosition = hit.point;
-            return true;
-        }
+        float rayLength = 100f; // 100유닛까지 바닥 탐색
 
-        spawnPosition = Vector3.zero;
-        return false;
+        bool result = Physics.Raycast(position, Vector3.down, out hit, rayLength, groundMask);
+
+        // 디버그 선
+        Debug.DrawRay(position, Vector3.down * rayLength, result ? Color.green : Color.red, 5f);
+
+        spawnPosition = result ? hit.point : Vector3.zero;
+        return result;
     }
 }

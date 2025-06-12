@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     private AudioClip crouchClip;
     [SerializeField]
     private AudioClip sandClip;   // Sand에서의 걷는 소리
+    [SerializeField]
+    private AudioClip caveClip; //동굴 걷는 소리
+
 
     private float footstepDelay;
     private float footstepTimer = 0f;
@@ -520,7 +523,6 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.collider != null)
             {
-                // 표면 태그를 검사하여 발소리 변경
                 if (hit.collider.CompareTag("Grass"))
                 {
                     currentSurface = "Grass";
@@ -528,6 +530,10 @@ public class PlayerController : MonoBehaviour
                 else if (hit.collider.CompareTag("Sand"))
                 {
                     currentSurface = "Sand";
+                }
+                else if (hit.collider.CompareTag("Cave")) //
+                {
+                    currentSurface = "Cave";
                 }
                 else
                 {
@@ -553,18 +559,24 @@ public class PlayerController : MonoBehaviour
             {
                 case "Walk":
                     if (currentSurface == "Sand")
-                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                        footstepAudio.clip = sandClip;
+                    else if (currentSurface == "Cave")
+                        footstepAudio.clip = caveClip; 
                     else
-                        footstepAudio.clip = walkClip;  // 기본적으로는 walkClip
+                        footstepAudio.clip = walkClip;
                     break;
+
                 case "Run":
                     if (currentSurface == "Sand")
-                        footstepAudio.clip = sandClip;  // 모래에서는 sandClip
+                        footstepAudio.clip = sandClip;
+                    else if (currentSurface == "Cave")
+                        footstepAudio.clip = caveClip; 
                     else
-                        footstepAudio.clip = runClip;   // 기본적으로는 runClip
+                        footstepAudio.clip = runClip;
                     break;
+
                 case "Crouch":
-                    footstepAudio.clip = crouchClip;  // Crouch는 항상 crouchClip
+                    footstepAudio.clip = crouchClip; // Crouch는 표면에 상관없이 동일
                     break;
             }
 
