@@ -206,6 +206,11 @@ public class PlayerController : MonoBehaviour
         Debug.Log("불러온 저장 데이터 적용 완료!");
     }
 
+    public void ResetCameraRotation()
+    {
+        currentCameraRotationX = 0f;
+        theCamera.transform.localEulerAngles = Vector3.zero;
+    }
 
 
     void Update()

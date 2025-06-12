@@ -236,4 +236,13 @@ public class DayAndNight : MonoBehaviour
     }
 
 
+
+    public void ForceOutsideReset()
+    {
+        RenderSettings.fogColor = dayFogColor;
+        RenderSettings.fogDensity = defaultDayFogDensity;
+        RenderSettings.skybox = daySkybox;
+        isNight = false;
+        SetTemperature(maxTemperature);
+    }
 }

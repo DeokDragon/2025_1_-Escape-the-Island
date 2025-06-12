@@ -9,12 +9,15 @@ public class RespawnManager : MonoBehaviour
 
     public FadeController fadeController;
 
-    private bool isRespawning = false; 
+    private bool isRespawning = false;
+    private bool wasInCave = false;
 
     public void Respawn()
     {
         if (!isRespawning)
         {
+            //  부활 시작 전에 동굴 상태 저장
+            wasInCave = CaveStateManager.Instance != null && CaveStateManager.Instance.IsPlayerInsideCave;
             StartCoroutine(RespawnRoutine());
         }
     }
@@ -38,16 +41,27 @@ public class RespawnManager : MonoBehaviour
         // 위치 이동
         player.transform.position = respawnPoint.position;
 
-        // 동굴 상태를 바깥으로 설정
-        CaveStateManager.Instance.SetCaveState(false);
+        // 카메라 리셋
+        player.GetComponent<PlayerController>().ResetCameraRotation();
 
-        // 환경 초기화 (ExitCave와 같은 효과)
-        RenderSettings.ambientLight = Color.white;
-        RenderSettings.fogColor = Color.gray;
-        RenderSettings.fogMode = FogMode.Linear;
-        RenderSettings.fogStartDistance = 50f;
-        RenderSettings.fogEndDistance = 300f;
-        RenderSettings.fogDensity = 0.001f;
+        //  동굴 안에서 죽었을 경우만 시야/온도 리셋
+        if (wasInCave)
+        {
+            DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
+            if (timeSystem != null)
+                timeSystem.ForceOutsideReset();
+
+            // 동굴 상태를 바깥으로 강제 설정
+            CaveStateManager.Instance?.SetCaveState(false);
+
+            // 환경 초기화 (ExitCave와 같은 효과)
+            RenderSettings.ambientLight = Color.white;
+            RenderSettings.fogColor = Color.gray;
+            RenderSettings.fogMode = FogMode.Linear;
+            RenderSettings.fogStartDistance = 50f;
+            RenderSettings.fogEndDistance = 300f;
+            RenderSettings.fogDensity = 0.001f;
+        }
 
         // 체력 회복
         StatusController status = player.GetComponent<StatusController>();
