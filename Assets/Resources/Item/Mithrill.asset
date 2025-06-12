@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Torchlight_27
+  m_Name: Mithrill
   m_EditorClassIdentifier: 
-  itemName: Torchlight
-  itemDesc: "\uD683\uBD88"
-  itemType: 0
-  itemImage: {fileID: 21300000, guid: e686a763768f14149a689bd0295bcbfb, type: 3}
+  itemName: Mithrill
+  itemDesc: "\uBBF8\uC2A4\uB9B4"
+  itemType: 2
+  itemImage: {fileID: 21300000, guid: 45c18ae4bb183124f906668c663d9b4d, type: 3}
   itemPrefab: {fileID: 0}
-  weaponType: LightingTools
+  weaponType: 
   attackPower: 0
   materialType: 0
