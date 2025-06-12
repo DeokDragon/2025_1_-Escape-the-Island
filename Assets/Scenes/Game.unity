@@ -550,11 +550,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4224169423126298659, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224169423126298659, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d5d794476a449042aac1519be31f2cb,
+        type: 2}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
       propertyPath: baseRect
       value: 
       objectReference: {fileID: 117518831}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: itemCount
+      value: 99
+      objectReference: {fileID: 0}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
       propertyPath: quickSlotNumber
@@ -39144,11 +39165,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4224169423126298659, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224169423126298659, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 893b3eb3804dfa642a51d61c7da9a9b7,
+        type: 2}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
       propertyPath: baseRect
       value: 
       objectReference: {fileID: 117518831}
+    - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
+        type: 3}
+      propertyPath: itemCount
+      value: 99
+      objectReference: {fileID: 0}
     - target: {fileID: 5489878191181652886, guid: e42b6318bd077e64bb5e4babc8c63fff,
         type: 3}
       propertyPath: quickSlotNumber
