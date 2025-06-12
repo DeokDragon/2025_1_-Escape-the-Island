@@ -30,7 +30,7 @@ public class ItemDatabase : MonoBehaviour
                     itemDict.Add(key, item);
             }
 
-            Debug.Log($"[ItemDatabase] 총 아이템 수: {items.Count}");
+            
         }
         else
         {
