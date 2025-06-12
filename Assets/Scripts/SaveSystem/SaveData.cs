@@ -19,6 +19,7 @@ public class SaveData
 
     public float currentTime;
     public int currentWoodCount;
+    public int currentShipRepairStage;
 
     public List<QuickSlotData> quickSlots = new List<QuickSlotData>(); // ✅ 퀵슬롯 정보 추가
     public List<QuickSlotData> quickSlotDataList = new List<QuickSlotData>(); 
