@@ -175,29 +175,39 @@ public class CraftManual : MonoBehaviour
 
 
     private void Build()
+    {
+        if (isPreviewActivated && go_Preview.GetComponent<PreviewObject>().isBuildable())
         {
-            if (isPreviewActivated && go_Preview.GetComponent<PreviewObject>().isBuildable())
+            int selectedSlot = GetSelectedSlot();
+
+            if (!CheckMaterials(selectedSlot))
             {
-                int selectedSlot = GetSelectedSlot();  // 현재 선택된 슬롯을 가져옴 (추가 필요)
-
-                if (!CheckMaterials(selectedSlot))
-                {
-                    Debug.Log("재료가 부족하여 제작할 수 없습니다!");
-                    return;
-                }
-
+                Debug.Log("재료가 부족하여 제작할 수 없습니다!");
+                return;
+            }
 
             PlayBuildSound();
+            ConsumeMaterials(selectedSlot);
 
-            ConsumeMaterials(selectedSlot);  //재료 소모
-                Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
-                Destroy(go_Preview);
-                isActivated = false;
-                isPreviewActivated = false;
-                go_Preview = null;
-                go_Prefab = null;
-            }
+            // 이 부분 수정됨:
+            GameObject placedObject = Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
+
+            SaveManager.instance.CurrentSaveData.spawnedObjects.Add(new SpawnedObjectData
+            {
+                prefabName = go_Prefab.name,
+                position = placedObject.transform.position,
+                rotation = placedObject.transform.eulerAngles
+            });
+
+
+            Destroy(go_Preview);
+            isActivated = false;
+            isPreviewActivated = false;
+            go_Preview = null;
+            go_Prefab = null;
         }
+    }
+
 
     private void PreviewPositionUpdate()
     {

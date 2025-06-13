@@ -4,13 +4,14 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager instance;
+    public SaveData CurrentSaveData { get; private set; }
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject); // 씬 이동해도 유지됨
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -27,14 +28,13 @@ public class SaveManager : MonoBehaviour
     {
         Debug.Log($"💾 저장 시작: 슬롯 {slotIndex}");
 
-        SaveData data = new SaveData();
+        SaveData data = CurrentSaveData ?? new SaveData();
 
         // 1. 플레이어 위치 저장
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             data.playerPosition = player.transform.position;
-            
         }
 
         // 2. 상태 저장
@@ -45,7 +45,6 @@ public class SaveManager : MonoBehaviour
             data.stamina = status.GetCurrentStamina();
             data.hunger = status.GetCurrentHunger();
             data.thirst = status.GetCurrentThirst();
-            
         }
 
         // 3. 인벤토리 저장
@@ -53,7 +52,6 @@ public class SaveManager : MonoBehaviour
         if (inventory != null)
         {
             var slots = inventory.GetSlots();
-            
             foreach (var slot in slots)
             {
                 if (slot.item != null)
@@ -64,12 +62,11 @@ public class SaveManager : MonoBehaviour
                         itemCount = slot.itemCount
                     };
                     data.inventorySlots.Add(slotData);
-                    
                 }
             }
         }
 
-        // 4. 퀵슬롯 저장 (✅ 저장 파일 생성 전에)
+        // 4. 퀵슬롯 저장
         QuickSlotController quickSlot = FindObjectOfType<QuickSlotController>();
         if (quickSlot != null)
         {
@@ -92,7 +89,7 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        //5. 동굴 위치 저장
+        // 5. 동굴 위치 저장
         CaveRandomizer caveRandomizer = FindObjectOfType<CaveRandomizer>();
         if (caveRandomizer != null)
         {
@@ -106,18 +103,21 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        // 6. JSON 저장
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(GetSaveFilePath(slotIndex), json);
-
-        
-
+        // 6. 시간 저장
         DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
         if (timeSystem != null)
         {
             data.currentTime = timeSystem.transform.eulerAngles.x;
         }
 
+        // ✅ 7. 설치 오브젝트 저장 (이미 spawnedObjects 리스트에 들어있으므로 따로 추가할 필요 없음)
+
+        // 8. 실제 JSON으로 저장
+        string json = JsonUtility.ToJson(data, true);
+        File.WriteAllText(GetSaveFilePath(slotIndex), json);
+
+        // ✅ 저장 후 현재 세이브데이터도 갱신 (필수)
+        CurrentSaveData = data;
     }
 
     public SaveData LoadFromSlot(int slotIndex)
@@ -128,13 +128,32 @@ public class SaveManager : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            
+
+            // ✅ 설치된 오브젝트 복구
+            foreach (var objData in data.spawnedObjects)
+            {
+                Debug.Log($"프리팹 로드 시도: {objData.prefabName}");
+
+                GameObject prefab = Resources.Load<GameObject>($"InstallablePrefabs/{objData.prefabName}");
+                if (prefab != null)
+                {
+                    Debug.Log($"성공적으로 프리팹 로드됨: {objData.prefabName}");
+                    Instantiate(prefab, objData.position, Quaternion.Euler(objData.rotation));
+                }
+                else
+                {
+                    Debug.LogWarning($"프리팹 로드 실패: {objData.prefabName}");
+                }
+            }
+
+            // ✅ 로드시 CurrentSaveData 갱신
+            CurrentSaveData = data;
 
             return data;
         }
         else
         {
-           
+            Debug.LogWarning($"Save file not found: {path}");
             return null;
         }
     }
@@ -148,16 +167,13 @@ public class SaveManager : MonoBehaviour
     public void DeleteSlot(int slotIndex)
     {
         string path = GetSaveFilePath(slotIndex);
-
         if (File.Exists(path))
         {
             File.Delete(path);
-          //   Debug.Log($" 슬롯 {slotIndex} 저장 파일 삭제됨: {path}");
         }
         else
         {
             Debug.Log($" 슬롯 {slotIndex}에는 삭제할 파일이 없음.");
         }
     }
-
 }

@@ -151,6 +151,16 @@ public class PlayerController : MonoBehaviour
 
     private void ApplySaveData(SaveData data)
     {
+        if (data == null)
+        {
+            Debug.LogWarning("불러온 SaveData가 null입니다.");
+            return;
+        }
+
+        // 혹시 초기화 안된 상태에서 호출되면 강제 초기화
+        if (theStatusController == null)
+            theStatusController = FindObjectOfType<StatusController>();
+
         // 1. 위치 적용
         transform.position = data.playerPosition;
 
@@ -178,7 +188,7 @@ public class PlayerController : MonoBehaviour
             timeSystem.SetTime(data.currentTime);
         }
 
-        // 6. (선택) 배 수리 단계 적용 (필요할 경우만)
+        // 6. 배 수리 단계 적용
         ShipStatus shipStatus = FindObjectOfType<ShipStatus>();
         if (shipStatus != null && data.currentShipRepairStage > 0)
         {
@@ -205,6 +215,7 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("불러온 저장 데이터 적용 완료!");
     }
+
 
     public void ResetCameraRotation()
     {
