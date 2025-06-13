@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class DayAndNight : MonoBehaviour
 {
+    
+    public float currentTime
+    {
+        get { return transform.eulerAngles.x; }
+    }
     // -------------------- 시간 --------------------
     [Header("시간 진행")]
     [SerializeField] private float secondPerRealTimeSecond = 60f;
