@@ -5,8 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    public int caveIndex; // 활성화된 동굴의 인덱스 저장
-
+    public int caveIndex;
     public Vector3 playerPosition;
     public float hp;
     public float stamina;
@@ -21,8 +20,11 @@ public class SaveData
     public int currentWoodCount;
     public int currentShipRepairStage;
 
-    public List<QuickSlotData> quickSlots = new List<QuickSlotData>(); // ✅ 퀵슬롯 정보 추가
-    public List<QuickSlotData> quickSlotDataList = new List<QuickSlotData>(); 
+    public List<QuickSlotData> quickSlots = new List<QuickSlotData>();
+    public List<QuickSlotData> quickSlotDataList = new List<QuickSlotData>();
+
+    // ✅ 설치 오브젝트용 리스트
+    public List<SpawnedObjectData> spawnedObjects = new List<SpawnedObjectData>();
 }
 
 [System.Serializable]
@@ -39,5 +41,10 @@ public class QuickSlotData
     public int itemCount;
 }
 
-
-
+[System.Serializable]
+public class SpawnedObjectData
+{
+    public string prefabName;
+    public Vector3 position;
+    public Vector3 rotation;
+}
