@@ -22,7 +22,7 @@ public class SaveSlotUI : MonoBehaviour
             if (slotButtons[i] == null)
                 Debug.LogError($"❌ slotButtons[{i}] 가 null입니다");
             else
-                Debug.Log($"✅ slotButtons[{i}] 연결 완료: {slotButtons[i].name}");
+                 Debug.Log($"✅ slotButtons[{i}] 연결 완료: {slotButtons[i].name}");
         }
 
         if (SaveManager.instance == null)
