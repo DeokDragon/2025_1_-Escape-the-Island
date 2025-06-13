@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -8,7 +8,7 @@ public class IntroStoryUI : MonoBehaviour
     [System.Serializable]
     public class StoryPage
     {
-        public string imagePath; // Resources ∞Ê∑Œ
+        public string imagePath; // Resources Í≤ΩÎ°ú
         [TextArea] public string storyText;
     }
 
@@ -18,6 +18,7 @@ public class IntroStoryUI : MonoBehaviour
     public TextMeshProUGUI storyText;
     public TextMeshProUGUI hintText;
     public GameObject storyPanel;
+    public GameObject player;  // ÌîåÎ†àÏù¥Ïñ¥ Ïò§Î∏åÏ†ùÌä∏ Ïó∞Í≤∞
 
     private int currentPage = 0;
 
@@ -27,15 +28,38 @@ public class IntroStoryUI : MonoBehaviour
 
         if (isContinue == 1)
         {
-            // ¿ÃæÓ«œ±‚¿œ ∂ß¥¬ Ω∫≈‰∏Æ ∆–≥Œ æ»∂ÁøÚ
             storyPanel.SetActive(false);
             GameManager.canPlayerMove = true;
+            GameManager.canPlayerRotate = true;
+            GameManager.isIntroPlaying = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             return;
         }
 
         currentPage = 0;
         storyPanel.SetActive(true);
         GameManager.canPlayerMove = false;
+        GameManager.canPlayerRotate = false;
+        GameManager.isIntroPlaying = true;
+
+        if (player != null)
+        {
+            var controller = player.GetComponent<PlayerController>();
+            if (controller != null)
+                controller.enabled = false;
+
+            var rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.velocity = Vector3.zero;
+            }
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         ShowPage();
     }
 
@@ -57,6 +81,8 @@ public class IntroStoryUI : MonoBehaviour
             Sprite img = Resources.Load<Sprite>(page.imagePath);
             if (img != null)
                 storyImage.sprite = img;
+            else
+                Debug.LogWarning("Ïä§ÌÜ†Î¶¨ Ïù¥ÎØ∏ÏßÄ Î°úÎìú Ïã§Ìå®: " + page.imagePath);
         }
         else
         {
@@ -73,6 +99,25 @@ public class IntroStoryUI : MonoBehaviour
     void EndStory()
     {
         storyPanel.SetActive(false);
-        GameManager.canPlayerMove = true;  // ∫ª ∞‘¿” Ω√¿€
+
+        GameManager.canPlayerMove = true;
+        GameManager.canPlayerRotate = true;
+        GameManager.isIntroPlaying = false;
+
+        if (player != null)
+        {
+            var controller = player.GetComponent<PlayerController>();
+            if (controller != null)
+                controller.enabled = true;
+
+            var rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+            }
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

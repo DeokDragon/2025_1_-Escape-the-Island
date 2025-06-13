@@ -97,7 +97,7 @@ public class PauseMenu : MonoBehaviour
         if (selectedSlot != -1 && SaveManager.instance != null)
         {
             SaveManager.instance.SaveToSlot(selectedSlot);
-            Debug.Log($"💾 게임 종료 직전 자동 저장 완료! 슬롯: {selectedSlot}");
+            
         }
         else
         {

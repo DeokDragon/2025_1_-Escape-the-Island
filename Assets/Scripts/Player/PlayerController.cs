@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         int isContinue = PlayerPrefs.GetInt("IsContinue", -1);
         int slotIndex = PlayerPrefs.GetInt("SelectedSlot", -1);
 
-        Debug.Log($"[DEBUG] isContinue = {isContinue}, slotIndex = {slotIndex}");
+       //  Debug.Log($"[DEBUG] isContinue = {isContinue}, slotIndex = {slotIndex}");
 
         if (isContinue == 1)
         {
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("⚠️ 이어하기 아님 → 새 게임 상태임");
+           //  Debug.Log("⚠️ 이어하기 아님 → 새 게임 상태임");
         }
     }
 
@@ -217,28 +217,30 @@ public class PlayerController : MonoBehaviour
         {
  
           PlayFootstepSound(); // 발소리 재생
-        if (isActivated && GameManager.canPlayerMove)
-            {
-                IsGround();
-                TryJump();
-                TryRun();
-                TryCrouch();            
-                MoveCheck();
-            if (!Inventory.inventoryActivated && GameManager.canPlayerRotate)
+        if (isActivated && GameManager.canPlayerMove && !GameManager.isIntroPlaying)
+        {
+            IsGround();
+            TryJump();
+            TryRun();
+            TryCrouch();
+            MoveCheck();
+
+            if (!Inventory.inventoryActivated && GameManager.canPlayerRotate && !GameManager.isIntroPlaying)
             {
                 CameraRotation();
                 CharacterRotation();
             }
-
-        }
         }
 
-     void FixedUpdate()
+    }
+
+    void FixedUpdate()
     {
-        if (isActivated && GameManager.canPlayerMove)
+        if (isActivated && GameManager.canPlayerMove && !GameManager.isIntroPlaying)
         {
-            Move();        
+            Move();
         }
+
     }
 
     // 앉기 시도
