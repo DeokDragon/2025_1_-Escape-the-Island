@@ -36,6 +36,10 @@ public class IntroStoryUI : MonoBehaviour
         currentPage = 0;
         storyPanel.SetActive(true);
         GameManager.canPlayerMove = false;
+
+       
+
+
         ShowPage();
     }
 
@@ -74,5 +78,6 @@ public class IntroStoryUI : MonoBehaviour
     {
         storyPanel.SetActive(false);
         GameManager.canPlayerMove = true;  // 본 게임 시작
+
     }
 }
