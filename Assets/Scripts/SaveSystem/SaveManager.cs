@@ -110,7 +110,7 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSaveFilePath(slotIndex), json);
 
-        Debug.Log($"✅ 저장 완료! → {GetSaveFilePath(slotIndex)}");
+        
 
         DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
         if (timeSystem != null)
@@ -152,7 +152,7 @@ public class SaveManager : MonoBehaviour
         if (File.Exists(path))
         {
             File.Delete(path);
-            Debug.Log($" 슬롯 {slotIndex} 저장 파일 삭제됨: {path}");
+          //   Debug.Log($" 슬롯 {slotIndex} 저장 파일 삭제됨: {path}");
         }
         else
         {

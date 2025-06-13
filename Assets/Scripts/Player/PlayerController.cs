@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         int isContinue = PlayerPrefs.GetInt("IsContinue", -1);
         int slotIndex = PlayerPrefs.GetInt("SelectedSlot", -1);
 
-        Debug.Log($"[DEBUG] isContinue = {isContinue}, slotIndex = {slotIndex}");
+       //  Debug.Log($"[DEBUG] isContinue = {isContinue}, slotIndex = {slotIndex}");
 
         if (isContinue == 1)
         {
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("⚠️ 이어하기 아님 → 새 게임 상태임");
+           //  Debug.Log("⚠️ 이어하기 아님 → 새 게임 상태임");
         }
     }
 
