@@ -103,20 +103,20 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        // 6. 시간 저장
+        // ✅ 6. 시간 저장 (여기 완전히 고침!)
         DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
         if (timeSystem != null)
         {
-            data.currentTime = timeSystem.transform.eulerAngles.x;
+            data.currentTime = timeSystem.currentTime;  // 기존 transform.eulerAngles.x → 정확히 currentTime으로 수정
         }
 
-        // ✅ 7. 설치 오브젝트 저장 (이미 spawnedObjects 리스트에 들어있으므로 따로 추가할 필요 없음)
+        // ✅ 7. 설치 오브젝트 저장 (이미 spawnedObjects에 들어가있음 → 건드릴 필요 없음)
 
         // 8. 실제 JSON으로 저장
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetSaveFilePath(slotIndex), json);
 
-        // ✅ 저장 후 현재 세이브데이터도 갱신 (필수)
+        // ✅ 저장 후 현재 세이브데이터도 갱신
         CurrentSaveData = data;
     }
 
@@ -144,6 +144,13 @@ public class SaveManager : MonoBehaviour
                 {
                     Debug.LogWarning($"프리팹 로드 실패: {objData.prefabName}");
                 }
+            }
+
+            // ✅ 시간 복구 추가
+            DayAndNight timeSystem = FindObjectOfType<DayAndNight>();
+            if (timeSystem != null)
+            {
+                timeSystem.SetTime(data.currentTime);
             }
 
             // ✅ 로드시 CurrentSaveData 갱신
