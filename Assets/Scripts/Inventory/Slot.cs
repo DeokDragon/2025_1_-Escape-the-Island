@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-// 보내주신 Slot.cs 코드 전체 (수정 없음)
 public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
 
@@ -50,27 +49,41 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 
 
-    public void UpdateSlotUI()
+    public void UpdateSlotUI() // 이 메서드의 내부도 확인
     {
         if (item != null)
         {
-            itemImage.sprite = item.itemImage;
-            SetColor(1);
-
-            if (item.itemType != Item.ItemType.Equipment)
+            if (itemImage != null) // itemImage가 할당되어 있는지 확인
             {
-                go_CountImage.SetActive(true);
-                text_Count.gameObject.SetActive(true);
-                text_Count.text = itemCount.ToString();
+                itemImage.sprite = item.itemImage;
+                itemImage.gameObject.SetActive(true); // 이미지가 활성화되는지 확인
+                SetColor(1);
             }
             else
             {
-                go_CountImage.SetActive(false);
-                text_Count.gameObject.SetActive(false);
-                text_Count.text = "0";
+                Debug.LogWarning($"[Slot] Slot '{this.name}' has item '{item.itemName}' but itemImage is NULL or not assigned.");
+            }
+
+            if (item.itemType != Item.ItemType.Equipment)
+            {
+                if (go_CountImage != null) go_CountImage.SetActive(true);
+                if (text_Count != null)
+                {
+                    text_Count.gameObject.SetActive(true);
+                    text_Count.text = itemCount.ToString();
+                }
+                else
+                {
+                    Debug.LogWarning($"[Slot] Slot '{this.name}' has item but text_Count is NULL or not assigned.");
+                }
+            }
+            else
+            {
+                if (go_CountImage != null) go_CountImage.SetActive(false);
+                if (text_Count != null) text_Count.gameObject.SetActive(false);
             }
         }
-        else
+        else // 아이템이 null이면 슬롯 초기화
         {
             ClearSlot();
         }
@@ -94,9 +107,13 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void AddItem(Item _item, int _count = 1)
     {
-        if (!CanReceive(_item)) return; // 슬롯 필터에 걸리면 못 넣음
+        //if (!CanReceive(_item)) return; 이거 일단 임시로 함
 
-        ApplyItem(_item, _count);
+        item = _item;
+        itemCount = _count; // 초기 아이템 개수 설정
+
+        Debug.Log($"[Slot] AddItem called for '{_item.itemName}', count: {_count}. Update UI now."); // 이 로그를 추가
+        UpdateSlotUI(); // <-- 이 부분이 UI 갱신을 담당합니다.
     }
 
     public int GetQuickSlotNumber()
@@ -105,7 +122,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     private IEnumerator DelayedEquip()
     {
-        yield return new WaitForSeconds(0.1f); // 살짝만 지연
+        yield return new WaitForSeconds(0.1f);
 
         if (QuickSlotController.instance != null &&
         quickSlotNumber == QuickSlotController.instance.GetSelectedSlotNumber())
@@ -130,11 +147,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void SetSlotCount(int _count)
     {
         itemCount += _count;
-        text_Count.gameObject.SetActive(true);
-        text_Count.text = itemCount.ToString();
-
+        Debug.Log($"[Slot] SetSlotCount called for '{item.itemName}', new count: {itemCount}. Update UI now.");
         if (itemCount <= 0)
             ClearSlot();
+        else
+            UpdateSlotUI();
     }
 
     public void ClearSlot()
@@ -160,11 +177,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
             else if (item.itemName == "BearMeat")
             {
-                UseItem(); // UseItem 내부에서 상태 회복 + SetSlotCount 포함
+                UseItem(); 
             }
             else
             {
-                SetSlotCount(-1); // 일반 소비 아이템
+                SetSlotCount(-1); 
             }
         }
     }
@@ -176,8 +193,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             StatusController statusController = FindObjectOfType<StatusController>();
             if (statusController != null)
             {
-                statusController.IncreaseHP(3);      //피 회복
-                statusController.IncreaseHungry(10); //배고픔 회복
+                statusController.IncreaseHP(3);      
+                statusController.IncreaseHungry(10); 
             }
             SetSlotCount(-1);
             UpdateSlotUI();
@@ -227,13 +244,18 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (!canReceiveItem)
+        {
+            return;
+        }
+
         if (DragSlot.instance.dragSlot != null)
         {
             ChangeSlot();
 
-            if (isQuickSlot) //인벤토리 퀵슬롯
+            if (isQuickSlot)
                 theItemEffectDatabase.IsActivatedQuickSlot(quickSlotNumber);
-            else //인벤토리 -> 인벤, 퀵슬롯 -> 인벤
+            else
                 if (DragSlot.instance.dragSlot.isQuickSlot)
                 theItemEffectDatabase.IsActivatedQuickSlot(DragSlot.instance.dragSlot.quickSlotNumber);
         }
@@ -244,28 +266,24 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         Item draggedItem = DragSlot.instance.dragSlot.item;
         int draggedCount = DragSlot.instance.dragSlot.itemCount;
 
-        // 추가: 슬롯이 받을 수 있는지 확인
         if (!CanReceive(draggedItem))
         {
             Debug.LogWarning("이 슬롯은 해당 아이템을 받을 수 없습니다.");
             return;
         }
 
-        // --- 디버깅을 위한 로그 추가 ---
         string originalItemName = (item != null) ? item.itemName : "비어있음";
         Debug.Log($"[슬롯 변경 시작] '{DragSlot.instance.dragSlot.name}'에서 '{name}'으로 '{draggedItem.itemName}' 옮기는 중. 대상 슬롯의 원래 아이템: '{originalItemName}'");
 
 
-        // ✅ 이미 같은 아이템이 있다면 수량만 합치기
         if (item != null && item.itemName == draggedItem.itemName)
         {
             Debug.Log("같은 아이템 발견: 수량을 합칩니다.");
             itemCount += draggedCount;
-            DragSlot.instance.dragSlot.ClearSlot(); // 원래 슬롯은 비워야 함
+            DragSlot.instance.dragSlot.ClearSlot();
         }
         else
         {
-            // 일반 교환
             Debug.Log("다른 아이템 발견: 아이템을 교환합니다.");
             Item _tempItem = item;
             int _tempItemCount = itemCount;
@@ -283,8 +301,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 DragSlot.instance.dragSlot.ClearSlot();
             }
         }
-
-        // 이 슬롯의 UI와 원래 슬롯의 UI를 모두 업데이트
         UpdateSlotUI();
         DragSlot.instance.dragSlot.UpdateSlotUI();
     }
@@ -310,7 +326,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void OnDisable()
     {
         if (theItemEffectDatabase != null)
-            theItemEffectDatabase.HideToolTip(); // 슬롯 비활성화될 때도 툴팁 끄기
+            theItemEffectDatabase.HideToolTip();
     }
     public virtual bool CanReceive(Item item)
     {
@@ -320,7 +336,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         public override bool CanReceive(Item item)
         {
-            return false; // 어떤 아이템도 못 넣음
+            return false; // 어떤 아이템도 못 넣게함.
         }
     }
     public void ForceAddItem(Item _item, int _count = 1)
@@ -332,10 +348,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (_item.itemImage == null)
         {
             Debug.LogError($"[ApplyItem 오류] 슬롯 '{this.name}'에 아이템 '{_item.itemName}'을 적용하려 했으나, 이 아이템의 itemImage 필드가 비어있습니다(null)!");
-        }
-        else
-        {
-            Debug.Log($"[ApplyItem 정보] 슬롯 '{this.name}'에 아이템 '{_item.itemName}'의 이미지를 적용합니다. 이미지 이름: '{_item.itemImage.name}'");
         }
         item = _item;
         itemCount = _count;
@@ -362,9 +374,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             StartCoroutine(DelayedEquip());
         OnSlotChanged?.Invoke();
     }
-
-    // ----- [ 조합 시스템 연동을 위해 추가된 함수들 ] -----
-
     public void RemoveItems(int amount)
     {
         itemCount -= amount;

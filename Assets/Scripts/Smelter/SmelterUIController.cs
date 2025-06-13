@@ -7,7 +7,7 @@ public class SmelterUIController : MonoBehaviour
 {
     public Slot leftInputSlot;    // 왼쪽 제련 입력 슬롯
     public Slot rightOutputSlot;  // 오른쪽 제련 출력 슬롯 (아이템 넣기 막기)
-    public TextMeshProUGUI statusText;  // 제련 상태 표시 텍스트
+    public TextMeshProUGUI statusText;    // 제련 상태 표시 텍스트
 
     private bool isSmelting = false;
     private bool isUIOpen = false;
@@ -17,12 +17,11 @@ public class SmelterUIController : MonoBehaviour
 
     void Start()
     {
-        rightOutputSlot.canReceiveItem = false; // 출력 슬롯은 아이템 못 받게 설정
+        rightOutputSlot.canReceiveItem = false;
     }
 
     public void OnStartSmeltingButton()
     {
-        Debug.Log("제련 버튼 눌림");
         if (isSmelting) return; // 이미 제련 중이면 무시
 
         if (leftInputSlot.item == null)
@@ -31,12 +30,32 @@ public class SmelterUIController : MonoBehaviour
             return;
         }
 
+        // 제련 가능한 아이템인지 검사
+        if (CreateSmeltedItem(leftInputSlot.item) == null)
+        {
+            statusText.text = "제련할 수 없는 아이템입니다.";
+            return;
+        }
+
         if (rightOutputSlot.item != null)
         {
-            statusText.text = "출력 슬롯이 비어있지 않습니다.";
-            return;
-
+            Item predictedOutputItem = CreateSmeltedItem(leftInputSlot.item);
+            if (predictedOutputItem != null && rightOutputSlot.item.itemName == predictedOutputItem.itemName)
+            {
+                // 스택이 가득 찼는지 확인 (Item 클래스에 maxStackCount 변수가 있다고 가정)
+                if (rightOutputSlot.itemCount >= rightOutputSlot.item.maxStackCount)
+                {
+                    statusText.text = "출력 슬롯의 공간이 부족합니다.";
+                    return;
+                }
+            }
+            else // 기존 아이템과 새로 제련될 아이템이 다르다면 출력 슬롯 비워야 함
+            {
+                statusText.text = "출력 슬롯이 비어있지 않습니다.";
+                return;
+            }
         }
+
         SmelterCoroutineRunner.instance.StartCoroutine(SmeltingCoroutine());
     }
 
@@ -45,9 +64,10 @@ public class SmelterUIController : MonoBehaviour
         isSmelting = true;
 
         Item inputItem = leftInputSlot.item;
-        int inputCount = leftInputSlot.itemCount;
+        int initialInputCount = leftInputSlot.itemCount; // 초기에 슬롯에 있던 총 수량
 
-        if (inputItem == null || inputCount <= 0)
+
+        if (inputItem == null || initialInputCount <= 0)
         {
             statusText.text = "제련 실패: 입력 수량 오류";
             isSmelting = false;
@@ -55,32 +75,48 @@ public class SmelterUIController : MonoBehaviour
         }
 
         Item outputItem = CreateSmeltedItem(inputItem);
-        leftInputSlot.ClearSlot(); // 슬롯 비움
+        if (outputItem == null)
+        {
+            statusText.text = "제련할 수 없는 아이템입니다.";
+            isSmelting = false;
+            yield break;
+        }
 
         int produced = 0;
 
-        for (int i = 0; i < inputCount; i++)
+        for (int i = 0; i < initialInputCount; i++) // 초기 입력 수량만큼 반복
         {
-            float elapsed = 0f;
+            if (leftInputSlot.item == null || leftInputSlot.itemCount <= 0 || leftInputSlot.item.itemName != inputItem.itemName)
+            {
+                statusText.text = $"제련 중단: 입력 아이템 부족.";
+                isSmelting = false;
+                yield break;
+            }
 
-            while (elapsed < smeltingTime)
+            float elapsed = 0f;
+            while (elapsed < smeltingTime) 
             {
                 elapsed += Time.deltaTime;
                 float percent = Mathf.Clamp01(elapsed / smeltingTime) * 100f;
-                statusText.text = $"제련 중.. {i + 1} / {inputCount} ({percent:F0}%)";
-                yield return null;
+                statusText.text = $"제련 중.. {i + 1} / {initialInputCount} ({percent:F0}%)";
+                yield return null; 
             }
+            // 1. 입력 슬롯에서 1개 감소
+            leftInputSlot.SetSlotCount(-1);
 
-            // 한 개씩 오른쪽 슬롯에 추가
+            // 2. 결과 아이템을 출력 슬롯에 1개 추가
+            Debug.Log($"[SmelterCoroutine] Right Slot Before Add/Set: Item='{(rightOutputSlot.item != null ? rightOutputSlot.item.itemName : "NULL")}', Count='{rightOutputSlot.itemCount}'"); //
             if (rightOutputSlot.item != null && rightOutputSlot.item.itemName == outputItem.itemName)
             {
-                rightOutputSlot.SetSlotCount(1);
+                if (rightOutputSlot.itemCount < rightOutputSlot.item.maxStackCount)
+                {
+                    rightOutputSlot.SetSlotCount(1);
+                }
             }
             else if (rightOutputSlot.item == null)
             {
                 rightOutputSlot.AddItem(outputItem, 1);
             }
-
             produced++;
         }
 
@@ -92,22 +128,24 @@ public class SmelterUIController : MonoBehaviour
     {
         Item smeltedItem = null;
 
-        if (inputItem.itemName == "IronOre")
-            smeltedItem = Resources.Load<Item>("Item/Iron");
-        else if (inputItem.itemName == "BearMeat")
-            smeltedItem = Resources.Load<Item>("Item/GrilledBearMeat");
-        else if (inputItem.itemName == "WolfMeat")
-            smeltedItem = Resources.Load<Item>("Item/GrilledWolfMeat");
+        if (inputItem == null) return null;
 
-        if (smeltedItem == null)
+        switch (inputItem.itemName) 
         {
-            Debug.LogWarning("[Smelter] 제련 아이템 불러오기 실패");
-            smeltedItem = ScriptableObject.CreateInstance<Item>();
-            smeltedItem.itemName = inputItem.itemName + " Ingot";
-        }
-        else
-        {
-            Debug.Log("[Smelter] 아이템 불러오기 성공: " + smeltedItem.itemName);
+            case "Iron Stone":
+                smeltedItem = Resources.Load<Item>("Item/Iron"); //철
+                break;
+            case "AlloyOre":
+                smeltedItem = Resources.Load<Item>("Item/Alloy_14"); //미스릴
+                break;
+            case "BearMeat":
+                smeltedItem = Resources.Load<Item>("Item/GrilledBearMeat_21"); //곰고기
+                break;
+            case "WolfMeat":
+                smeltedItem = Resources.Load<Item>("Item/GrilledWolfMeat_23"); //늑대고기
+                break;
+            default: // 위에 명시된 아이템 외에는 제련 불가
+                return null; // 제련 불가능 아이템은 null 반환
         }
 
         return smeltedItem;
@@ -115,12 +153,12 @@ public class SmelterUIController : MonoBehaviour
 
     void Update()
     {
-        // 오른쪽 슬롯에 아이템 있으면 상태 항상 "제련 완료!" 표시
         if (rightOutputSlot.item != null && !isSmelting)
         {
             statusText.text = "제련 완료!";
         }
     }
+
     public void CloseSmeltingUI()
     {
         smeltingUI.SetActive(false);

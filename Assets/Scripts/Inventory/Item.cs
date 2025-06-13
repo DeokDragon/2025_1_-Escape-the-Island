@@ -8,7 +8,7 @@ public class Item : ScriptableObject
 
     public string itemName;
     [TextArea]
-    public string itemDesc;//아이템 설명
+    public string itemDesc; //아이템 설명
     public ItemType itemType;
     public Sprite itemImage;
     public GameObject itemPrefab;
@@ -18,6 +18,7 @@ public class Item : ScriptableObject
     public float attackPower;
     public MaterialType materialType;
 
+    public int maxStackCount = 99;
 
     public enum ItemType
     {

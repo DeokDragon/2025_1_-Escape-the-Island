@@ -8,7 +8,6 @@ public class SmelterCoroutineRunner : MonoBehaviour
 
     void Awake()
     {
-        // 인스턴스가 비어있다면 이 오브젝트를 할당합니다
         if (instance == null)
         {
             instance = this;
