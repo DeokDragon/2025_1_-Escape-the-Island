@@ -217,28 +217,30 @@ public class PlayerController : MonoBehaviour
         {
  
           PlayFootstepSound(); // 발소리 재생
-        if (isActivated && GameManager.canPlayerMove)
-            {
-                IsGround();
-                TryJump();
-                TryRun();
-                TryCrouch();            
-                MoveCheck();
-            if (!Inventory.inventoryActivated && GameManager.canPlayerRotate)
+        if (isActivated && GameManager.canPlayerMove && !GameManager.isIntroPlaying)
+        {
+            IsGround();
+            TryJump();
+            TryRun();
+            TryCrouch();
+            MoveCheck();
+
+            if (!Inventory.inventoryActivated && GameManager.canPlayerRotate && !GameManager.isIntroPlaying)
             {
                 CameraRotation();
                 CharacterRotation();
             }
-
-        }
         }
 
-     void FixedUpdate()
+    }
+
+    void FixedUpdate()
     {
-        if (isActivated && GameManager.canPlayerMove)
+        if (isActivated && GameManager.canPlayerMove && !GameManager.isIntroPlaying)
         {
-            Move();        
+            Move();
         }
+
     }
 
     // 앉기 시도

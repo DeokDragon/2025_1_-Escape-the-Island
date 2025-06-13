@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public static bool isAnvilUIOpen = false;
     public static bool isShipRepairUIOpen = false;
     public static bool isTutorialOpen = false;
+    public static bool isIntroPlaying = false;
 
     void Start()
     {
