@@ -38,6 +38,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public bool canReceiveItem = true;
 
     public UnityEvent OnSlotChanged;
+    //물통
+    public bool isWaterFilled = false;
+    public int waterAmount = 0;      // 현재 물의 양 (0 ~ maxWaterAmount)
+    public int maxWaterAmount = 3;
+
 
     void Start()
     {
@@ -59,10 +64,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 itemImage.gameObject.SetActive(true); // 이미지가 활성화되는지 확인
                 SetColor(1);
             }
-            else
-            {
-                Debug.LogWarning($"[Slot] Slot '{this.name}' has item '{item.itemName}' but itemImage is NULL or not assigned.");
-            }
 
             if (item.itemType != Item.ItemType.Equipment)
             {
@@ -71,10 +72,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 {
                     text_Count.gameObject.SetActive(true);
                     text_Count.text = itemCount.ToString();
-                }
-                else
-                {
-                    Debug.LogWarning($"[Slot] Slot '{this.name}' has item but text_Count is NULL or not assigned.");
                 }
             }
             else
@@ -111,8 +108,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         item = _item;
         itemCount = _count; // 초기 아이템 개수 설정
-
-        Debug.Log($"[Slot] AddItem called for '{_item.itemName}', count: {_count}. Update UI now."); // 이 로그를 추가
+        isWaterFilled = false;
         UpdateSlotUI(); // <-- 이 부분이 UI 갱신을 담당합니다.
     }
 
@@ -147,7 +143,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void SetSlotCount(int _count)
     {
         itemCount += _count;
-        Debug.Log($"[Slot] SetSlotCount called for '{item.itemName}', new count: {itemCount}. Update UI now.");
         if (itemCount <= 0)
             ClearSlot();
         else
@@ -268,23 +263,19 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         if (!CanReceive(draggedItem))
         {
-            Debug.LogWarning("이 슬롯은 해당 아이템을 받을 수 없습니다.");
             return;
         }
 
         string originalItemName = (item != null) ? item.itemName : "비어있음";
-        Debug.Log($"[슬롯 변경 시작] '{DragSlot.instance.dragSlot.name}'에서 '{name}'으로 '{draggedItem.itemName}' 옮기는 중. 대상 슬롯의 원래 아이템: '{originalItemName}'");
 
 
         if (item != null && item.itemName == draggedItem.itemName)
         {
-            Debug.Log("같은 아이템 발견: 수량을 합칩니다.");
             itemCount += draggedCount;
             DragSlot.instance.dragSlot.ClearSlot();
         }
         else
         {
-            Debug.Log("다른 아이템 발견: 아이템을 교환합니다.");
             Item _tempItem = item;
             int _tempItemCount = itemCount;
 
@@ -292,12 +283,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
             if (_tempItem != null)
             {
-                Debug.Log($"원래 슬롯으로 '{_tempItem.itemName}' 아이템을 되돌려줍니다.");
                 DragSlot.instance.dragSlot.ApplyItem(_tempItem, _tempItemCount);
             }
             else
             {
-                Debug.Log("대상 슬롯이 비어있었으므로, 원래 슬롯을 비웁니다.");
                 DragSlot.instance.dragSlot.ClearSlot();
             }
         }
@@ -345,10 +334,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     private void ApplyItem(Item _item, int _count)
     {
-        if (_item.itemImage == null)
-        {
-            Debug.LogError($"[ApplyItem 오류] 슬롯 '{this.name}'에 아이템 '{_item.itemName}'을 적용하려 했으나, 이 아이템의 itemImage 필드가 비어있습니다(null)!");
-        }
         item = _item;
         itemCount = _count;
         itemImage.sprite = item.itemImage;
@@ -387,5 +372,18 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         AddItem(newItem, count);
     }
-
+    public void UpdateBottleUI()
+    {
+        if (item != null && item.itemName == "IronBottle")
+        {
+            if (isWaterFilled)
+            {
+                itemImage.color = Color.cyan; 
+            }
+            else
+            {
+                itemImage.color = Color.white;
+            }
+        }
+    }
 }

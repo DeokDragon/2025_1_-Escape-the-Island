@@ -209,6 +209,7 @@ public class DayAndNight : MonoBehaviour
 
             if (craftManual != null)
             {
+                // 동굴 안, 밖 상관없이 갑옷 착용에 따른 데미지 감소 적용
                 finalDamage = craftManual.CalculateColdDamageAfterProtection(rawDamage);
             }
 

@@ -79,7 +79,6 @@ public class CraftManual : MonoBehaviour
     //armor 관련 함수
     [SerializeField] private GameObject craftUI_armor; // 노란 버튼 탭 (Armor)
     private enum CraftTab { Craft, Armor }
-    private CraftTab currentTab = CraftTab.Craft;
     [SerializeField] private Craft[] craft_armor;
     [SerializeField] private GameObject helmetIcon;
     [SerializeField] private GameObject armorIcon;
@@ -146,7 +145,6 @@ public class CraftManual : MonoBehaviour
         inventory = FindObjectOfType<Inventory>(); // 인벤토리 자동 검색
 
         // 초기 탭 설정
-        currentTab = CraftTab.Craft;
         craftUI1.SetActive(true);
         craftUI2.SetActive(false);
         craftUI3.SetActive(false);
@@ -341,7 +339,6 @@ public class CraftManual : MonoBehaviour
     {
         PlayClickSound();
 
-        currentTab = CraftTab.Armor;
         craftUI1.SetActive(false);
         craftUI2.SetActive(false);
         craftUI3.SetActive(false);
@@ -352,7 +349,6 @@ public class CraftManual : MonoBehaviour
     {
         PlayClickSound();
 
-        currentTab = CraftTab.Craft;
         craftUI_armor.SetActive(false);
         craftUI1.SetActive(true);
         craftUI2.SetActive(false);
