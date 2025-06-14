@@ -1,45 +1,77 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WaterWell : MonoBehaviour
 {
-    public GameObject interactPromptUI; // EÅ° UI Ç¥½Ã¿ë
-    public LayerMask playerLayer; // ÇÃ·¹ÀÌ¾î ·¹ÀÌ¾î
-    public float interactDistance = 3f; // »óÈ£ÀÛ¿ë °Å¸®
-    public int thirstIncreaseAmount = 20; // ¹°À» ¸¶¼ÌÀ» ¶§ Áõ°¡ÇÏ´Â ¸ñ¸¶¸§ ¾ç
+    public GameObject interactPromptUI;
+    public Text interactPromptText; 
+    public LayerMask playerLayer;
+    public float interactDistance = 3f;
+    public int thirstIncreaseAmount = 20;
 
-    private bool isPlayerNearby = false; // ÇÃ·¹ÀÌ¾î°¡ ¿ì¹° ±ÙÃ³¿¡ ÀÖ´ÂÁö È®ÀÎ
-    private StatusController playerStatusController; // ÇÃ·¹ÀÌ¾î »óÅÂ ÄÁÆ®·Ñ·¯
+    private bool isPlayerNearby = false;
+    private StatusController playerStatusController;
 
+    public string bottleItemName = "IronBottle"; 
+    private Slot selectedSlot;
+
+    //ì˜¤ë””ì˜¤ ì„¤ì •
+    public AudioClip drinkSound;       // ë§ˆì‹¤ ë•Œ ë‚˜ëŠ” ì†Œë¦¬
+    private AudioSource audioSource;   // ì†Œë¦¬ ì¬ìƒìš© ì˜¤ë””ì˜¤ì†ŒìŠ¤
     void Start()
     {
-        // ÇÃ·¹ÀÌ¾î »óÅÂ ÄÁÆ®·Ñ·¯ Ã£±â
         playerStatusController = FindObjectOfType<StatusController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward); // ÇÃ·¹ÀÌ¾îÀÇ ½Ã¼± ¹æÇâÀ¸·Î Ray¸¦ ½÷¼­ ¿ì¹° °¨Áö
 
         if (Physics.Raycast(ray, out hit, interactDistance, playerLayer))
         {
-            if (hit.transform.CompareTag("WaterWell")) // ¿ì¹° ÅÂ±×¿Í ºñ±³
+            if (hit.transform.CompareTag("WaterWell"))
             {
                 isPlayerNearby = true;
-                interactPromptUI.SetActive(true); // EÅ° UI Ç¥½Ã
+                interactPromptUI.SetActive(true);
 
-                if (Input.GetKeyDown(KeyCode.E)) // E Å°¸¦ ´­·¶À» ¶§
+                // í˜„ì¬ ì„ íƒëœ í€µìŠ¬ë¡¯ ë²ˆí˜¸ ë° ìŠ¬ë¡¯ ê°€ì ¸ì˜¤ê¸°
+                int selectedSlotIndex = QuickSlotController.instance?.GetSelectedSlotNumber() ?? -1;
+                Slot[] quickSlots = QuickSlotController.instance?.GetQuickSlots();
+
+                string promptText = "ë¬¼ ë§ˆì‹œê¸°";
+
+                if (quickSlots != null && selectedSlotIndex >= 0 && selectedSlotIndex < quickSlots.Length)
                 {
-                    DrinkWater();
+                    selectedSlot = quickSlots[selectedSlotIndex]; 
+                    if (selectedSlot.item != null && selectedSlot.item.itemName == bottleItemName)
+                    {
+                        promptText = "ë¬¼ ì±„ìš°ê¸°";
+                    }
+                }
+                else
+                {
+                    selectedSlot = null; 
+                }
+
+                interactPromptText.text = promptText;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (promptText == "ë¬¼ ì±„ìš°ê¸°")
+                        FillBottle();
+                    else
+                        DrinkWater();
                 }
             }
         }
         else
         {
             isPlayerNearby = false;
-            interactPromptUI.SetActive(false); // EÅ° UI ¼û±â±â
+            interactPromptUI.SetActive(false);
         }
     }
 
@@ -48,6 +80,35 @@ public class WaterWell : MonoBehaviour
         if (playerStatusController != null)
         {
             playerStatusController.IncreaseThirsty(thirstIncreaseAmount);
+
+
+            if (drinkSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(drinkSound);
+            }
+
+            // ë¬¼í†µì— ë¬¼ì´ ì°¨ ìˆì„ ë•Œë§Œ ë¬¼ë³‘ ë¹„ìš°ê¸° ë° UI ì—…ë°ì´íŠ¸
+            if (selectedSlot != null && selectedSlot.isWaterFilled)
+            {
+                selectedSlot.isWaterFilled = false;  
+                selectedSlot.UpdateBottleUI();
+            }
+        }
+    }
+
+    void FillBottle()
+    {
+        Slot[] quickSlots = QuickSlotController.instance?.GetQuickSlots();
+        int selectedSlotIndex = QuickSlotController.instance?.GetSelectedSlotNumber() ?? -1;
+
+        if (quickSlots != null && selectedSlotIndex >= 0 && selectedSlotIndex < quickSlots.Length)
+        {
+            Slot selectedSlot = quickSlots[selectedSlotIndex];
+            if (selectedSlot.item != null && selectedSlot.item.itemName == bottleItemName)
+            {
+                selectedSlot.isWaterFilled = true; 
+                selectedSlot.UpdateBottleUI(); 
+            }
         }
     }
 }

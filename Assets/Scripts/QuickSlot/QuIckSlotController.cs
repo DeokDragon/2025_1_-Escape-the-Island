@@ -18,9 +18,14 @@ public class QuickSlotController : MonoBehaviour
     [SerializeField]
     private WeaponManager1 theWeaponManager;
 
+    //소리 사운드
+    public AudioClip drinkSound; // 인스펙터에서 할당
+    private AudioSource audioSource;
+
     void Awake()
     {
         instance = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -44,6 +49,11 @@ public class QuickSlotController : MonoBehaviour
     void Update()
     {
         TryInputNumber();
+
+        if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
+        {
+            TryDrinkFromSelectedSlot();
+        }
     }
 
     private void TryInputNumber()
@@ -139,5 +149,34 @@ public class QuickSlotController : MonoBehaviour
         }
     }
 
+    private void TryDrinkFromSelectedSlot()
+    {
+        Slot slot = quickSlots[selectedSlot];
+        if (slot != null && slot.item != null && slot.item.itemName == "IronBottle")
+        {
+            if (slot.isWaterFilled)
+            {
+                StatusController statusController = FindObjectOfType<StatusController>();
+                if (statusController != null)
+                {
+                    int thirstIncreaseAmount = 20; // 원하는 목마름 회복량
+                    statusController.IncreaseThirsty(thirstIncreaseAmount);
 
+                    // 물병 물 비우기 및 UI 업데이트
+                    slot.isWaterFilled = false;
+                    slot.UpdateBottleUI();
+
+                    // 소리 재생
+                    if (audioSource != null && drinkSound != null)
+                    {
+                        audioSource.PlayOneShot(drinkSound);
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("물이 없는 물병입니다.");
+            }
+        }
+    }
 }
