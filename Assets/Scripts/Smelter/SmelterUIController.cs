@@ -133,7 +133,7 @@ public class SmelterUIController : MonoBehaviour
                 smeltedItem = Resources.Load<Item>("Item/Iron"); //철
                 break;
             case "AlloyOre":
-                smeltedItem = Resources.Load<Item>("Item/Alloy_14"); //미스릴
+                smeltedItem = Resources.Load<Item>("Item/Alloy"); //미스릴
                 break;
             case "BearMeat":
                 smeltedItem = Resources.Load<Item>("Item/GrilledBearMeat_21"); //곰고기
