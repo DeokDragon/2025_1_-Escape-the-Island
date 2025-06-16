@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fbf1774c892db64ebb03cac594b3f23, type: 3}
-  m_Name: Alloy_14
+  m_Name: Alloy
   m_EditorClassIdentifier: 
   itemName: Alloy
   itemDesc: "\uBBF8\uC2A4\uB9B4"
