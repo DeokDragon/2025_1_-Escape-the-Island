@@ -88,8 +88,6 @@ public class QuickSlotController : MonoBehaviour
             }
         }
     }
-
-
     private void ChangeSlot(int _num)
     {
         SelectedSlot(_num);
