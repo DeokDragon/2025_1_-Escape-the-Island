@@ -6394,6 +6394,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: IronAxe
       objectReference: {fileID: 0}
+    - target: {fileID: 7435332245455369852, guid: b63f5d6893d74b94d878b308f36b9848,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7605895008501110263, guid: b63f5d6893d74b94d878b308f36b9848,
         type: 3}
       propertyPath: closeWeaponName
@@ -20305,6 +20310,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlloyPickaxe
       objectReference: {fileID: 0}
+    - target: {fileID: 6408799866362780922, guid: b21c2f15a71bd4a4093b8715db833e71,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6408799866374279670, guid: b21c2f15a71bd4a4093b8715db833e71,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
+    - target: {fileID: 6408799866374279670, guid: b21c2f15a71bd4a4093b8715db833e71,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
     - target: {fileID: 8286577763459191639, guid: b21c2f15a71bd4a4093b8715db833e71,
         type: 3}
       propertyPath: closeWeaponName
@@ -36355,6 +36375,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlloyAxe
       objectReference: {fileID: 0}
+    - target: {fileID: 7435332245455369852, guid: b63f5d6893d74b94d878b308f36b9848,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435332245458484074, guid: b63f5d6893d74b94d878b308f36b9848,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
+    - target: {fileID: 7435332245458484074, guid: b63f5d6893d74b94d878b308f36b9848,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
     - target: {fileID: 7605895008501110263, guid: b63f5d6893d74b94d878b308f36b9848,
         type: 3}
       propertyPath: closeWeaponName
@@ -69220,6 +69255,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlloyPickaxe
       objectReference: {fileID: 0}
+    - target: {fileID: 500469835359764635, guid: 879f1f0e45527ca469af73d9534c0b2e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 500469835359935675, guid: 879f1f0e45527ca469af73d9534c0b2e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -69385,6 +69425,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AlloyAxe
+      objectReference: {fileID: 0}
+    - target: {fileID: 7729312524773794060, guid: e5aad628d353790459a44a54bcb2458c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8171065721022644025, guid: e5aad628d353790459a44a54bcb2458c,
         type: 3}
