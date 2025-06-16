@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6451660593944306102
+--- !u!1001 &7719385268242893504
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -46,7 +46,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
       propertyPath: m_Name
-      value: RockAxe
+      value: Axe
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
       propertyPath: m_Layer
@@ -115,13 +115,11 @@ PrefabInstance:
     - target: {fileID: 13700002, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -876546973899608171, guid: 632afedeafdf47d409c9de31379a7352,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
     - target: {fileID: 13700002, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: -876546973899608171, guid: 632afedeafdf47d409c9de31379a7352,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 76fd23e22cda94c4ba621960017cc2f0, type: 2}
     - target: {fileID: 13700002, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
@@ -134,27 +132,27 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100020, guid: 69d05da20a3c8a047ac641747745433d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6517002555313819871}
+      addedObject: {fileID: 2191955370874367494}
   m_SourcePrefab: {fileID: 100100000, guid: 69d05da20a3c8a047ac641747745433d, type: 3}
---- !u!1 &6451660593944209154 stripped
+--- !u!1 &7719385268242992244 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100020, guid: 69d05da20a3c8a047ac641747745433d,
     type: 3}
-  m_PrefabInstance: {fileID: 6451660593944306102}
+  m_PrefabInstance: {fileID: 7719385268242893504}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6517002555313819871
+--- !u!114 &2191955370874367494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6451660593944209154}
+  m_GameObject: {fileID: 7719385268242992244}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55a0423efd79a774cae289b37c84df9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeWeaponName: RockAxe
+  closeWeaponName: Axe
   isHand: 0
   isAxe: 1
   isPickaxe: 0
@@ -167,10 +165,10 @@ MonoBehaviour:
   workDelay: 1.3
   workDelayA: 0.5
   workDelayB: 0.1
-  anim: {fileID: 6451660593953723606}
---- !u!95 &6451660593953723606 stripped
+  anim: {fileID: 7719385268252360608}
+--- !u!95 &7719385268252360608 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9500000, guid: 69d05da20a3c8a047ac641747745433d,
     type: 3}
-  m_PrefabInstance: {fileID: 6451660593944306102}
+  m_PrefabInstance: {fileID: 7719385268242893504}
   m_PrefabAsset: {fileID: 0}

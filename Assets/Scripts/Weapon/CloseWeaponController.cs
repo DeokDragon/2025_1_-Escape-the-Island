@@ -111,6 +111,36 @@ public abstract class CloseWeaponController : MonoBehaviour
 
         currentCloseWeapon.transform.localPosition = Vector3.zero;
         currentCloseWeapon.gameObject.SetActive(true);
+
+        // ▼▼▼▼▼ 기존 코드를 아래 내용으로 교체 ▼▼▼▼▼
+
+        var anim = currentCloseWeapon.anim;
+        if (anim == null)
+        {
+            Debug.LogWarning($"[CloseWeaponController] {currentCloseWeapon.name}에 Animator가 없습니다.");
+            return;
+        }
+
+        if (!anim.enabled)
+            anim.enabled = true;
+
+        // Animator Controller가 할당되지 않았을 경우, Resources에서 로드
+        if (anim.runtimeAnimatorController == null)
+        {
+            string controllerPath = "";
+            if (currentCloseWeapon.isAxe)
+                controllerPath = "AnimatorControllers/Axe_Controller";
+            else if (currentCloseWeapon.isPickaxe)
+                controllerPath = "AnimatorControllers/Pickaxe_Controller";
+
+            if (!string.IsNullOrEmpty(controllerPath))
+            {
+                anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(controllerPath);
+                Debug.Log($"[CloseWeaponController] {currentCloseWeapon.name}의 Animator Controller를 '{controllerPath}'에서 로드했습니다.");
+            }
+        }
+
+        Debug.Log($"[DEBUG] {currentCloseWeapon.name} Animator enabled: {anim.enabled}, Controller: {anim.runtimeAnimatorController?.name}");
     }
 
     private bool IsCrafting()

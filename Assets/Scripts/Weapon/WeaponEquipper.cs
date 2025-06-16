@@ -10,10 +10,12 @@ public class WeaponEquipper : MonoBehaviour
     public GameObject rockAxePrefab;
     public GameObject ironAxePrefab;
     public GameObject diamondAxePrefab;
+    public GameObject alloyAxePrefab; //미스릴
 
     public GameObject rockPickaxePrefab;
     public GameObject ironPickaxePrefab;
     public GameObject diamondPickaxePrefab;
+    public GameObject alloyPickaxePrefab; //이것도 미스릴
 
     private GameObject currentWeapon;
 
@@ -43,9 +45,11 @@ public class WeaponEquipper : MonoBehaviour
             "RockAxe" => rockAxePrefab,
             "IronAxe" => ironAxePrefab,
             "DiamondAxe" => diamondAxePrefab,
+            "AlloyAxe" => alloyAxePrefab, //미스릴도끼
             "RockPickaxe" => rockPickaxePrefab,
             "IronPickaxe" => ironPickaxePrefab,
             "DiamondPickaxe" => diamondPickaxePrefab,
+            "AlloyPickaxe" => alloyPickaxePrefab, //미스릴곡괭이
             _ => null
         };
     }
