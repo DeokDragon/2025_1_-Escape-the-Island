@@ -233,7 +233,6 @@ RectTransform:
   - {fileID: 979573972214262633}
   - {fileID: 1385047797663927025}
   - {fileID: 595857348234232493}
-  - {fileID: 4398884630945533014}
   - {fileID: 4814283670493868421}
   - {fileID: 1259163845735293672}
   - {fileID: 7895165138719542838}
@@ -242,6 +241,7 @@ RectTransform:
   - {fileID: 5785784031482442391}
   - {fileID: 2515387946054352095}
   - {fileID: 8212197637835694017}
+  - {fileID: 4398884630945533014}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -2142,6 +2142,9 @@ MonoBehaviour:
   OnSlotChanged:
     m_PersistentCalls:
       m_Calls: []
+  isWaterFilled: 0
+  waterAmount: 0
+  maxWaterAmount: 3
 --- !u!114 &1232592260683157566 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1652302242785079620, guid: e42b6318bd077e64bb5e4babc8c63fff,
@@ -2671,6 +2674,9 @@ MonoBehaviour:
   OnSlotChanged:
     m_PersistentCalls:
       m_Calls: []
+  isWaterFilled: 0
+  waterAmount: 0
+  maxWaterAmount: 3
 --- !u!1001 &5048382079551511372
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2831,6 +2837,9 @@ MonoBehaviour:
   OnSlotChanged:
     m_PersistentCalls:
       m_Calls: []
+  isWaterFilled: 0
+  waterAmount: 0
+  maxWaterAmount: 3
 --- !u!114 &5828041519815502344 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1652302242785079620, guid: e42b6318bd077e64bb5e4babc8c63fff,
@@ -3209,6 +3218,9 @@ MonoBehaviour:
   OnSlotChanged:
     m_PersistentCalls:
       m_Calls: []
+  isWaterFilled: 0
+  waterAmount: 0
+  maxWaterAmount: 3
 --- !u!1001 &8510944506464616748
 PrefabInstance:
   m_ObjectHideFlags: 0

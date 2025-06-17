@@ -258,16 +258,15 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void ChangeSlot()
     {
+        // 같은 슬롯이면 아무것도 하지 않기
+        if (DragSlot.instance.dragSlot == this)
+            return;
+
         Item draggedItem = DragSlot.instance.dragSlot.item;
         int draggedCount = DragSlot.instance.dragSlot.itemCount;
 
         if (!CanReceive(draggedItem))
-        {
             return;
-        }
-
-        string originalItemName = (item != null) ? item.itemName : "비어있음";
-
 
         if (item != null && item.itemName == draggedItem.itemName)
         {
@@ -290,6 +289,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 DragSlot.instance.dragSlot.ClearSlot();
             }
         }
+
         UpdateSlotUI();
         DragSlot.instance.dragSlot.UpdateSlotUI();
     }

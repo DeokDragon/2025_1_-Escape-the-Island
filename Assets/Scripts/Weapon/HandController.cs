@@ -5,7 +5,8 @@ using UnityEngine;
 public class HandController : CloseWeaponController
 {
 
-    public static bool isActivate = true;
+    //public static bool isActivate = true;
+    public bool isActivate = false;
 
     private void Start()
     {

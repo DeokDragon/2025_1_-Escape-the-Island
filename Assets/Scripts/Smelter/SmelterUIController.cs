@@ -64,16 +64,15 @@ public class SmelterUIController : MonoBehaviour
         isSmelting = true;
 
         Item inputItem = leftInputSlot.item;
-        int initialInputCount = leftInputSlot.itemCount; // 초기에 슬롯에 있던 총 수량
+        int initialInputCount = leftInputSlot.itemCount;
 
-
+        // --- (초기 아이템 유효성 검사 부분은 그대로 둡니다) ---
         if (inputItem == null || initialInputCount <= 0)
         {
             statusText.text = "제련 실패: 입력 수량 오류";
             isSmelting = false;
             yield break;
         }
-
         Item outputItem = CreateSmeltedItem(inputItem);
         if (outputItem == null)
         {
@@ -81,31 +80,30 @@ public class SmelterUIController : MonoBehaviour
             isSmelting = false;
             yield break;
         }
+        // ----------------------------------------------------
 
-        int produced = 0;
-
-        for (int i = 0; i < initialInputCount; i++) // 초기 입력 수량만큼 반복
+        for (int i = 0; i < initialInputCount; i++)
         {
-            if (leftInputSlot.item == null || leftInputSlot.itemCount <= 0 || leftInputSlot.item.itemName != inputItem.itemName)
-            {
-                statusText.text = $"제련 중단: 입력 아이템 부족.";
-                isSmelting = false;
-                yield break;
-            }
 
             float elapsed = 0f;
-            while (elapsed < smeltingTime) 
+            while (elapsed < smeltingTime)
             {
+                // 매 프레임마다 아이템이 제자리에 있는지 확인.
+                if (leftInputSlot.item == null || leftInputSlot.item.itemName != inputItem.itemName)
+                {
+                    statusText.text = "제련이 중지되었습니다.";
+                    isSmelting = false;
+                    yield break;
+                }
+
                 elapsed += Time.deltaTime;
                 float percent = Mathf.Clamp01(elapsed / smeltingTime) * 100f;
                 statusText.text = $"제련 중.. {i + 1} / {initialInputCount} ({percent:F0}%)";
-                yield return null; 
+                yield return null;
             }
-            // 1. 입력 슬롯에서 1개 감소
+
             leftInputSlot.SetSlotCount(-1);
 
-            // 2. 결과 아이템을 출력 슬롯에 1개 추가
-            Debug.Log($"[SmelterCoroutine] Right Slot Before Add/Set: Item='{(rightOutputSlot.item != null ? rightOutputSlot.item.itemName : "NULL")}', Count='{rightOutputSlot.itemCount}'"); //
             if (rightOutputSlot.item != null && rightOutputSlot.item.itemName == outputItem.itemName)
             {
                 if (rightOutputSlot.itemCount < rightOutputSlot.item.maxStackCount)
@@ -117,7 +115,6 @@ public class SmelterUIController : MonoBehaviour
             {
                 rightOutputSlot.AddItem(outputItem, 1);
             }
-            produced++;
         }
 
         statusText.text = "제련 완료!";
@@ -136,7 +133,7 @@ public class SmelterUIController : MonoBehaviour
                 smeltedItem = Resources.Load<Item>("Item/Iron"); //철
                 break;
             case "AlloyOre":
-                smeltedItem = Resources.Load<Item>("Item/Alloy_14"); //미스릴
+                smeltedItem = Resources.Load<Item>("Item/Alloy"); //미스릴
                 break;
             case "BearMeat":
                 smeltedItem = Resources.Load<Item>("Item/GrilledBearMeat_21"); //곰고기
