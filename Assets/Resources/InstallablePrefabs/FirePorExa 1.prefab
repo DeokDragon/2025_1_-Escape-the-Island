@@ -95,7 +95,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: FirePotExA
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2661184373266632593, guid: dbb17dab41999c14bac6893658d8abaf, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
