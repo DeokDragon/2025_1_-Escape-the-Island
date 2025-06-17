@@ -39005,7 +39005,6 @@ MonoBehaviour:
     m_Bits: 241664
   range: 10
   text_SlotNeedItem: []
-  rotateSpeed: 180
   craftUI_armor: {fileID: 502476722}
   craft_armor:
   - craftName: Head

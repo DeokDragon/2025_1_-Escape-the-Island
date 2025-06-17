@@ -72,7 +72,7 @@ public class CraftManual : MonoBehaviour
         private Text[] text_SlotNeedItem;
         //회전 돌리는거 qe전용
        private Quaternion targetRotation; // 목표 회전값
-      [SerializeField] private float rotateSpeed = 180f; // 초당 회전 속도 (degree/second
+  
 
 
 

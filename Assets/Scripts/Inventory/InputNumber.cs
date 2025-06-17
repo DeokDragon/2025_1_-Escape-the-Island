@@ -50,16 +50,13 @@ public class InputNumber : MonoBehaviour
         }
 
         currentSlot = targetSlot;
-
-        // ✅ dragSlot에 직접 할당
-        DragSlot.instance.dragSlot = targetSlot;
+        DragSlot.instance.dragSlot = targetSlot; // ★ 이 줄을 추가하세요
 
         go_Base.SetActive(true);
         activated = true;
         if_text.text = "";
         text_Preview.text = targetSlot.itemCount.ToString();
     }
-
     public void Cancel()
     {
         activated = false;
@@ -70,7 +67,14 @@ public class InputNumber : MonoBehaviour
 
     public void OK()
     {
-        Debug.Log("[버리기 UI] OK 버튼 눌림");
+
+        if (DragSlot.instance.dragSlot == null && currentSlot != null)
+        {
+            DragSlot.instance.dragSlot = currentSlot;
+        }
+
+        // 강제로 텍스트 갱신
+        if_text.DeactivateInputField();
 
         DragSlot.instance.SetColor(0);
 
@@ -89,7 +93,9 @@ public class InputNumber : MonoBehaviour
             }
         }
         else
+        {
             num = int.Parse(text_Preview.text);
+        }
 
         StartCoroutine(DropItemCoroutine(num));
     }
