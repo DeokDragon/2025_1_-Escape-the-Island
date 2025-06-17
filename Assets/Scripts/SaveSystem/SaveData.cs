@@ -13,7 +13,6 @@ public class SaveData
     public float thirst;
 
     public List<InventorySlotData> inventorySlots = new List<InventorySlotData>();
-
     public string equippedWeaponName;
 
     public float currentTime;
@@ -22,8 +21,6 @@ public class SaveData
 
     public List<QuickSlotData> quickSlots = new List<QuickSlotData>();
     public List<QuickSlotData> quickSlotDataList = new List<QuickSlotData>();
-
-    // ✅ 설치 오브젝트용 리스트
     public List<SpawnedObjectData> spawnedObjects = new List<SpawnedObjectData>();
 }
 

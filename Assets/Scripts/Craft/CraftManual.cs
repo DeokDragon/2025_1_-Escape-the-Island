@@ -189,13 +189,13 @@ public class CraftManual : MonoBehaviour
 
             // 이 부분 수정됨:
             GameObject placedObject = Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
-
             SaveManager.instance.CurrentSaveData.spawnedObjects.Add(new SpawnedObjectData
             {
                 prefabName = go_Prefab.name,
                 position = placedObject.transform.position,
                 rotation = placedObject.transform.eulerAngles
             });
+
 
 
             Destroy(go_Preview);
