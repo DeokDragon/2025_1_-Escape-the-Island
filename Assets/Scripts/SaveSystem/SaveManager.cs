@@ -183,4 +183,8 @@ public class SaveManager : MonoBehaviour
             Debug.Log($" 슬롯 {slotIndex}에는 삭제할 파일이 없음.");
         }
     }
+    public void InitializeNewGame()
+    {
+        CurrentSaveData = new SaveData();
+    }
 }
