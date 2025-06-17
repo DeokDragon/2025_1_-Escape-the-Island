@@ -157,10 +157,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3659074915153158055}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 858d7a8cb6b090f448b8ae859a30abb7,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2661184373266632593}
   m_SourcePrefab: {fileID: 100100000, guid: 858d7a8cb6b090f448b8ae859a30abb7, type: 3}
 --- !u!4 &7249791369817503928 stripped
 Transform:
@@ -233,19 +229,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2661184373266632593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8059119491127861762}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ae64a358bc9b58469796285a42626bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactPromptUI: {fileID: 0}
-  player: {fileID: 0}
-  interactDistance: 3
-  smeltingUI: {fileID: 0}

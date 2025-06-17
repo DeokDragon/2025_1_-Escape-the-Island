@@ -16,7 +16,9 @@ MonoBehaviour:
   itemDesc: "\uBBF8\uC2A4\uB9B4 \uC6D0\uC11D"
   itemType: 2
   itemImage: {fileID: 21300000, guid: c6ab515eef4a1c64d9df27dcc1b40010, type: 3}
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 3892326250626601810, guid: e733da4289d9c294db75778066fee53e,
+    type: 3}
   weaponType: 
   attackPower: 0
   materialType: 0
+  maxStackCount: 99
