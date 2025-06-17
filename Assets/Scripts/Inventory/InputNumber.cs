@@ -51,6 +51,9 @@ public class InputNumber : MonoBehaviour
 
         currentSlot = targetSlot;
 
+        // ✅ dragSlot에 직접 할당
+        DragSlot.instance.dragSlot = targetSlot;
+
         go_Base.SetActive(true);
         activated = true;
         if_text.text = "";
