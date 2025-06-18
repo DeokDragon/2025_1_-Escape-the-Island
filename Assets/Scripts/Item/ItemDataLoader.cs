@@ -1,54 +1,42 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using Newtonsoft.Json;
+using System.IO;
 
 public class ItemDataLoader : MonoBehaviour
 {
     [SerializeField]
-    private string jsonFileName = "items";          //Resources Æú´õ¿¡¼­ °¡Á®¿Ã JSON ÆÄÀÏ ÀÌ¸§
+    private string jsonFileName = "item_export.json";  // í™•ì¥ì í¬í•¨, StreamingAssets í´ë”ì— ìœ„ì¹˜
 
-    private List<ItemData> itemList;
+    private List<ItemData> itemDataList;
 
-    // Start is called before the first frame update
     void Start()
     {
         LoadItemData();
     }
 
-
     void LoadItemData()
     {
-        TextAsset jsonFile = Resources.Load<TextAsset>(jsonFileName);       //TextAsset ÇüÅÂ·Î Json ÆÄÀÏÀ» ·ÎµùÇÑ´Ù.
+        string path = Path.Combine(Application.streamingAssetsPath, jsonFileName);
 
-        if (jsonFile != null)                                                //ÆÄÀÏ ÀĞÀ»¶§´Â Null °ª Ã³¸®¸¦ ÇÑ´Ù.
+        if (File.Exists(path))
         {
-            //¿øº» ÅØ½ºÆ®¿¡¼­ UTF-8·Î º¯È¯ Ã³¸®
-            byte[] bytes = Encoding.Default.GetBytes(jsonFile.text);
-            string correntText = Encoding.UTF8.GetString(bytes);
+            string jsonText = File.ReadAllText(path);
+            ItemDataListWrapper wrapper = JsonUtility.FromJson<ItemDataListWrapper>(jsonText);
+            itemDataList = wrapper.items;
 
-            //º¯È¯µÈ ÅØ½ºÆ® »ç¿ë
-            itemList = JsonConvert.DeserializeObject<List<ItemData>>(correntText);
+            Debug.Log($"ë¡œë“œëœ ì•„ì´í…œ ìˆ˜: {itemDataList.Count}");
 
-            Debug.Log($"·ÎµåµÈ ¾ÆÀÌÅÛ ¼ö : {itemList.Count}");
-
-            foreach(var item in itemList)
+            foreach (var item in itemDataList)
             {
-                Debug.Log($"¾ÆÀÌÅÛ : {EncodeKorean(item.itemName)}, ¼³¸í : {EncodeKorean(item.description)}");
+                Debug.Log($"- ì•„ì´í…œ: {item.itemName}, ì„¤ëª…: {item.itemDesc}");
             }
         }
         else
         {
-            Debug.LogError($"JSON ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù. : {jsonFileName}");
+            Debug.LogError($"âŒ JSON íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: {path}");
         }
-    }
-
-    //ÇÑ±Û ÀÎÄÚµùÀ» À§ÇÑ ÇïÆÛ ÇÔ¼ö
-    private string EncodeKorean(string text)
-    {
-        if (string.IsNullOrEmpty(text)) return "";          //ÅØ½ºÆ®°¡ NULL °ªÀÌ¸é ÇÔ¼ö¸¦ ³¡³½´Ù.
-        byte[] bytes = Encoding.Default.GetBytes(text);     //stringÀ» Byte ¹è¿­·Î º¯È¯ÇÑ ÈÄ
-        return Encoding.UTF8.GetString(bytes);              //ÀÎÄÚµùÀ» UTF8·Î ¹Ù²Û´Ù.
     }
 }

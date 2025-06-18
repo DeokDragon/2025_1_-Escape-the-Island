@@ -57100,8 +57100,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1656120026}
   - component: {fileID: 1656120025}
+  - component: {fileID: 1656120027}
   m_Layer: 0
-  m_Name: ItemDatabaseObject
+  m_Name: ItemDatabase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57145,13 +57146,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656120024}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 481, y: 544.1223, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 517.7809, y: 548.78595, z: -10.01773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1755570624}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1656120027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656120024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5721ad78735473d47aa75b092bce9b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonFileName: item_export.json
 --- !u!224 &1659450656 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1788752435397623892, guid: e42b6318bd077e64bb5e4babc8c63fff,
@@ -60187,6 +60201,7 @@ Transform:
   - {fileID: 143939877}
   - {fileID: 141892989}
   - {fileID: 262124806}
+  - {fileID: 1656120026}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1757546923
@@ -75732,7 +75747,6 @@ SceneRoots:
   - {fileID: 179866499}
   - {fileID: 8191202921111286065}
   - {fileID: 1771767860}
-  - {fileID: 1656120026}
   - {fileID: 1692305832}
   - {fileID: 1052330146}
   - {fileID: 2108929518}
