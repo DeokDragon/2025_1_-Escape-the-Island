@@ -139,6 +139,8 @@ MonoBehaviour:
   go_treeCenter: {fileID: 7649142411331963536}
   go_Log_Prefabs: {fileID: 1814469710727601293, guid: 914b5b0f97060ca4b8252dde6dbd84e7,
     type: 3}
+  go_Twig_Prefab: {fileID: 2238244578760360029, guid: 2004d01c741ed664cad615bfacaaca0b,
+    type: 3}
   force: 20
   go_ChildTree: {fileID: 7649142411331963524}
   parentCol: {fileID: 1063826940395562637}
@@ -147,7 +149,7 @@ MonoBehaviour:
   go_hit_effect_prefab: {fileID: 1899073720969875331, guid: ae1cef74338678a4299f5a29a90c58b9,
     type: 3}
   debrisDestroyTime: 5
-  destroyTime: 6
+  destroyTime: 5
   chop_sound: Tree_Chop
   falldown_sound: Tree_FallDown
   logChange_sound: Tree_Log
@@ -192,7 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1550d060f749c4ebf06d7ea97384cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisObject: {fileID: 0}
 --- !u!1 &7649142411331963522 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: 57aa1416211c1464b95dccf147aacdb6,

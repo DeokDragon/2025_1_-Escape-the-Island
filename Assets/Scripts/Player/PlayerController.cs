@@ -431,7 +431,7 @@ public class PlayerController : MonoBehaviour
 
             if (!Input.GetKey(KeyCode.Space)) // 점프 안할 때만 중력 추가
             {
-                myRigid.AddForce(Vector3.down * 100f, ForceMode.Force);
+                myRigid.AddForce(Vector3.down * 50f, ForceMode.Force);
             }
         }
     }

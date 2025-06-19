@@ -162,7 +162,7 @@ public class TreeComponent : MonoBehaviour
         }
 
         //Twig 积己
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             Vector3 offset = go_ChildTree.transform.right * (1.5f * i); // 糠栏肺 混娄 国府扁
             Instantiate(go_Twig_Prefab, go_ChildTree.transform.position + offset + Vector3.up * 0.5f, Quaternion.identity);
