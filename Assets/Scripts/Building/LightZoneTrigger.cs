@@ -4,18 +4,33 @@ using UnityEngine;
 
 public class LightZoneTrigger : MonoBehaviour
 {
-  
-    [SerializeField] private float innerRadius = 1.5f;  // 완전히 밝은 거리
-    [SerializeField] private float outerRadius = 5f;    // 전혀 밝지 않은 거리
-    [SerializeField] private Transform torchCenter;     // 횃불 중심 위치
+    [SerializeField] private float innerRadius = 1.5f;
+    [SerializeField] private float outerRadius = 5f;
+    [SerializeField] private Transform torchCenter;
 
     private bool isPlayerInside = false;
     private Transform player;
+    private bool isInCave = false;
+
+    private void Start()
+    {
+        // 주변에 "Cave" 태그를 가진 오브젝트가 있는지 확인
+        Collider[] hits = Physics.OverlapSphere(transform.position, 1f);
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Cave"))
+            {
+                isInCave = true;
+                break;
+            }
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!CaveStateManager.Instance.IsPlayerInsideCave) return; //동굴 밖이면 무시
+        if (!CaveStateManager.Instance.IsPlayerInsideCave) return;
+        if (!isInCave) return;
 
         player = other.transform;
         isPlayerInside = true;
@@ -25,22 +40,21 @@ public class LightZoneTrigger : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         isPlayerInside = false;
-        ResetFog();  // 플레이어가 완전히 나가면 다시 동굴 안개로 복귀
+
+        if (isInCave)
+            ResetFog();
     }
 
     private void Update()
     {
-        // ① 동굴 안이 아니면 아예 아무 효과도 주지 않음
-        if (!isPlayerInside || player == null || !CaveStateManager.Instance.IsPlayerInsideCave)
-            return;
+        if (!isPlayerInside || player == null) return;
+        if (!CaveStateManager.Instance.IsPlayerInsideCave) return;
+        if (!isInCave) return;
 
         float distance = Vector3.Distance(player.position, torchCenter.position);
-
-        // 0 ~ 1 사이 보간 비율 구하기
         float t = Mathf.InverseLerp(outerRadius, innerRadius, distance);
-        t = Mathf.Clamp01(t); // 안정성 보장
+        t = Mathf.Clamp01(t);
 
-        // 안개와 밝기 보간 (지금은 어둠 유지지만 구조 유지)
         RenderSettings.ambientLight = Color.Lerp(Color.black, Color.black, t);
         RenderSettings.fogColor = Color.Lerp(Color.black, Color.black, t);
         RenderSettings.fogStartDistance = Mathf.Lerp(0.8f, 4f, t);
@@ -53,6 +67,5 @@ public class LightZoneTrigger : MonoBehaviour
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogStartDistance = 0.8f;
         RenderSettings.fogEndDistance = 3f;
-      
     }
 }

@@ -18291,7 +18291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &530173119
 Transform:
   m_ObjectHideFlags: 0
@@ -37702,10 +37702,8 @@ MonoBehaviour:
   - craftName: Torch
     go_Prefab: {fileID: 4945572756309443369, guid: 49bb8da57306fb648bf5305fe45f7a9e,
       type: 3}
-    craftNeedItem:
-    - Twig
-    - Coal
-    craftNeedItemCount: 0200000001000000
+    craftNeedItem: []
+    craftNeedItemCount: 
     go_PreviewPrefab: {fileID: 164646311706332490, guid: 8853c9d4d88e9f0498237c8762b441d7,
       type: 3}
     craftType: 0
