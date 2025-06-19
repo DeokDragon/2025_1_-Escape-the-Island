@@ -19,7 +19,7 @@ public class Smelter : MonoBehaviour
         {
             interactPromptUI.SetActive(false); // UI 열려있을 땐 프롬프트 꺼두기
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 CloseSmeltingUI();
                 GameManager.escHandledThisFrame = true;
