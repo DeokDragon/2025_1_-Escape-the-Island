@@ -29,7 +29,6 @@ public class OreSpawner : MonoBehaviour
 
             if (caveCollider == null)
             {
-                Debug.LogWarning("Cave에 Collider가 없습니다!");
                 continue;
             }
 
@@ -67,9 +66,6 @@ public class OreSpawner : MonoBehaviour
         float rayLength = 100f; // 100유닛까지 바닥 탐색
 
         bool result = Physics.Raycast(position, Vector3.down, out hit, rayLength, groundMask);
-
-        // 디버그 선
-        Debug.DrawRay(position, Vector3.down * rayLength, result ? Color.green : Color.red, 5f);
 
         spawnPosition = result ? hit.point : Vector3.zero;
         return result;
