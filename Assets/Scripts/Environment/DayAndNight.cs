@@ -145,13 +145,19 @@ public class DayAndNight : MonoBehaviour
     // -------------------- 안개 조절 --------------------
     private void UpdateFog()
     {
+        if (CaveStateManager.Instance != null && CaveStateManager.Instance.IsPlayerInsideCave)
+        {
+            // CaveEntranceTrigger가 설정한 값을 유지
+            return;
+        }
+
         float angleX = transform.eulerAngles.x;
         if (isNight)
         {
             targetFogDensity = nightFogDensity;
             RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, nightFogColor, fogDensityCalc * Time.deltaTime);
         }
-        else if (angleX >= 0f && angleX <= 60f)  // 아침 구간
+        else if (angleX >= 0f && angleX <= 60f)  // 아침
         {
             targetFogDensity = morningFogDensity;
             RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, morningFogColor, fogDensityCalc * Time.deltaTime);

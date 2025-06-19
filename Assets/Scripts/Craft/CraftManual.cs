@@ -176,6 +176,9 @@ public class CraftManual : MonoBehaviour
     {
         if (isPreviewActivated && go_Preview.GetComponent<PreviewObject>().isBuildable())
         {
+            // 🚨 설치 상태 먼저 해제해서 중복 실행 방지
+            isPreviewActivated = false;
+
             int selectedSlot = GetSelectedSlot();
 
             if (!CheckMaterials(selectedSlot))
@@ -187,25 +190,25 @@ public class CraftManual : MonoBehaviour
             PlayBuildSound();
             ConsumeMaterials(selectedSlot);
 
-            // 이 부분 수정됨:
             GameObject placedObject = Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
-            SaveManager.instance.CurrentSaveData.spawnedObjects.Add(new SpawnedObjectData
+
+            // ✅ 세이브 기록
+            if (SaveManager.instance != null && SaveManager.instance.CurrentSaveData != null && SaveManager.instance.CurrentSaveData.spawnedObjects != null)
             {
-                prefabName = go_Prefab.name,
-                position = placedObject.transform.position,
-                rotation = placedObject.transform.eulerAngles
-            });
-
-
+                SaveManager.instance.CurrentSaveData.spawnedObjects.Add(new SpawnedObjectData
+                {
+                    prefabName = go_Prefab.name,
+                    position = placedObject.transform.position,
+                    rotation = placedObject.transform.eulerAngles
+                });
+            }
 
             Destroy(go_Preview);
             isActivated = false;
-            isPreviewActivated = false;
             go_Preview = null;
             go_Prefab = null;
         }
     }
-
 
     private void PreviewPositionUpdate()
     {

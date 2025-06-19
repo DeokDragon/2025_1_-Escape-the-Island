@@ -7,6 +7,21 @@ public class CaveEntranceTrigger : MonoBehaviour
     public Transform caveForwardDirection;  // 동굴이 바라보는 방향 (앞쪽)
     private bool isInsideCave = false;
 
+
+    private void Start()
+    {
+        if (CaveStateManager.Instance != null && CaveStateManager.Instance.IsPlayerInsideCave)
+        {
+            EnterCave();
+            isInsideCave = true;
+        }
+        else
+        {
+            ExitCave();
+            isInsideCave = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
@@ -35,9 +50,9 @@ public class CaveEntranceTrigger : MonoBehaviour
         RenderSettings.ambientLight = Color.black;
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogMode = FogMode.Linear;
-        RenderSettings.fogStartDistance = 2f;
-        RenderSettings.fogEndDistance = 10f;  // 가까운 거리에서 포그 시작
-        RenderSettings.fogDensity = 0.1f;    // Linear 모드에서는 크게 영향 없음
+        RenderSettings.fogStartDistance = 0.8f;
+        RenderSettings.fogEndDistance = 3f;  // 가까운 거리에서 포그 시작
+                                                // Linear 모드에서는 크게 영향 없음
 
         Debug.Log("Entered cave - dark on");
     }
@@ -51,7 +66,7 @@ public class CaveEntranceTrigger : MonoBehaviour
         RenderSettings.fogMode = FogMode.Linear;
         RenderSettings.fogStartDistance = 50f;
         RenderSettings.fogEndDistance = 300f;
-        RenderSettings.fogDensity = 0.001f;
+
 
         Debug.Log("Exited cave - bright on");
     }

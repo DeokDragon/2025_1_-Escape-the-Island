@@ -10,7 +10,7 @@ public class Chest : MonoBehaviour
     public float interactDistance = 3f;
     public Transform player;
     public LayerMask Box; // 상호작용 가능한 레이어
-
+    private bool inputCooldown = false; //시간초
     private bool isUIOpen = false;
 
 
@@ -25,13 +25,13 @@ public class Chest : MonoBehaviour
 
         if (isUIOpen)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.E) && !inputCooldown)
             {
                 CloseChestUI();
                 GameManager.escHandledThisFrame = true;
             }
 
-            interactPromptUI.SetActive(false); // UI 열려있으면 E키 UI는 꺼둠
+            interactPromptUI.SetActive(false);
             return;
         }
 
@@ -58,13 +58,8 @@ public class Chest : MonoBehaviour
         {
             interactPromptUI.SetActive(false);
         }
-
-        if (isUIOpen && Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseChestUI();
-            GameManager.escHandledThisFrame = true;
-        }
     }
+
 
     void OpenChest()
     {
@@ -75,13 +70,21 @@ public class Chest : MonoBehaviour
         GameManager.isChestUIOpen = true;
         GameManager.canPlayerRotate = false;
         GameManager.canPlayerMove = false;
-
         GameManager.UpdateCursorState();
 
         if (openSound != null && audioSource != null)
             audioSource.PlayOneShot(openSound);
+
+        // 👇 입력 잠금 코루틴 시작
+        StartCoroutine(InputCooldown());
     }
 
+    IEnumerator InputCooldown()
+    {
+        inputCooldown = true;
+        yield return new WaitForSeconds(0.3f); // 0.3초간 입력 무시
+        inputCooldown = false;
+    }
 
     void ShowChestUI()
     {
