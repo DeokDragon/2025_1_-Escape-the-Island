@@ -58626,10 +58626,10 @@ MonoBehaviour:
   walkSpeed: 5
   runSpeed: 10
   crouchSpeed: 3
-  jumpForce: 30
+  jumpForce: 25
   crouchPosY: 0
   lookSensitivity: 1
-  cameraRotationLimit: 45
+  cameraRotationLimit: 50
   theCamera: {fileID: 963194227}
 --- !u!54 &1774666865
 Rigidbody:
