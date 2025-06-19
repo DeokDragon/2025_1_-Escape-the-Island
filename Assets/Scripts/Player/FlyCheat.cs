@@ -5,8 +5,8 @@ public class FlyCheat : MonoBehaviour
     private bool isFlying = false;
     private Rigidbody rb;
 
-    public float flySpeed = 10f;
-    public float verticalSpeed = 5f;
+    public float flySpeed = 70f;
+    public float verticalSpeed = 40f;
 
     void Start()
     {
